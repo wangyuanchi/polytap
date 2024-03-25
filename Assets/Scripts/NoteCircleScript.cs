@@ -26,9 +26,6 @@ public class NoteCircleScript : MonoBehaviour
             transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3, 3, 3), elapsedTime / timeToExit);
             yield return null;
         }
-
-        // Deletes the object after it goes offscreen
-        Destroy(gameObject);
     }
 
 }

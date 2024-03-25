@@ -97,4 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1bde966fad5c945be21585cd4201b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeToTap: 0
+  timeToTap: 0.02
+  delete: 0

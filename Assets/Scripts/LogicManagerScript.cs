@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class LogicManagerScript : MonoBehaviour
 {
@@ -15,7 +16,9 @@ public class LogicManagerScript : MonoBehaviour
 
     private int currentNote = 0; 
     private float bufferWindow = 0.2f;
-    
+
+    public List<GameObject> notesList = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,8 +34,10 @@ public class LogicManagerScript : MonoBehaviour
             // If the current note has been missed, go to the next one
             if (Time.time - beatMapStartTime > beatMap[currentNote]["timeStamp"] + bufferWindow)
             {
-                currentNote++;
                 Debug.Log("Missed Timing");
+                currentNote++;
+                DeleteNote();
+
             }
 
             // If a tap has been registered, check if it is at the correct timing
@@ -41,12 +46,15 @@ public class LogicManagerScript : MonoBehaviour
                 if (Math.Abs(beatMap[currentNote]["timeStamp"] - registeredTapTimestamp) <= bufferWindow)
                 {
                     Debug.Log("Correct Timing");
-                    currentNote++;
+                    DeleteNote();
+
                 }
                 else
                 {
                     Debug.Log("Wrong Timing");
+                    DeleteNote();
                 }
+                currentNote++;
                 newRegisteredTap = false;
             }
         }
@@ -62,6 +70,13 @@ public class LogicManagerScript : MonoBehaviour
             registeredTapTimestamp = Time.time - beatMapStartTime;
             newRegisteredTap = true;
         }
+    }
+
+    public void DeleteNote()
+    {
+        GameObject oldestNote = notesList[0];
+        Destroy(oldestNote);
+        notesList.RemoveAt(0);
     }
 
 }
