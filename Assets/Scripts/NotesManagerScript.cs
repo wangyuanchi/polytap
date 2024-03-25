@@ -9,7 +9,6 @@ public class NotesManagerScript : MonoBehaviour
     public GameObject logicManager;
     public int noteSpeed = 3;
 
-
     // WARNING: timeStamp (near the start) cannot be at a timing earlier than that of timeToTap
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
     {
@@ -27,7 +26,6 @@ public class NotesManagerScript : MonoBehaviour
         { 4, 4 },
         { 5, 2 }
     };
-
 
     // Start is called before the first frame update
     void Start()
@@ -59,7 +57,7 @@ public class NotesManagerScript : MonoBehaviour
         if (note["typeOfNote"] == 0f) {
             GameObject newNote = Instantiate(noteCircle, transform.position, transform.rotation);
             newNote.GetComponent<NoteCircleScript>().timeToTap = noteSpeedTimings[noteSpeed];
-            logicManager.GetComponent<LogicManagerScript>().notesList.Add(newNote);
+            logicManager.GetComponent<LogicManagerScript>().noteObjectsQueue.Enqueue(newNote);
             
         }
     }

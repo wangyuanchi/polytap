@@ -16,8 +16,9 @@ public class LogicManagerScript : MonoBehaviour
 
     private int currentNote = 0; 
     private float bufferWindow = 0.2f;
+    private float expectedInputWindow = 0.4f;
 
-    public List<GameObject> notesList = new List<GameObject>();
+    public Queue<GameObject> noteObjectsQueue = new Queue<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +37,6 @@ public class LogicManagerScript : MonoBehaviour
             {
                 Debug.Log("Missed Timing");
                 currentNote++;
-                DeleteNote();
-
             }
 
             // If a tap has been registered, check if it is at the correct timing
@@ -46,20 +45,26 @@ public class LogicManagerScript : MonoBehaviour
                 if (Math.Abs(beatMap[currentNote]["timeStamp"] - registeredTapTimestamp) <= bufferWindow)
                 {
                     Debug.Log("Correct Timing");
-                    DeleteNote();
-
+                    DeleteNoteObject();
+                    currentNote++;
                 }
                 else
                 {
                     Debug.Log("Wrong Timing");
-                    DeleteNote();
+                    // Delete note if the wrong input was expected
+                    if (Math.Abs(beatMap[currentNote]["timeStamp"] - registeredTapTimestamp) <= expectedInputWindow)
+                    { 
+                        DeleteNoteObject();
+                        currentNote++;
+                    }        
                 }
-                currentNote++;
                 newRegisteredTap = false;
             }
         }
-        else {
-            Debug.Log("Level Complete");
+        // Level Complete
+        else
+        {
+            
         }
     }
 
@@ -72,11 +77,10 @@ public class LogicManagerScript : MonoBehaviour
         }
     }
 
-    public void DeleteNote()
+    public void DeleteNoteObject()
     {
-        GameObject oldestNote = notesList[0];
+        GameObject oldestNote = noteObjectsQueue.Dequeue();
         Destroy(oldestNote);
-        notesList.RemoveAt(0);
     }
 
 }

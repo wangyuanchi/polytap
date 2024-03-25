@@ -14,18 +14,21 @@ public class NoteCircleScript : MonoBehaviour
         StartCoroutine(ScaleOverTime(timeToTap));
     }
 
-    // Scale the note to go to (3, 3, 3), where it passes JudgementLineCircle at (1, 1, 1) by time
+    // Scale the note to go to (1.5, 1.5, 1.5), where it passes JudgementLineCircle at (1, 1, 1) by time
     IEnumerator ScaleOverTime(float timeToTap)
     {
         float elapsedTime = 0f;
-        float timeToExit = timeToTap * 3;
+        float timeToExit = timeToTap * 1.5f;
 
         while (elapsedTime < timeToExit)
         {
             elapsedTime += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3, 3, 3), elapsedTime / timeToExit);
+            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(1.5f, 1.5f, 1.5f), elapsedTime / timeToExit);
             yield return null;
         }
+
+        // Delete missed note
+        Destroy(gameObject);
     }
 
 }
