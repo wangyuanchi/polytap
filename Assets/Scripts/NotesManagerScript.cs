@@ -7,14 +7,26 @@ public class NotesManagerScript : MonoBehaviour
 
     public GameObject noteCircle;
     public GameObject logicManager;
+    public int noteSpeed = 3;
 
-    // {"typeOfNote", "timeToSpawn", "timeToTap"}
-    private List<List<float>> beatMap = new List<List<float>>{
-            new List<float> { 0f, 0f, 5f },
-            new List<float> { 0f, 3f, 5f }
-        };
+    // WARNING: timeStamp (near the start) cannot be at a timing earlier than that of timeToTap
+    private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
+    {
+        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 6f } },
+        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 10f } }
+    };
     // Referencing the index of beatMap
     private int currentNote = 0;
+    // noteSpeed timings { noteSpeed, timeToTap }
+    private Dictionary<int, int> noteSpeedTimings = new Dictionary<int, int>
+    {
+        { 1, 10 },
+        { 2, 8 },
+        { 3, 6 },
+        { 4, 4 },
+        { 5, 2 }
+    };
+
 
     // Start is called before the first frame update
     void Start()
@@ -24,36 +36,28 @@ public class NotesManagerScript : MonoBehaviour
         // Give LogicManagerScript the exact timing the beatmap starts
         logicManager.GetComponent<LogicManagerScript>().beatMapStartTime = Time.time;
 
-        // Give all tapTimings to LogicManager
-        foreach (List<float> note in beatMap)
-        {
-            logicManager.GetComponent<LogicManagerScript>().allTapTimings.Add(note[1] + note[2]);
-        }
+        // Give beatMap to LogicManager
+        logicManager.GetComponent<LogicManagerScript>().beatMap = beatMap;
     }
 
-    IEnumerator SpawnBeatMap(List<List<float>> beatMap) {
+    IEnumerator SpawnBeatMap(List<Dictionary<string, float>> beatMap) {
         // If the currentNote exists
-        while (currentNote < beatMap.Count) { 
-            // Wait for timing to hit timeToSpawn, then spawn the note and go to the next note
-            yield return new WaitForSeconds(beatMap[currentNote][1]);
-            SpawnNote((int)beatMap[currentNote][0]);
+        while (currentNote < beatMap.Count) {
+            float timeUntilSpawn = beatMap[currentNote]["timeStamp"] - noteSpeedTimings[noteSpeed];
+            // Wait for timing to hit spawn time, then spawn the note and go to the next note
+            yield return new WaitForSeconds(timeUntilSpawn);
+            SpawnNote(beatMap[currentNote]);
             currentNote++;
         }
     }
 
-    void SpawnNote(int noteIndex) {
+    // Spawn and update variables in the instance of the new note
+    void SpawnNote(Dictionary<string, float> note) {
 
-        // Dictionary for all notes
-        Dictionary<int, GameObject> notesDictionary = new Dictionary<int, GameObject>{
-            {0, noteCircle}
-        };
-
-        // Spawn a new note
-        GameObject newNote = Instantiate(notesDictionary[noteIndex], transform.position, transform.rotation);
-
-        // Update variables in the instance of the new note and overall tapTimings
-        if (noteIndex == 0) {
-            newNote.GetComponent<NoteCircleScript>().timeToTap = beatMap[currentNote][2];
+        // noteCircle
+        if (note["typeOfNote"] == 0f) {
+            GameObject newNote = Instantiate(noteCircle, transform.position, transform.rotation);
+            newNote.GetComponent<NoteCircleScript>().timeToTap = noteSpeedTimings[noteSpeed];
         }
     }
 

@@ -7,42 +7,41 @@ using UnityEngine.InputSystem;
 public class LogicManagerScript : MonoBehaviour
 {
 
-    public List<float> allTapTimings = new List<float>(); // May not be in ascending order
+    public List<Dictionary<string, float>> beatMap;
     public float beatMapStartTime;
 
-    private float registeredTapTiming;
+    private float registeredTapTimestamp;
     private bool newRegisteredTap = false;
-    private int tapTimingListener = 0; // Index of the current timing being listened for a tap
-    private float bufferWindow = 0.5f;
-    private bool levelComplete = false;
-    
 
+    private int currentNote = 0; 
+    private float bufferWindow = 0.2f;
+    
     // Start is called before the first frame update
     void Start()
     {
-        allTapTimings.Sort();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        // If current tapTimingListener exists in allTapTimings
-        if (tapTimingListener < allTapTimings.Count)
+        // If current note exists
+        if (currentNote < beatMap.Count)
         {
-            // If the current tap timing being listened has been missed, go to the next one
-            if (Time.time > allTapTimings[tapTimingListener] + bufferWindow)
+            // If the current note has been missed, go to the next one
+            if (Time.time - beatMapStartTime > beatMap[currentNote]["timeStamp"] + bufferWindow)
             {
-                tapTimingListener++;
+                currentNote++;
                 Debug.Log("Missed Timing");
             }
 
             // If a tap has been registered, check if it is at the correct timing
             if (newRegisteredTap)
             {
-                if (Math.Abs(allTapTimings[tapTimingListener] - registeredTapTiming) <= bufferWindow)
+                if (Math.Abs(beatMap[currentNote]["timeStamp"] - registeredTapTimestamp) <= bufferWindow)
                 {
                     Debug.Log("Correct Timing");
-                    tapTimingListener++;
+                    currentNote++;
                 }
                 else
                 {
@@ -52,7 +51,7 @@ public class LogicManagerScript : MonoBehaviour
             }
         }
         else {
-            levelComplete = true;
+            Debug.Log("Level Complete");
         }
     }
 
@@ -60,7 +59,7 @@ public class LogicManagerScript : MonoBehaviour
     {
         if (context.started)
         {
-            registeredTapTiming = Time.time - beatMapStartTime;
+            registeredTapTimestamp = Time.time - beatMapStartTime;
             newRegisteredTap = true;
         }
     }
