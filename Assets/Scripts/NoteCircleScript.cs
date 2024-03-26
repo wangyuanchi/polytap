@@ -6,29 +6,25 @@ using UnityEngine;
 public class NoteCircleScript : MonoBehaviour
 {
 
-    public float timeToTap; // The time it takes from spawning to hitting the judgement line
+    public float timeSpawnToJudgement;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ScaleOverTime(timeToTap));
+        StartCoroutine(ScaleOverTime(timeSpawnToJudgement));
     }
 
-    // Scale the note to go to (1.5, 1.5, 1.5), where it passes JudgementLineCircle at (1, 1, 1) by time
-    IEnumerator ScaleOverTime(float timeToTap)
+    // Scale the note to go to (1.5, 1.5, 1.5), where it passes JudgementLineCircle at (1, 1, 1) by timeSpawnToJudgement
+    IEnumerator ScaleOverTime(float timeSpawnToJudgement)
     {
         float elapsedTime = 0f;
-        float timeToExit = timeToTap * 1.5f;
+        float timeSpawnToDestroy = timeSpawnToJudgement * 1.5f;
 
-        while (elapsedTime < timeToExit)
+        while (elapsedTime < timeSpawnToDestroy)
         {
             elapsedTime += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(1.5f, 1.5f, 1.5f), elapsedTime / timeToExit);
+            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(1.5f, 1.5f, 1.5f), elapsedTime / timeSpawnToDestroy);
             yield return null;
         }
-
-        // Delete missed note
-        Destroy(gameObject);
     }
-
 }
