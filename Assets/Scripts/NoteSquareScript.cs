@@ -9,23 +9,23 @@ public class NoteSquareScript : MonoBehaviour
     public float timeSpawnToJudgement; 
     public float holdDuration;
 
-    public GameObject noteSquareX;
-    public GameObject noteSquareY;
+    public GameObject noteSquareStart;
+    public GameObject noteSquareEnd;
 
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ScaleOverTime(timeSpawnToJudgement, noteSquareX));
-        StartCoroutine(ScaleOverTime(timeSpawnToJudgement, noteSquareY));
+        StartCoroutine(ScaleOverTime(timeSpawnToJudgement, noteSquareStart));
+        StartCoroutine(ScaleOverTime(timeSpawnToJudgement, noteSquareEnd));
     }
 
-    // Scale the side to go to (1.5, 1.5, 1.5), where it passes JudgementLineSquare at (1, 1, 1) by timeSpawnToJudgement
-    IEnumerator ScaleOverTime(float timeSpawnToJudgement, GameObject side)
+    // Scale the note to go to (1.5, 1.5, 1.5), where it passes JudgementLineSquare at (1, 1, 1) by timeSpawnToJudgement
+    IEnumerator ScaleOverTime(float timeSpawnToJudgement, GameObject typeOfSquare)
     {
         float elapsedTime = 0f;
         float timeSpawnToDestroy = timeSpawnToJudgement * 1.5f;
 
-        if (side == noteSquareY)
+        if (typeOfSquare == noteSquareEnd)
         { 
             yield return new WaitForSeconds(holdDuration);
         }
@@ -33,8 +33,10 @@ public class NoteSquareScript : MonoBehaviour
         while (elapsedTime < timeSpawnToDestroy)
         {
             elapsedTime += Time.deltaTime;
-            side.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(1.5f, 1.5f, 1.5f), elapsedTime / timeSpawnToDestroy);
+            typeOfSquare.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(1.5f, 1.5f, 1.5f), elapsedTime / timeSpawnToDestroy);
             yield return null;
         }
+
+        Destroy(gameObject);
     }
 }

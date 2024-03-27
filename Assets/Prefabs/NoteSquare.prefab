@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4503120948248581829}
   - component: {fileID: 17955519718335951}
   m_Layer: 0
-  m_Name: NoteSquareX
+  m_Name: NoteSquareStart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 8049001632426647}
   - component: {fileID: 8589755773133398996}
   m_Layer: 0
-  m_Name: NoteSquareY
+  m_Name: NoteSquareEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11b14b1cbeda3b42b957b07025500ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeSpawnXToJudgement: 0
-  timeSpawnYToJudgement: 0
-  noteSquareX: {fileID: 2679122800779892556}
-  noteSquareY: {fileID: 8846992531432319350}
+  timeSpawnToJudgement: 0
+  holdDuration: 0
+  noteSquareStart: {fileID: 2679122800779892556}
+  noteSquareEnd: {fileID: 8846992531432319350}

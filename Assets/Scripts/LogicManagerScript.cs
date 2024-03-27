@@ -7,104 +7,119 @@ using UnityEngine.UIElements;
 
 public class LogicManagerScript : MonoBehaviour
 {
-
     public float beatMapStartTime;
     public Queue<GameObject> noteObjectsQueue = new Queue<GameObject>();
-    public Queue<Dictionary<string, float>> noteTimingsQueue = new Queue<Dictionary<string, float>>();  
+    public Queue<Dictionary<string, float>> noteTimingsQueue = new Queue<Dictionary<string, float>>();
+    public int health = 3;
 
     private float inputStart;
     private float inputEnd;
     private bool input = false;
-    private bool waitForDuration = false;
     private float inputDuration = 0;
+    private bool waitingForInputDuration = false; // This is a bypass variable so that if-else statements would be reached on the next frame
+
     private float bufferWindow = 0.15f; // The buffer window is a subset of the expected window
     private float expectedWindow = 0.5f; // The expected window is where the user is expected to provide an input before the note is missed
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
     {
-        float currentTimeStamp = Time.time - beatMapStartTime;
-
         // If there are notes in the queue
-        if (noteObjectsQueue.Count > 0 && noteTimingsQueue.Count > 0) { 
+        if (noteObjectsQueue.Count > 0)
+        {
+            float currentTimeStamp = Time.time - beatMapStartTime;
+            float currentTimeToNextNoteTiming = noteTimingsQueue.Peek()["timeStamp"] - currentTimeStamp;
 
+            // If input is detected
             if (input)
             {
-                // If (initial) input is expected and correct
-                if (Math.Abs(noteTimingsQueue.Peek()["timeStamp"] - currentTimeStamp) <= bufferWindow || waitForDuration)
+                // If input is expected and too early
+                if (Math.Abs(currentTimeToNextNoteTiming) <= expectedWindow && currentTimeToNextNoteTiming > bufferWindow)
+                {
+                    DequeueNote("wrong", "Wrong Input: Tap Too Early");
+                }
+
+                // If input is expected and correct
+                else if (Math.Abs(currentTimeToNextNoteTiming) <= bufferWindow || waitingForInputDuration)
                 {
                     // If tap required
                     if (noteTimingsQueue.Peek()["type"] == 0f)
                     {
-                        Debug.Log("Correct Input");
-                        noteTimingsQueue.Dequeue();
-                        Destroy(noteObjectsQueue.Dequeue());
-
+                        DequeueNote("correct", "Correct Input");
                     }
+
                     // If hold required
                     else if (noteTimingsQueue.Peek()["type"] == 1f)
                     {
-                        waitForDuration = true; // This is a bypass variable so that this if-else statement would be reached on the next frame
-                        if (inputDuration != 0 && Math.Abs(inputDuration - noteTimingsQueue.Peek()["duration"]) <= bufferWindow)
+                        waitingForInputDuration = true;
+                        // If the hold has been released
+                        if (inputDuration != 0)
                         {
-                            Debug.Log("Correct Input");
-                            noteTimingsQueue.Dequeue();
-                            Destroy(noteObjectsQueue.Dequeue());
-                            waitForDuration = false;
+                            if (Math.Abs(noteTimingsQueue.Peek()["duration"] - inputDuration) <= bufferWindow)
+                            {
+                                DequeueNote("correct", "Correct Input");
+                            }
+                            else
+                            {
+                                DequeueNote("wrong", "Wrong Input: Release Too Early");
+                            }
+                            waitingForInputDuration = false;
                         }
-                        else if (inputDuration != 0 && noteTimingsQueue.Peek()["duration"] - inputDuration > bufferWindow)
+                        // If the hold has not been released and the release timing is missed
+                        else
                         {
-                            Debug.Log("Wrong Input: Release Too Early");
-                            noteTimingsQueue.Dequeue();
-                            Destroy(noteObjectsQueue.Dequeue());
-                            waitForDuration = false;
+                            if (currentTimeStamp > noteTimingsQueue.Peek()["timeStamp"] + noteTimingsQueue.Peek()["duration"] + bufferWindow)
+                            {
+                                DequeueNote("wrong", "Wrong Input: Release Too Late");
+                                waitingForInputDuration = false;
+                            }
                         }
-                        else if (inputDuration == 0 && currentTimeStamp > noteTimingsQueue.Peek()["timeStamp"] + noteTimingsQueue.Peek()["duration"] + bufferWindow)
-                        {
-                            Debug.Log("Wrong Input: Release Too Late");
-                            noteTimingsQueue.Dequeue();
-                            Destroy(noteObjectsQueue.Dequeue());
-                            waitForDuration = false;
-                        }
-
                     }
                 }
-
-                // If (initial) input is expected and too early
-                if (noteTimingsQueue.Peek()["timeStamp"] - currentTimeStamp <= expectedWindow && noteTimingsQueue.Peek()["timeStamp"] - currentTimeStamp > bufferWindow )
+                // If input is expected and wrong
+                else if (-currentTimeToNextNoteTiming > bufferWindow)
                 {
-                    Debug.Log("Wrong Input: Tap Too Early");
-                    noteTimingsQueue.Dequeue();
-                    Destroy(noteObjectsQueue.Dequeue());
+                    DequeueNote("wrong", "Wrong Input: Tap Too Late");
                 }
             }
 
-            // Note: Inputs that are unexpected will not be considered wrong
-            // If note is completely missed without input (If input is too late, will simply be considered an unexpected input)
-            if (currentTimeStamp - noteTimingsQueue.Peek()["timeStamp"] > bufferWindow && !waitForDuration)
+            // If note is completely missed without input
+            else if (-currentTimeToNextNoteTiming > expectedWindow)
             {
-                Debug.Log("Missed Note!");
-                noteTimingsQueue.Dequeue();
-                Destroy(noteObjectsQueue.Dequeue());
+                DequeueNote("missed", "Missed Note");
             }
 
-            if (!waitForDuration)
+            if (!waitingForInputDuration)
             {
-                input = false;
-                inputDuration = 0;
+                ResetInput(); 
             }
         }
     }
 
+    // Called when a correct/wrong input took place or the note is missed
+    void DequeueNote(string inputType, string inputDetails)
+    {
+        Debug.Log(inputDetails);
+
+        GameObject dequeuedNoteObject = noteObjectsQueue.Dequeue();
+        noteTimingsQueue.Dequeue();
+
+        // Decrease health if input is wrong/missed
+        if (inputType != "correct")
+        {
+            health--;
+        }
+
+        // Let noteObject move past the JudgementLine and be destroyed after a while if it is missed, otherwise destroy it instantly
+        if (inputType != "missed")
+        {
+            Destroy(dequeuedNoteObject);    
+        }
+}
+
+    // Sets input to true, and checks for its duration
     public void Tap(InputAction.CallbackContext context)
     {
-
         if (context.started)
         {
             inputStart = Time.time;
@@ -115,8 +130,11 @@ public class LogicManagerScript : MonoBehaviour
             inputEnd = Time.time;
             inputDuration = inputEnd - inputStart;
         }
-
     }
 
-
+    void ResetInput()
+    {
+        input = false;
+        inputDuration = 0;
+    }
 }

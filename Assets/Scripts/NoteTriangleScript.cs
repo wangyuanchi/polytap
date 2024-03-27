@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoteCircleScript : MonoBehaviour
+public class NoteTriangleScript : MonoBehaviour
 {
 
     public float timeSpawnToJudgement;
