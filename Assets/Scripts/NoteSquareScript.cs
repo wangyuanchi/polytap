@@ -20,12 +20,12 @@ public class NoteSquareScript : MonoBehaviour
     }
 
     // Scale the note to go to (1.5, 1.5, 1.5), where it passes JudgementLineSquare at (1, 1, 1) by timeSpawnToJudgement
-    IEnumerator ScaleOverTime(float timeSpawnToJudgement, GameObject typeOfSquare)
+    IEnumerator ScaleOverTime(float timeSpawnToJudgement, GameObject noteSquareChild)
     {
         float elapsedTime = 0f;
         float timeSpawnToDestroy = timeSpawnToJudgement * 1.5f;
 
-        if (typeOfSquare == noteSquareEnd)
+        if (noteSquareChild == noteSquareEnd)
         { 
             yield return new WaitForSeconds(holdDuration);
         }
@@ -33,10 +33,10 @@ public class NoteSquareScript : MonoBehaviour
         while (elapsedTime < timeSpawnToDestroy)
         {
             elapsedTime += Time.deltaTime;
-            typeOfSquare.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(1.5f, 1.5f, 1.5f), elapsedTime / timeSpawnToDestroy);
+            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(1.5f, 1.5f, 1.5f), elapsedTime / timeSpawnToDestroy);
             yield return null;
         }
 
-        Destroy(gameObject);
+        Destroy(noteSquareChild);
     }
 }

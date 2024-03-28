@@ -7,16 +7,18 @@ public class NotesManagerScript : MonoBehaviour
     public GameObject noteCircle;
     public GameObject noteSquare;
     public GameObject noteTriangle;
+    public GameObject notePentagon;
     public GameObject logicManager;
     public int noteSpeed = 5; // note sprite thickness calibrated for noteSpeed = 3
 
     // WARNING: timeStamp (near the start) cannot be at a timing earlier than that of timeSpawnToJudgement!
-    // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
+    // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle, 3f -> Pentagon
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
     {
-        new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 3f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 4f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 5f }, { "timeStampRelease", 5.25f } }
+        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 2f } },
+        new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 3.5f } },
+        new Dictionary<string, float> { { "typeOfNote", 3f }, { "timeStamp", 4f }, { "timeStampRelease", 7f } },
+        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 7.25f }, { "timeStampRelease", 7.5f } }
     };
     // Referencing the index of beatMap
     private int currentNote = 0;
@@ -61,7 +63,7 @@ public class NotesManagerScript : MonoBehaviour
     void SpawnNote(Dictionary<string, float> note)
     {
         // noteCircle
-        if (note["typeOfNote"] == 0f) 
+        if (note["typeOfNote"] == 0f)
         {
             GameObject newNote = Instantiate(noteCircle, transform.position, transform.rotation);
             newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
@@ -77,7 +79,7 @@ public class NotesManagerScript : MonoBehaviour
         }
 
         // noteSquare
-        if (note["typeOfNote"] == 1f) 
+        else if (note["typeOfNote"] == 1f)
         {
             GameObject newNote = Instantiate(noteSquare, transform.position, transform.rotation);
             newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
@@ -95,22 +97,40 @@ public class NotesManagerScript : MonoBehaviour
         }
 
         // noteTriangle
-        if (note["typeOfNote"] == 2f)
+        else if (note["typeOfNote"] == 2f)
         {
             for (int triangleIndex = 0; triangleIndex < 2; triangleIndex++)
-            {    
-            GameObject newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
-            newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            {
+                GameObject newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
+                newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+                logicManager.GetComponent<LogicManagerScript>().noteObjectsQueue.Enqueue(newNote);
+                logicManager.GetComponent<LogicManagerScript>().noteTimingsQueue.Enqueue
+                    (
+                        new Dictionary<string, float>
+                        {
+                        { "type", 0f },
+                        { "timeStamp", note["timeStamp"] },
+                        }
+                    );
+            }
+        }
+
+        // notePentagon
+        else if (note["typeOfNote"] == 3f)
+        {
+            GameObject newNote = Instantiate(notePentagon, transform.position, transform.rotation);
+            newNote.GetComponent<NotePentagonScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            newNote.GetComponent<NotePentagonScript>().holdDuration = note["timeStampRelease"] - note["timeStamp"];
             logicManager.GetComponent<LogicManagerScript>().noteObjectsQueue.Enqueue(newNote);
             logicManager.GetComponent<LogicManagerScript>().noteTimingsQueue.Enqueue
                 (
                     new Dictionary<string, float>
                     {
-                        { "type", 0f },
+                        { "type", 1f },
                         { "timeStamp", note["timeStamp"] },
+                        { "duration", note["timeStampRelease"] - note["timeStamp"] }
                     }
                 );
-            }
         }
     }
 }
