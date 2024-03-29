@@ -10,7 +10,7 @@ public class LogicManagerScript : MonoBehaviour
     public float beatMapStartTime;
     public Queue<GameObject> noteObjectsQueue = new Queue<GameObject>();
     public Queue<Dictionary<string, float>> noteTimingsQueue = new Queue<Dictionary<string, float>>();
-    public int health = 3;
+    public GameObject UIManager;
 
     private float inputStart;
     private float inputEnd;
@@ -107,7 +107,7 @@ public class LogicManagerScript : MonoBehaviour
         // Decrease health if input is wrong/missed
         if (inputType != "correct")
         {
-            health--;
+            UIManager.GetComponent<UIManagerScript>().DecreaseHealth();
         }
 
         // Let noteObject move past the JudgementLine and be destroyed after a while if it is missed, otherwise destroy it instantly
