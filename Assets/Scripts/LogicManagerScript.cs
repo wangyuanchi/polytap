@@ -12,14 +12,50 @@ public class LogicManagerScript : MonoBehaviour
     public Queue<Dictionary<string, float>> noteTimingsQueue = new Queue<Dictionary<string, float>>();
     public GameObject UIManager;
 
+    [SerializeField]
+    private InputActionReference tapActionReference;
     private float inputStart;
     private float inputEnd;
     private bool input = false;
     private float inputDuration = 0;
     private bool waitingForInputDuration = false; // This is a bypass variable so that if-else statements would be reached on the next frame
 
-    private float bufferWindow = 0.15f; // The buffer window is a subset of the expected window
-    private float expectedWindow = 0.5f; // The expected window is where the user is expected to provide an input before the note is missed
+    private float bufferWindow = 0.1f; // The buffer window is a subset of the expected window
+    private float expectedWindow = 0.3f; // The expected window is where the user is expected to provide an input before the note is missed
+    
+    private void OnEnable()
+    {
+        tapActionReference.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        tapActionReference.action.Disable();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Sets input to true and checks for its duration
+        tapActionReference.action.started += context =>
+        {
+            inputStart = Time.time;
+            input = true;
+        };
+
+        tapActionReference.action.canceled += context =>
+        {
+            inputEnd = Time.time;
+            inputDuration = inputEnd - inputStart;
+        };
+    }
+    
+    // Forcefully end input after every frame
+    void ResetInput()
+    {
+        input = false;
+        inputDuration = 0;
+    }
 
     // Update is called once per frame
     void Update()
@@ -113,28 +149,7 @@ public class LogicManagerScript : MonoBehaviour
         // Let noteObject move past the JudgementLine and be destroyed after a while if it is missed, otherwise destroy it instantly
         if (inputType != "missed")
         {
-            Destroy(dequeuedNoteObject);    
+            Destroy(dequeuedNoteObject);
         }
-}
-
-    // Sets input to true, and checks for its duration
-    public void Tap(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            inputStart = Time.time;
-            input = true;
-        }
-        if (context.canceled)
-        {
-            inputEnd = Time.time;
-            inputDuration = inputEnd - inputStart;
-        }
-    }
-
-    void ResetInput()
-    {
-        input = false;
-        inputDuration = 0;
     }
 }

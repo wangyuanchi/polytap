@@ -19,11 +19,11 @@ public class NoteSquareScript : MonoBehaviour
         StartCoroutine(ScaleOverTime(timeSpawnToJudgement, noteSquareEnd));
     }
 
-    // Scale the note to go to (1.5, 1.5, 1.5), where it passes JudgementLineSquare at (1, 1, 1) by timeSpawnToJudgement
+    // Scale the note to go to (3, 3, 3), where it passes JudgementLineSquare at (1, 1, 1) by timeSpawnToJudgement
     IEnumerator ScaleOverTime(float timeSpawnToJudgement, GameObject noteSquareChild)
     {
         float elapsedTime = 0f;
-        float timeSpawnToDestroy = timeSpawnToJudgement * 1.5f;
+        float timeSpawnToDestroy = timeSpawnToJudgement * 3f;
 
         if (noteSquareChild == noteSquareEnd)
         { 
@@ -33,7 +33,7 @@ public class NoteSquareScript : MonoBehaviour
         while (elapsedTime < timeSpawnToDestroy)
         {
             elapsedTime += Time.deltaTime;
-            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(1.5f, 1.5f, 1.5f), elapsedTime / timeSpawnToDestroy);
+            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3f, 3f, 3f), elapsedTime / timeSpawnToDestroy);
             yield return null;
         }
 

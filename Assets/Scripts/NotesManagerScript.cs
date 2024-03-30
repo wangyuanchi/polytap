@@ -7,7 +7,6 @@ public class NotesManagerScript : MonoBehaviour
     public GameObject noteCircle;
     public GameObject noteSquare;
     public GameObject noteTriangle;
-    public GameObject notePentagon;
 
     public GameObject logicManager;
     public GameObject audioManager;
@@ -15,7 +14,7 @@ public class NotesManagerScript : MonoBehaviour
     public int noteSpeed = 5; // note sprite thickness calibrated for noteSpeed = 3
 
     // WARNING: timeStamp (near the start) cannot be at a timing earlier than that of timeSpawnToJudgement!
-    // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle, 3f -> Pentagon
+    // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
     {
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 5.277f } },
@@ -30,7 +29,7 @@ public class NotesManagerScript : MonoBehaviour
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 48.421f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 53.201f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 58.037f } },
-        new Dictionary<string, float> { { "typeOfNote", 3f }, { "timeStamp", 62.862f }, { "timeStampRelease", 71.182f } },
+        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 62.862f }, { "timeStampRelease", 71.182f } },
         new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 72.376f } },
         new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 77.242f }, { "timeStampRelease", 78.372f } },
         new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 79.602f }, { "timeStampRelease", 80.802f } },
@@ -43,7 +42,7 @@ public class NotesManagerScript : MonoBehaviour
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 98.782f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 101.411f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 103.841f } },
-        new Dictionary<string, float> { { "typeOfNote", 3f }, { "timeStamp", 106.068f }, { "timeStampRelease", 114.232f } }
+        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 106.068f }, { "timeStampRelease", 114.232f } }
     };
     // Referencing the index of beatMap
     private int currentNote = 0;
@@ -139,24 +138,6 @@ public class NotesManagerScript : MonoBehaviour
                         }
                     );
             }
-        }
-
-        // notePentagon
-        else if (note["typeOfNote"] == 3f)
-        {
-            GameObject newNote = Instantiate(notePentagon, transform.position, transform.rotation);
-            newNote.GetComponent<NotePentagonScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
-            newNote.GetComponent<NotePentagonScript>().holdDuration = note["timeStampRelease"] - note["timeStamp"];
-            logicManager.GetComponent<LogicManagerScript>().noteObjectsQueue.Enqueue(newNote);
-            logicManager.GetComponent<LogicManagerScript>().noteTimingsQueue.Enqueue
-                (
-                    new Dictionary<string, float>
-                    {
-                        { "type", 1f },
-                        { "timeStamp", note["timeStamp"] },
-                        { "duration", note["timeStampRelease"] - note["timeStamp"] }
-                    }
-                );
         }
     }
 }
