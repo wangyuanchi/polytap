@@ -6,9 +6,27 @@
             "id": "ab3d1a1d-cfb1-4fa4-a33f-7f09d56f0690",
             "actions": [
                 {
-                    "name": "Tap",
+                    "name": "Circle",
                     "type": "Button",
                     "id": "ebead7f7-4207-433e-8da7-a375c732c664",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Square",
+                    "type": "Button",
+                    "id": "f13d761d-5306-4743-b915-c65397200228",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Triangle",
+                    "type": "Button",
+                    "id": "d1f7dc27-f5da-4336-ab56-713e0c78a487",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -18,12 +36,34 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "108ba45d-91cb-4040-89a9-28469b9840ca",
-                    "path": "<Keyboard>/space",
+                    "id": "03de0102-5ed0-4cba-858d-fd4a189a9c28",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "MultiTap",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Triangle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0720026f-04ea-4b8e-970b-8165eebc9b86",
+                    "path": "<Keyboard>/rightShift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Tap",
+                    "action": "Square",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "108ba45d-91cb-4040-89a9-28469b9840ca",
+                    "path": "<Keyboard>/space",
+                    "interactions": "Tap",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Circle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

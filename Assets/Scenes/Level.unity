@@ -154,7 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   beatMapStartTime: 0
   UIManager: {fileID: 783021154}
-  tapActionReference: {fileID: 2861234422685222790, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
+  circleActionReference: {fileID: 2861234422685222790, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
+  squareActionReference: {fileID: -2785143678684464852, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
+  triangleActionReference: {fileID: -3585319890446463770, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
 --- !u!4 &123170252
 Transform:
   m_ObjectHideFlags: 0

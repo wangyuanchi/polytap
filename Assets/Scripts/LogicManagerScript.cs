@@ -8,148 +8,155 @@ using UnityEngine.UIElements;
 public class LogicManagerScript : MonoBehaviour
 {
     public float beatMapStartTime;
-    public Queue<GameObject> noteObjectsQueue = new Queue<GameObject>();
-    public Queue<Dictionary<string, float>> noteTimingsQueue = new Queue<Dictionary<string, float>>();
+    public Queue<GameObject> circleObjectsQueue = new Queue<GameObject>();
+    public Queue<GameObject> squareObjectsQueue = new Queue<GameObject>();
+    public Queue<GameObject> triangleObjectsQueue = new Queue<GameObject>();
+    public Queue<Dictionary<string, float>> circleTimingsQueue = new Queue<Dictionary<string, float>>();
+    public Queue<Dictionary<string, float>> squareTimingsQueue = new Queue<Dictionary<string, float>>();
+    public Queue<Dictionary<string, float>> triangleTimingsQueue = new Queue<Dictionary<string, float>>();
     public GameObject UIManager;
 
     [SerializeField]
-    private InputActionReference tapActionReference;
-    private float inputStart;
-    private float inputEnd;
-    private bool input = false;
+    private InputActionReference circleActionReference;
+    [SerializeField]
+    private InputActionReference squareActionReference;
+    [SerializeField]
+    private InputActionReference triangleActionReference;
     private float inputDuration = 0;
-    private bool waitingForInputDuration = false; // This is a bypass variable so that if-else statements would be reached on the next frame
 
-    private float bufferWindow = 0.1f; // The buffer window is a subset of the expected window
-    private float expectedWindow = 0.3f; // The expected window is where the user is expected to provide an input before the note is missed
+    private float bufferWindow = 0.15f; // The buffer window is a subset of the expected window
+    private float expectedWindow = 0.5f; // The expected window is where the user is expected to provide an input before the note is missed
     
     private void OnEnable()
     {
-        tapActionReference.action.Enable();
+        circleActionReference.action.Enable();
+        squareActionReference.action.Enable();
+        triangleActionReference.action.Enable();
     }
 
     private void OnDisable()
     {
-        tapActionReference.action.Disable();
+        circleActionReference.action.Disable();
+        squareActionReference.action.Disable();
+        triangleActionReference.action.Disable();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        // Sets input to true and checks for its duration
-        tapActionReference.action.started += context =>
+        // Circle -> Single Tap
+        circleActionReference.action.performed += context =>
         {
-            inputStart = Time.time;
-            input = true;
+            if (circleTimingsQueue.Count > 0) { checkInputCircle(Time.time - beatMapStartTime); }
         };
 
-        tapActionReference.action.canceled += context =>
+        // Square -> Hold and Release
+        squareActionReference.action.started += context =>
         {
-            inputEnd = Time.time;
-            inputDuration = inputEnd - inputStart;
+            inputDuration = Time.time;
+        };
+        squareActionReference.action.canceled += context =>
+        {
+            float inputEnd = Time.time;
+            inputDuration = inputEnd - inputDuration;
+            if (squareTimingsQueue.Count > 0) { checkInputSquare(inputEnd - inputDuration - beatMapStartTime, inputDuration); }
+        };
+
+        triangleActionReference.action.performed += context =>
+        {
+            if (triangleTimingsQueue.Count > 0) { checkInputTriangle(Time.time - beatMapStartTime); }
         };
     }
-    
-    // Forcefully end input after every frame
-    void ResetInput()
+
+    void checkInputCircle(float inputTimeStamp)
     {
-        input = false;
-        inputDuration = 0;
+        float requiredTimeStamp = circleTimingsQueue.Peek()["timeStamp"];
+        if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
+        {
+            ProcessInput(true, "Correct Input!");
+            DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
+        }
+        else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
+        {
+            ProcessInput(false, "Wrong Input: Too Early/Late");
+            DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
+        }
+    }
+
+    void checkInputSquare(float inputTimeStamp, float inputDuration)
+    {
+        float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
+        if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
+        {
+            if (Math.Abs(squareTimingsQueue.Peek()["duration"] - inputDuration) <= bufferWindow)
+            {
+                ProcessInput(true, "Correct Input!");
+            }
+            else
+            {
+                ProcessInput(false, "Wrong Input: Too Early/Late Release");
+            }
+            DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
+        }
+        else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
+        {
+            ProcessInput(false, "Wrong Input: Too Early/Late");
+            DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
+        }
+    }
+
+    void checkInputTriangle(float inputTimeStamp)
+    {
+        float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
+        if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
+        {
+            ProcessInput(true, "Correct Input!");
+            DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
+        }
+        else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
+        {
+            ProcessInput(false, "Wrong Input: Too Early/Late");
+            DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        // If there are notes in the queue
-        if (noteObjectsQueue.Count > 0)
+        float currentTimeStamp = Time.time - beatMapStartTime;
+        if (circleTimingsQueue.Count > 0 && currentTimeStamp > circleTimingsQueue.Peek()["timeStamp"] + expectedWindow)
         {
-            float currentTimeStamp = Time.time - beatMapStartTime;
-            float currentTimeToNextNoteTiming = noteTimingsQueue.Peek()["timeStamp"] - currentTimeStamp;
-
-            // If input is detected
-            if (input)
-            {
-                // If input is expected and too early
-                if (Math.Abs(currentTimeToNextNoteTiming) <= expectedWindow && currentTimeToNextNoteTiming > bufferWindow)
-                {
-                    DequeueNote("wrong", "Wrong Input: Tap Too Early");
-                }
-
-                // If input is expected and correct
-                else if (Math.Abs(currentTimeToNextNoteTiming) <= bufferWindow || waitingForInputDuration)
-                {
-                    // If tap required
-                    if (noteTimingsQueue.Peek()["type"] == 0f)
-                    {
-                        DequeueNote("correct", "Correct Input");
-                    }
-
-                    // If hold required
-                    else if (noteTimingsQueue.Peek()["type"] == 1f)
-                    {
-                        waitingForInputDuration = true;
-                        // If the hold has been released
-                        if (inputDuration != 0)
-                        {
-                            if (Math.Abs(noteTimingsQueue.Peek()["duration"] - inputDuration) <= bufferWindow)
-                            {
-                                DequeueNote("correct", "Correct Input");
-                            }
-                            else
-                            {
-                                DequeueNote("wrong", "Wrong Input: Release Too Early");
-                            }
-                            waitingForInputDuration = false;
-                        }
-                        // If the hold has not been released and the release timing is missed
-                        else
-                        {
-                            if (currentTimeStamp > noteTimingsQueue.Peek()["timeStamp"] + noteTimingsQueue.Peek()["duration"] + bufferWindow)
-                            {
-                                DequeueNote("wrong", "Wrong Input: Release Too Late");
-                                waitingForInputDuration = false;
-                            }
-                        }
-                    }
-                }
-                // If input is expected and wrong
-                else if (-currentTimeToNextNoteTiming > bufferWindow)
-                {
-                    DequeueNote("wrong", "Wrong Input: Tap Too Late");
-                }
-            }
-
-            // If note is completely missed without input
-            else if (-currentTimeToNextNoteTiming > expectedWindow)
-            {
-                DequeueNote("missed", "Missed Note");
-            }
-
-            if (!waitingForInputDuration)
-            {
-                ResetInput(); 
-            }
+            DequeueNote(circleObjectsQueue, circleTimingsQueue, false);
+            UIManager.GetComponent<UIManagerScript>().DecreaseHealth();
+            Debug.Log("Missed Note!");
+        }
+        if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindow)
+        {
+            DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
+            UIManager.GetComponent<UIManagerScript>().DecreaseHealth();
+            Debug.Log("Missed Note!");
+        }
+        if (triangleTimingsQueue.Count > 0 && currentTimeStamp > triangleTimingsQueue.Peek()["timeStamp"] + expectedWindow)
+        {
+            DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
+            UIManager.GetComponent<UIManagerScript>().DecreaseHealth();
+            Debug.Log("Missed Note!");
         }
     }
 
-    // Called when a correct/wrong input took place or the note is missed
-    void DequeueNote(string inputType, string inputDetails)
+    void ProcessInput(bool inputCorrect, string inputDetails)
     {
         Debug.Log(inputDetails);
 
-        GameObject dequeuedNoteObject = noteObjectsQueue.Dequeue();
+        if (!inputCorrect)
+        { UIManager.GetComponent<UIManagerScript>().DecreaseHealth(); }
+    }
+
+    void DequeueNote(Queue<GameObject> noteObjectsQueue, Queue<Dictionary<string, float>> noteTimingsQueue, bool destroyNote)
+    {
+        GameObject note = noteObjectsQueue.Dequeue();
         noteTimingsQueue.Dequeue();
-
-        // Decrease health if input is wrong/missed
-        if (inputType != "correct")
-        {
-            UIManager.GetComponent<UIManagerScript>().DecreaseHealth();
-        }
-
-        // Let noteObject move past the JudgementLine and be destroyed after a while if it is missed, otherwise destroy it instantly
-        if (inputType != "missed")
-        {
-            Destroy(dequeuedNoteObject);
-        }
+        if (destroyNote)
+        { Destroy(note); }
     }
 }

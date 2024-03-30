@@ -11,14 +11,14 @@ public class NotesManagerScript : MonoBehaviour
     public GameObject logicManager;
     public GameObject audioManager;
     
-    public int noteSpeed = 5; // note sprite thickness calibrated for noteSpeed = 3
+    public int noteSpeed = 5;
 
     // WARNING: timeStamp (near the start) cannot be at a timing earlier than that of timeSpawnToJudgement!
     // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
     {
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 5.277f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 10.151f } },
+        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 5.277f } },
+        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 10.151f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 14.931f } },
         new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 19.661f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 24.326f } },
@@ -84,7 +84,6 @@ public class NotesManagerScript : MonoBehaviour
     }
 
     // Spawn, update relevant variables in the instance of the new note and give it AND its timing(s) to logicManager 
-    // type: 0f -> tap, 1f -> hold
     void SpawnNote(Dictionary<string, float> note)
     {
         // noteCircle
@@ -92,12 +91,11 @@ public class NotesManagerScript : MonoBehaviour
         {
             GameObject newNote = Instantiate(noteCircle, transform.position, transform.rotation);
             newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
-            logicManager.GetComponent<LogicManagerScript>().noteObjectsQueue.Enqueue(newNote);
-            logicManager.GetComponent<LogicManagerScript>().noteTimingsQueue.Enqueue
+            logicManager.GetComponent<LogicManagerScript>().circleObjectsQueue.Enqueue(newNote);
+            logicManager.GetComponent<LogicManagerScript>().circleTimingsQueue.Enqueue
                 (
                     new Dictionary<string, float>
                     {
-                        { "type", 0f },
                         { "timeStamp", note["timeStamp"] }
                     }
                 );
@@ -109,12 +107,11 @@ public class NotesManagerScript : MonoBehaviour
             GameObject newNote = Instantiate(noteSquare, transform.position, transform.rotation);
             newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
             newNote.GetComponent<NoteSquareScript>().holdDuration = note["timeStampRelease"] - note["timeStamp"];
-            logicManager.GetComponent<LogicManagerScript>().noteObjectsQueue.Enqueue(newNote);
-            logicManager.GetComponent<LogicManagerScript>().noteTimingsQueue.Enqueue
+            logicManager.GetComponent<LogicManagerScript>().squareObjectsQueue.Enqueue(newNote);
+            logicManager.GetComponent<LogicManagerScript>().squareTimingsQueue.Enqueue
                 (
                     new Dictionary<string, float>
                     {
-                        { "type", 1f },
                         { "timeStamp", note["timeStamp"] },
                         { "duration", note["timeStampRelease"] - note["timeStamp"] }
                     }
@@ -124,20 +121,16 @@ public class NotesManagerScript : MonoBehaviour
         // noteTriangle
         else if (note["typeOfNote"] == 2f)
         {
-            for (int triangleIndex = 0; triangleIndex < 2; triangleIndex++)
-            {
-                GameObject newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
-                newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
-                logicManager.GetComponent<LogicManagerScript>().noteObjectsQueue.Enqueue(newNote);
-                logicManager.GetComponent<LogicManagerScript>().noteTimingsQueue.Enqueue
-                    (
-                        new Dictionary<string, float>
-                        {
-                        { "type", 0f },
+            GameObject newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
+            newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            logicManager.GetComponent<LogicManagerScript>().triangleObjectsQueue.Enqueue(newNote);
+            logicManager.GetComponent<LogicManagerScript>().triangleTimingsQueue.Enqueue
+                (
+                    new Dictionary<string, float>
+                    {
                         { "timeStamp", note["timeStamp"] },
-                        }
-                    );
-            }
+                    }
+                );
         }
     }
 }
