@@ -10,7 +10,8 @@ public class UIManagerScript : MonoBehaviour
     public Image[] hearts;
     public Sprite HeartEmpty;
     public Sprite HeartFull;
-    
+    public GameObject GameOverScreen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +26,8 @@ public class UIManagerScript : MonoBehaviour
 
     void GameOver()
     {
-
+        GameOverScreen.SetActive(true);
+        new AudioManagerScript().audioSource.Stop();
     }
 
     public void DecreaseHealth()

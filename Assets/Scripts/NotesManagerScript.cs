@@ -17,8 +17,8 @@ public class NotesManagerScript : MonoBehaviour
     // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
     {
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 5.277f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 10.151f } },
+        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 5.277f } },
+        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 10.151f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 14.931f } },
         new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 19.661f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 24.326f } },
