@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,14 +15,21 @@ public class UIManagerScript : MonoBehaviour
     public Sprite HeartFull;
 
     public GameObject SceneManager;
-    public GameObject NoteManager;
+    public GameObject AudioManager;
     public GameObject gameOverObject;
     public TMP_Text gameOverText;
+
+    public float beatMapStartTime;
+
+    private float audioTotalDuration;
+    private float audioCompletedDuration;
+    private float progressPercentage;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        audioTotalDuration = AudioManager.GetComponent<AudioManagerScript>().audioClip.length;
+
     }
 
     // Update is called once per frame
@@ -29,22 +37,17 @@ public class UIManagerScript : MonoBehaviour
     {
         
     }
-    void GameOver()
+    IEnumerator GameOver()
     {   
-        //Gets percentage of notes completed
-        float note = NoteManager.GetComponent<NotesManagerScript>().currentNote;
-        float max = NoteManager.GetComponent<NotesManagerScript>().beatMapLength;
-        float progress = Mathf.Floor((note / max)*100);
-        gameOverText.text = $"Game Over! Progress:{progress}%";
+        // Checks for the progress based on the length of the audio completed
+        audioCompletedDuration = Time.time - beatMapStartTime; 
+        progressPercentage = audioCompletedDuration / audioTotalDuration;
+        gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress:{progressPercentage.ToString("0.00")}%";
         gameOverObject.SetActive(true);
-        StartCoroutine(waiter());           //Needed to let text be shown for a few seconds
-    }
 
-    IEnumerator waiter()
-    {   
-        //just waits for 5 seconds before restarting
+        // Pause for 5 seconds before restarting the scene
         yield return new WaitForSeconds(5);
-        SceneManager.GetComponent<SceneManagerScript>().RestartScene();
+        SceneManager.GetComponent<SceneManagerScript>().RestartScene();         
     }
 
     public void DecreaseHealth()
@@ -67,7 +70,7 @@ public class UIManagerScript : MonoBehaviour
         // End the game if no health is left
         if (health == 0)
         {
-            GameOver();
+            StartCoroutine(GameOver());
         }
     }
 }

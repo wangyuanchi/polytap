@@ -11,7 +11,7 @@ public class NotesManagerScript : MonoBehaviour
 
     public GameObject logicManager;
     public GameObject audioManager;
-    public int beatMapLength;
+    public GameObject UIManager;
     
     public int noteSpeed = 5;
 
@@ -64,10 +64,10 @@ public class NotesManagerScript : MonoBehaviour
     {
         StartCoroutine(SpawnBeatMap(beatMap));
         audioManager.GetComponent<AudioManagerScript>().PlayAudio();
-        beatMapLength = beatMap.Count;
 
-        // Give LogicManagerScript the exact timing the beatmap starts
+        // Give LogicManagerScript and UIManagerScript the exact timing the beatmap starts
         logicManager.GetComponent<LogicManagerScript>().beatMapStartTime = Time.time;
+        UIManager.GetComponent<UIManagerScript>().beatMapStartTime = Time.time;
     }
 
     IEnumerator SpawnBeatMap(List<Dictionary<string, float>> beatMap)
