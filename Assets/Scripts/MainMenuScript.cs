@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuScript : MonoBehaviour
 {
     public void LoadLevelSelector()
-    { SceneManager.LoadSceneAsync("LevelSelector"); }
+    { SceneManager.LoadSceneAsync("Level Selector"); }
 
     public void LoadOptions()
     { SceneManager.LoadSceneAsync("Options"); }
