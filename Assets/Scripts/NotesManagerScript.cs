@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class NotesManagerScript : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class NotesManagerScript : MonoBehaviour
 
     public GameObject logicManager;
     public GameObject audioManager;
+    public int beatMapLength;
     
     public int noteSpeed = 5;
 
@@ -45,7 +47,7 @@ public class NotesManagerScript : MonoBehaviour
         new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 106.068f }, { "timeStampRelease", 114.232f } }
     };
     // Referencing the index of beatMap
-    private int currentNote = 0;
+    public int currentNote = 0;
 
     // noteSpeed timings { noteSpeed, timeSpawnToJudgement }
     private Dictionary<int, float> noteSpeedTimings = new Dictionary<int, float>
@@ -62,6 +64,7 @@ public class NotesManagerScript : MonoBehaviour
     {
         StartCoroutine(SpawnBeatMap(beatMap));
         audioManager.GetComponent<AudioManagerScript>().PlayAudio();
+        beatMapLength = beatMap.Count;
 
         // Give LogicManagerScript the exact timing the beatmap starts
         logicManager.GetComponent<LogicManagerScript>().beatMapStartTime = Time.time;
