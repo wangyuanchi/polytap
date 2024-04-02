@@ -5,6 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class LevelSelectorManagerScript : MonoBehaviour
 {
-    public void LoadLevel()
-    { SceneManager.LoadSceneAsync("Level 1"); }
+    public void LoadScene(string sceneName)
+    { SceneManager.LoadSceneAsync(sceneName); }
 }
