@@ -16,6 +16,7 @@ public class UIManagerScript : MonoBehaviour
 
     public GameObject SceneManager;
     public GameObject AudioManager;
+    public TMP_Text progressText;
     public GameObject gameOverObject;
     public TMP_Text gameOverText;
 
@@ -23,7 +24,6 @@ public class UIManagerScript : MonoBehaviour
 
     private float audioTotalDuration;
     private float audioCompletedDuration;
-    private float progressPercentage;
 
     // Start is called before the first frame update
     void Start()
@@ -35,19 +35,27 @@ public class UIManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Only run the progress percentage if game is not over
+        if (!gameOverObject.activeSelf)
+        { progressText.text = $"{getProgressPercentage()}%"; }
     }
     IEnumerator GameOver()
-    {   
-        // Checks for the progress based on the length of the audio completed
-        audioCompletedDuration = Time.time - beatMapStartTime; 
-        progressPercentage = audioCompletedDuration / audioTotalDuration;
-        gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress:{progressPercentage.ToString("0.00")}%";
+    {
+       
+        gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {getProgressPercentage()}%";
         gameOverObject.SetActive(true);
 
         // Pause for 5 seconds before restarting the scene
         yield return new WaitForSeconds(5);
         SceneManager.GetComponent<SceneManagerScript>().RestartScene();         
+    }
+
+    string getProgressPercentage()
+    {
+        float progressPercentage;
+        audioCompletedDuration = Time.time - beatMapStartTime;
+        progressPercentage = audioCompletedDuration / audioTotalDuration * 100f;
+        return progressPercentage.ToString("0.00");
     }
 
     public void DecreaseHealth()

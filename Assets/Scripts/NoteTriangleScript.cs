@@ -14,16 +14,16 @@ public class NoteTriangleScript : MonoBehaviour
         StartCoroutine(ScaleOverTime(timeSpawnToJudgement));
     }
 
-    // Scale the note to go to (3, 3, 3), where it passes JudgementLineCircle at (1, 1, 1) by timeSpawnToJudgement
+    // Scale the note to go to (6, 6, 6), where it passes JudgementLineCircle at (1, 1, 1) by timeSpawnToJudgement
     IEnumerator ScaleOverTime(float timeSpawnToJudgement)
     {
         float elapsedTime = 0f;
-        float timeSpawnToDestroy = timeSpawnToJudgement * 3f;
+        float timeSpawnToDestroy = timeSpawnToJudgement * 6f;
 
         while (elapsedTime < timeSpawnToDestroy)
         {
             elapsedTime += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3f, 3f, 3f), elapsedTime / timeSpawnToDestroy);
+            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(6f, 6f, 6f), elapsedTime / timeSpawnToDestroy);
             yield return null;
         }
 

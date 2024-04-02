@@ -97,3 +97,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea94d2a88b96e994cb062f9938753b6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeSpawnToJudgement: 0
