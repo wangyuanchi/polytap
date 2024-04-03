@@ -32,40 +32,47 @@ public class LogicManagerScript : MonoBehaviour
         circleActionReference.action.Enable();
         squareActionReference.action.Enable();
         triangleActionReference.action.Enable();
+
+        circleActionReference.action.performed += onCircle;
+        squareActionReference.action.started += onSquareHold;
+        squareActionReference.action.canceled += onSquareRelease;
+        triangleActionReference.action.performed += onTriangle;
     }
 
     private void OnDisable()
     {
+        circleActionReference.action.performed -= onCircle;
+        squareActionReference.action.started -= onSquareHold;
+        squareActionReference.action.canceled -= onSquareRelease;
+        triangleActionReference.action.performed -= onTriangle;
+
         circleActionReference.action.Disable();
         squareActionReference.action.Disable();
         triangleActionReference.action.Disable();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    // Circle -> Single Tap
+    private void onCircle(InputAction.CallbackContext context)
     {
-        // Circle -> Single Tap
-        circleActionReference.action.performed += context =>
-        {
-            if (circleTimingsQueue.Count > 0) { checkInputCircle(Time.time - beatMapStartTime); }
-        };
+        if (circleTimingsQueue.Count > 0) { checkInputCircle(Time.time - beatMapStartTime); }
+    }
 
-        // Square -> Hold and Release
-        squareActionReference.action.started += context =>
-        {
-            inputDuration = Time.time;
-        };
-        squareActionReference.action.canceled += context =>
-        {
-            float inputEnd = Time.time;
-            inputDuration = inputEnd - inputDuration;
-            if (squareTimingsQueue.Count > 0) { checkInputSquare(inputEnd - inputDuration - beatMapStartTime, inputDuration); }
-        };
+    // Square -> Hold and Release
+    private void onSquareHold(InputAction.CallbackContext context)
+    {
+        inputDuration = Time.time;
+    }
+    private void onSquareRelease(InputAction.CallbackContext context)
+    {
+        float inputEnd = Time.time;
+        inputDuration = inputEnd - inputDuration;
+        if (squareTimingsQueue.Count > 0) { checkInputSquare(inputEnd - inputDuration - beatMapStartTime, inputDuration); }
+    }
 
-        triangleActionReference.action.performed += context =>
-        {
-            if (triangleTimingsQueue.Count > 0) { checkInputTriangle(Time.time - beatMapStartTime); }
-        };
+    // Triangle -> Double Tap
+    private void onTriangle(InputAction.CallbackContext context)
+    {
+        if (triangleTimingsQueue.Count > 0) { checkInputTriangle(Time.time - beatMapStartTime); }
     }
 
     void checkInputCircle(float inputTimeStamp)

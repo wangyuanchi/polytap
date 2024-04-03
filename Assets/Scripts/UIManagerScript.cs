@@ -6,6 +6,8 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class UIManagerScript : MonoBehaviour
 {
@@ -14,40 +16,65 @@ public class UIManagerScript : MonoBehaviour
     public Sprite HeartEmpty;
     public Sprite HeartFull;
 
-    public GameObject SceneManager;
     public GameObject AudioManager;
-    public TMP_Text progressText;
-    public GameObject gameOverObject;
+    public GameObject pauseUI;
+    public GameObject gameOverUI;
     public TMP_Text gameOverText;
+    public TMP_Text progressText;
 
     public float beatMapStartTime;
 
     private float audioTotalDuration;
     private float audioCompletedDuration;
 
+    [SerializeField]
+    private InputActionReference pauseActionReference;
+
+    private void OnEnable()
+    {
+        pauseActionReference.action.Enable();
+        pauseActionReference.action.performed += onPause;
+    }
+
+    private void OnDisable()
+    {
+        pauseActionReference.action.performed -= onPause;
+        pauseActionReference.action.Disable();
+    }
+
+    private void onPause(InputAction.CallbackContext context)
+    {
+        if (pauseUI.activeSelf)
+        { ResumeScene(); }
+        else
+        { PauseScene(); }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         audioTotalDuration = AudioManager.GetComponent<AudioManagerScript>().audioClip.length;
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Only run the progress percentage if game is not over
-        if (!gameOverObject.activeSelf)
+        // Do not increase progress if game is over
+        if (!gameOverUI.activeSelf)
         { progressText.text = $"{getProgressPercentage()}%"; }
     }
+
+    // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
     IEnumerator GameOver()
     {
-       
+        AudioManager.GetComponent<AudioManagerScript>().PauseAudio();
+        
         gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {getProgressPercentage()}%";
-        gameOverObject.SetActive(true);
+        gameOverUI.SetActive(true);
 
-        // Pause for 5 seconds before restarting the scene
+        // Pause for 3 seconds before restarting the scene
         yield return new WaitForSeconds(3);
-        SceneManager.GetComponent<SceneManagerScript>().RestartScene();         
+        RestartScene(); 
     }
 
     string getProgressPercentage()
@@ -81,4 +108,32 @@ public class UIManagerScript : MonoBehaviour
             StartCoroutine(GameOver());
         }
     }
+
+    public void RestartScene()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void PauseScene()
+    {
+        pauseUI.SetActive(true);
+        Time.timeScale = 0;
+        AudioManager.GetComponent<AudioManagerScript>().PauseAudio();
+    }
+
+    public void ResumeScene()
+    {
+        pauseUI.SetActive(false);
+        Time.timeScale = 1;
+
+        // Prevent clash where audio resumes if user pauses then unpauses after the game has ended
+        if (!gameOverUI.activeSelf)
+        { 
+            AudioManager.GetComponent<AudioManagerScript>().ResumeAudio();
+        }
+    }
+
+    public void LoadScene(string sceneName)
+    { SceneManager.LoadSceneAsync(sceneName); }
 }
