@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class UIManagerScript : MonoBehaviour
 {
@@ -22,10 +23,15 @@ public class UIManagerScript : MonoBehaviour
     public TMP_Text gameOverText;
     public TMP_Text progressText;
 
+    public float currentScore;
+    public float highScore;
+
     public float beatMapStartTime;
 
     private float audioTotalDuration;
     private float audioCompletedDuration;
+
+    private float progressPercentage;
 
     [SerializeField]
     private InputActionReference pauseActionReference;
@@ -64,6 +70,13 @@ public class UIManagerScript : MonoBehaviour
         { progressText.text = $"{getProgressPercentage()}%"; }
     }
 
+    string getProgressPercentage()
+    {
+        audioCompletedDuration = Time.time - beatMapStartTime;
+        progressPercentage = audioCompletedDuration / audioTotalDuration * 100f;
+        return progressPercentage.ToString("0.00");
+    }
+
     // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
     IEnumerator GameOver()
     {
@@ -71,19 +84,25 @@ public class UIManagerScript : MonoBehaviour
         
         gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {getProgressPercentage()}%";
         gameOverUI.SetActive(true);
-
+        string sceneName = SceneManager.GetActiveScene().name;
+        highScore = PlayerPrefs.GetFloat(sceneName);
+        if (PlayerPrefs.HasKey(sceneName))
+        {
+            if (highScore < progressPercentage)
+            {
+                highScore = progressPercentage;
+                PlayerPrefs.SetFloat(sceneName, highScore);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetFloat(sceneName,progressPercentage);
+        }
         // Pause for 3 seconds before restarting the scene
         yield return new WaitForSeconds(3);
         RestartScene(); 
     }
 
-    string getProgressPercentage()
-    {
-        float progressPercentage;
-        audioCompletedDuration = Time.time - beatMapStartTime;
-        progressPercentage = audioCompletedDuration / audioTotalDuration * 100f;
-        return progressPercentage.ToString("0.00");
-    }
 
     public void DecreaseHealth()
     {

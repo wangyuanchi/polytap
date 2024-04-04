@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,11 +16,21 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
     [SerializeField] LeanTweenType tweenType;
     float dragThreshold;
 
+    public TMP_Text highScoreText;
+    public GameObject UIManager;
+
+    List<string> levelList = new List<string> 
+    { 
+        "Level 1", "Level 2", "Level 3" 
+    };
+
     private void Awake()
     {
         currentPage = 1;
         targetPos = levelPagesRect.localPosition;
         dragThreshold = Screen.width / 15;
+        string level = levelList[currentPage - 1];
+        highScoreText.text = $"HighScore:{PlayerPrefs.GetFloat(level)}";
     }
 
     public void Next()
@@ -45,6 +56,8 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
     void MovePage()
     {
         levelPagesRect.LeanMoveLocal(targetPos, tweenTime).setEase(tweenType);
+        string level = levelList[currentPage - 1];
+        highScoreText.text = $"HighScore:{PlayerPrefs.GetFloat(level)}";
     }
 
     public void OnEndDrag(PointerEventData eventData)
