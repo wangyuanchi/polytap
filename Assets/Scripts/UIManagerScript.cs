@@ -23,15 +23,10 @@ public class UIManagerScript : MonoBehaviour
     public TMP_Text gameOverText;
     public TMP_Text progressText;
 
-    public float currentScore;
-    public float highScore;
-
     public float beatMapStartTime;
 
     private float audioTotalDuration;
     private float audioCompletedDuration;
-
-    private float progressPercentage;
 
     [SerializeField]
     private InputActionReference pauseActionReference;
@@ -70,39 +65,35 @@ public class UIManagerScript : MonoBehaviour
         { progressText.text = $"{getProgressPercentage()}%"; }
     }
 
-    string getProgressPercentage()
+    float getProgressPercentage()
     {
+        float progressPercentage;
         audioCompletedDuration = Time.time - beatMapStartTime;
-        progressPercentage = audioCompletedDuration / audioTotalDuration * 100f;
-        return progressPercentage.ToString("0.00");
+        progressPercentage = (float) Math.Round(audioCompletedDuration / audioTotalDuration * 100f, 2);
+        return progressPercentage;
     }
 
     // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
     IEnumerator GameOver()
     {
         AudioManager.GetComponent<AudioManagerScript>().PauseAudio();
-        
-        gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {getProgressPercentage()}%";
+        float progressPercentage = getProgressPercentage();
+
+        gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
         gameOverUI.SetActive(true);
-        string sceneName = SceneManager.GetActiveScene().name;
-        highScore = PlayerPrefs.GetFloat(sceneName);
-        if (PlayerPrefs.HasKey(sceneName))
+
+        // Setting of high score in player prefs
+        string key = SceneManager.GetActiveScene().name + " High Score";
+        float highScore = PlayerPrefs.GetFloat(key);
+        if (highScore < progressPercentage)
         {
-            if (highScore < progressPercentage)
-            {
-                highScore = progressPercentage;
-                PlayerPrefs.SetFloat(sceneName, highScore);
-            }
+            PlayerPrefs.SetFloat(key, progressPercentage);
         }
-        else
-        {
-            PlayerPrefs.SetFloat(sceneName,progressPercentage);
-        }
+
         // Pause for 3 seconds before restarting the scene
         yield return new WaitForSeconds(3);
         RestartScene(); 
     }
-
 
     public void DecreaseHealth()
     {
