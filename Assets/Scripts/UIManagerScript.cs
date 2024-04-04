@@ -21,12 +21,14 @@ public class UIManagerScript : MonoBehaviour
     public GameObject pauseUI;
     public GameObject gameOverUI;
     public TMP_Text gameOverText;
+    public GameObject restartSoonText;
     public TMP_Text progressText;
 
     public float beatMapStartTime;
 
     private float audioTotalDuration;
     private float audioCompletedDuration;
+    private float progressPercentage;
 
     [SerializeField]
     private InputActionReference pauseActionReference;
@@ -62,24 +64,43 @@ public class UIManagerScript : MonoBehaviour
     {
         // Do not increase progress if game is over
         if (!gameOverUI.activeSelf)
-        { progressText.text = $"{getProgressPercentage()}%"; }
+        {
+            updateProgressPercentage();
+
+            if (progressPercentage < 100f)
+            {
+                progressText.text = $"{progressPercentage}%";
+            }
+            else
+            {
+                // Make sure progressPercentage is at exactly 100
+                progressPercentage = 100f;
+                progressText.text = $"{progressPercentage}%";
+                StartCoroutine(GameOver(true));
+            }
+        }
     }
 
-    float getProgressPercentage()
+    void updateProgressPercentage()
     {
-        float progressPercentage;
         audioCompletedDuration = Time.time - beatMapStartTime;
         progressPercentage = (float) Math.Round(audioCompletedDuration / audioTotalDuration * 100f, 2);
-        return progressPercentage;
     }
 
     // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
-    IEnumerator GameOver()
+    IEnumerator GameOver(bool levelComplete)
     {
-        AudioManager.GetComponent<AudioManagerScript>().PauseAudio();
-        float progressPercentage = getProgressPercentage();
+        if (levelComplete)
+        {
+            gameOverText.text = "Level Complete!";
+            restartSoonText.SetActive(false);
+        }
+        else
+        {
+            gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
+        }
 
-        gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
+        AudioManager.GetComponent<AudioManagerScript>().PauseAudio();
         gameOverUI.SetActive(true);
 
         // Setting of high score in player prefs
@@ -91,8 +112,11 @@ public class UIManagerScript : MonoBehaviour
         }
 
         // Pause for 3 seconds before restarting the scene
-        yield return new WaitForSeconds(3);
-        RestartScene(); 
+        if (!levelComplete)
+        {
+            yield return new WaitForSeconds(3);
+            RestartScene();
+        }
     }
 
     public void DecreaseHealth()
@@ -115,7 +139,7 @@ public class UIManagerScript : MonoBehaviour
         // End the game if no health is left
         if (health == 0)
         {
-            StartCoroutine(GameOver());
+            StartCoroutine(GameOver(false));
         }
     }
 
@@ -145,5 +169,8 @@ public class UIManagerScript : MonoBehaviour
     }
 
     public void LoadScene(string sceneName)
-    { SceneManager.LoadSceneAsync(sceneName); }
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadSceneAsync(sceneName); 
+    }
 }

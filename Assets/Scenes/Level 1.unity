@@ -610,7 +610,7 @@ GameObject:
   - component: {fileID: 491342915}
   - component: {fileID: 491342914}
   m_Layer: 5
-  m_Name: GameOverText2
+  m_Name: RestartSoonText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1007,6 +1007,7 @@ MonoBehaviour:
   pauseUI: {fileID: 1310174717}
   gameOverUI: {fileID: 916529231}
   gameOverText: {fileID: 1794277639}
+  restartSoonText: {fileID: 491342912}
   progressText: {fileID: 2046315652}
   beatMapStartTime: 0
   pauseActionReference: {fileID: 1906613333141810330, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}

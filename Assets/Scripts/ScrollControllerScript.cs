@@ -16,7 +16,7 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
     [SerializeField] LeanTweenType tweenType;
     float dragThreshold;
 
-    private void Awake()
+    void Start()
     {
         currentPage = 1;
         targetPos = levelPagesRect.localPosition;
