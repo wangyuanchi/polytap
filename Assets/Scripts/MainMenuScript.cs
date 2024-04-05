@@ -16,6 +16,7 @@ public class MainMenuScript : MonoBehaviour
     void Awake()
     {
         // Setting of player preferences
+        PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
         PlayerPrefs.SetFloat("Level 1 High Score", PlayerPrefs.GetFloat("Level 1 High Score", 0f));
     }
 }

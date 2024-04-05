@@ -4,37 +4,40 @@ using UnityEngine;
 
 public class AudioManagerScript : MonoBehaviour
 {
-    public AudioSource audioSource;
-    public AudioClip audioClip;
+    public AudioClip musicClip;
+    public GameObject musicObject;
+
+    private AudioSource musicSource;
 
     // Start is called before the first frame update
     void Start()
     {
-        audioSource.clip = audioClip;
-        PlayAudio();
+        musicSource = musicObject.GetComponent<AudioSource>();
+        musicSource.clip = musicClip;
+        PlayMusic();
     }
 
-    public void PlayAudio()
+    public void PlayMusic()
     {
-        if (!audioSource.isPlaying)
-        { audioSource.Play(); }
+        if (!musicSource.isPlaying)
+        { musicSource.Play(); }
     }
 
-    public void PauseAudio()
+    public void PauseMusic()
     {
-        if (audioSource.isPlaying)
-        { audioSource.Pause(); }
+        if (musicSource.isPlaying)
+        { musicSource.Pause(); }
     }
 
-    public void ResumeAudio()
+    public void ResumeMusic()
     {
-        if (!audioSource.isPlaying)
-        { audioSource.UnPause(); }
+        if (!musicSource.isPlaying)
+        { musicSource.UnPause(); }
     }
 
-    // Stopped audio cannot be resumed
-    public void StopAudio()
+    // Stopped music cannot be resumed, and must start from the beginning
+    public void StopMusic()
     {
-        audioSource.Stop();
+        musicSource.Stop();
     }
 }

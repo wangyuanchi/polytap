@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.Audio;
 using Unity.VisualScripting;
 
 public class UIManagerScript : MonoBehaviour
@@ -23,6 +24,9 @@ public class UIManagerScript : MonoBehaviour
     public TMP_Text gameOverText;
     public GameObject restartSoonText;
     public TMP_Text progressText;
+
+    public AudioMixer audioMixer;
+    public Slider musicSlider;
 
     public float beatMapStartTime;
 
@@ -56,7 +60,11 @@ public class UIManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        audioTotalDuration = AudioManager.GetComponent<AudioManagerScript>().audioClip.length;
+        // Load and set the music volume
+        musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
+        SetMusicVolume();
+
+        audioTotalDuration = AudioManager.GetComponent<AudioManagerScript>().musicClip.length;
     }
 
     // Update is called once per frame
@@ -100,7 +108,7 @@ public class UIManagerScript : MonoBehaviour
             gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
         }
 
-        AudioManager.GetComponent<AudioManagerScript>().PauseAudio();
+        AudioManager.GetComponent<AudioManagerScript>().StopMusic();
         gameOverUI.SetActive(true);
 
         // Setting of high score in player prefs
@@ -143,6 +151,13 @@ public class UIManagerScript : MonoBehaviour
         }
     }
 
+    public void SetMusicVolume()
+    {
+        float musicVolume = musicSlider.value;
+        audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume)*10);
+        PlayerPrefs.SetFloat("Music Volume", musicVolume);
+    }
+
     public void RestartScene()
     {
         Time.timeScale = 1;
@@ -153,7 +168,7 @@ public class UIManagerScript : MonoBehaviour
     {
         pauseUI.SetActive(true);
         Time.timeScale = 0;
-        AudioManager.GetComponent<AudioManagerScript>().PauseAudio();
+        AudioManager.GetComponent<AudioManagerScript>().PauseMusic();
     }
 
     public void ResumeScene()
@@ -164,7 +179,7 @@ public class UIManagerScript : MonoBehaviour
         // Prevent clash where audio resumes if user pauses then unpauses after the game has ended
         if (!gameOverUI.activeSelf)
         { 
-            AudioManager.GetComponent<AudioManagerScript>().ResumeAudio();
+            AudioManager.GetComponent<AudioManagerScript>().ResumeMusic();
         }
     }
 
