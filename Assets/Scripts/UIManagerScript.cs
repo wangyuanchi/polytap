@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 
 public class UIManagerScript : MonoBehaviour
 {
-    public int health = 3;
+    public int health;
     public Image[] hearts;
     public Sprite HeartEmpty;
     public Sprite HeartFull;
@@ -60,6 +60,8 @@ public class UIManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        setDifficulty();
+
         // Load and set the music volume
         musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
         SetMusicVolume();
@@ -89,42 +91,24 @@ public class UIManagerScript : MonoBehaviour
         }
     }
 
+    void setDifficulty()
+    {
+        if (PlayerPrefs.GetString("Hard Mode") == "false")
+        {
+            health = 3;
+        }
+        else
+        {
+            health = 1;
+            hearts[1].sprite = HeartEmpty;
+            hearts[2].sprite = HeartEmpty;
+        }
+    }
+
     void updateProgressPercentage()
     {
         audioCompletedDuration = Time.time - beatMapStartTime;
         progressPercentage = (float) Math.Round(audioCompletedDuration / audioTotalDuration * 100f, 2);
-    }
-
-    // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
-    IEnumerator GameOver(bool levelComplete)
-    {
-        if (levelComplete)
-        {
-            gameOverText.text = "Level Complete!";
-            restartSoonText.SetActive(false);
-        }
-        else
-        {
-            gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
-        }
-
-        AudioManager.GetComponent<AudioManagerScript>().StopMusic();
-        gameOverUI.SetActive(true);
-
-        // Setting of high score in player prefs
-        string key = SceneManager.GetActiveScene().name + " High Score";
-        float highScore = PlayerPrefs.GetFloat(key);
-        if (highScore < progressPercentage)
-        {
-            PlayerPrefs.SetFloat(key, progressPercentage);
-        }
-
-        // Pause for 3 seconds before restarting the scene
-        if (!levelComplete)
-        {
-            yield return new WaitForSeconds(3);
-            RestartScene();
-        }
     }
 
     public void DecreaseHealth()
@@ -151,11 +135,51 @@ public class UIManagerScript : MonoBehaviour
         }
     }
 
-    public void SetMusicVolume()
+    // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
+    IEnumerator GameOver(bool levelComplete)
     {
-        float musicVolume = musicSlider.value;
-        audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume)*10);
-        PlayerPrefs.SetFloat("Music Volume", musicVolume);
+        if (levelComplete)
+        {
+            gameOverText.text = "Level Complete!";
+            restartSoonText.SetActive(false);
+        }
+        else
+        {
+            gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
+        }
+
+        AudioManager.GetComponent<AudioManagerScript>().StopMusic();
+        gameOverUI.SetActive(true);
+
+        SetHighScore();
+
+        // Pause for 3 seconds before restarting the scene
+        if (!levelComplete)
+        {
+            yield return new WaitForSeconds(3);
+            RestartScene();
+        }
+    }
+
+    // Setting of high score in player prefs
+    void SetHighScore()
+    {
+        string key;
+        
+        if (PlayerPrefs.GetString("Hard Mode") == "false")
+        {
+            key = SceneManager.GetActiveScene().name + " High Score";
+        }
+        else
+        {
+            key = SceneManager.GetActiveScene().name + " Hard Mode High Score";
+        }
+
+        float highScore = PlayerPrefs.GetFloat(key);
+        if (highScore < progressPercentage)
+        {
+            PlayerPrefs.SetFloat(key, progressPercentage);
+        }
     }
 
     public void RestartScene()
@@ -187,5 +211,12 @@ public class UIManagerScript : MonoBehaviour
     {
         Time.timeScale = 1;
         SceneManager.LoadSceneAsync(sceneName); 
+    }
+
+    public void SetMusicVolume()
+    {
+        float musicVolume = musicSlider.value;
+        audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume) * 10);
+        PlayerPrefs.SetFloat("Music Volume", musicVolume);
     }
 }
