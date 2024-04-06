@@ -214,7 +214,7 @@ public class UIManagerScript : MonoBehaviour
     public void SetMusicVolume()
     {
         float musicVolume = musicSlider.value;
-        audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume) * 10);
+        audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume) * 25);
         PlayerPrefs.SetFloat("Music Volume", musicVolume);
     }
 }

@@ -1173,7 +1173,6 @@ MonoBehaviour:
   gameOverText: {fileID: 1794277639}
   restartSoonText: {fileID: 491342912}
   progressText: {fileID: 2046315652}
-  progressBar: {fileID: 0}
   audioMixer: {fileID: 24100000, guid: 2e4df9c1023ccf44ca8f198bb4b7f337, type: 2}
   musicSlider: {fileID: 1697433320}
   beatMapStartTime: 0
