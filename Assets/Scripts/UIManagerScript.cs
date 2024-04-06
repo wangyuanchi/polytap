@@ -24,6 +24,7 @@ public class UIManagerScript : MonoBehaviour
     public TMP_Text gameOverText;
     public GameObject restartSoonText;
     public TMP_Text progressText;
+    public GameObject progressBar;
 
     public AudioMixer audioMixer;
     public Slider musicSlider;
@@ -146,6 +147,7 @@ public class UIManagerScript : MonoBehaviour
         else
         {
             gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
+            progressBar.transform.localScale = new Vector3(progressPercentage/100, 1, 1);
         }
 
         AudioManager.GetComponent<AudioManagerScript>().StopMusic();
