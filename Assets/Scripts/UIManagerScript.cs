@@ -2,14 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.Audio;
-using Unity.VisualScripting;
 
 public class UIManagerScript : MonoBehaviour
 {
@@ -24,7 +22,6 @@ public class UIManagerScript : MonoBehaviour
     public TMP_Text gameOverText;
     public GameObject restartSoonText;
     public TMP_Text progressText;
-    public GameObject progressBar;
 
     public AudioMixer audioMixer;
     public Slider musicSlider;
@@ -147,7 +144,6 @@ public class UIManagerScript : MonoBehaviour
         else
         {
             gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
-            progressBar.transform.localScale = new Vector3(progressPercentage/100, 1, 1);
         }
 
         AudioManager.GetComponent<AudioManagerScript>().StopMusic();
@@ -170,11 +166,11 @@ public class UIManagerScript : MonoBehaviour
         
         if (PlayerPrefs.GetString("Hard Mode") == "false")
         {
-            key = SceneManager.GetActiveScene().name + " High Score";
+            key = SceneManager.GetActiveScene().name + "-N-HS";
         }
         else
         {
-            key = SceneManager.GetActiveScene().name + " Hard Mode High Score";
+            key = SceneManager.GetActiveScene().name + "-H-HS";
         }
 
         float highScore = PlayerPrefs.GetFloat(key);

@@ -15,10 +15,14 @@ public class MainMenuScript : MonoBehaviour
     // Called once per lifetime
     void Awake()
     {
+        // DO NOT UNCOMMENT THIS LINE
+        // PlayerPrefs.DeleteAll();
+
         // Setting of player preferences
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
-        PlayerPrefs.SetFloat("Level 1 High Score", PlayerPrefs.GetFloat("Level 1 High Score", 0f));
-        PlayerPrefs.SetFloat("Level 1 Hard Mode High Score", PlayerPrefs.GetFloat("Level 1 Hard Mode High Score", 0f));
         PlayerPrefs.SetString("Hard Mode", PlayerPrefs.GetString("Hard Mode", "false"));
+
+        PlayerPrefs.SetFloat("L1-N-HS", PlayerPrefs.GetFloat("L1-N-HS", 0f));
+        PlayerPrefs.SetFloat("L1-H-HS", PlayerPrefs.GetFloat("L1-H-HS", 0f));
     }
 }
