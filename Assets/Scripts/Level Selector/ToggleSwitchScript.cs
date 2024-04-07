@@ -12,8 +12,7 @@ public class ToggleSwitchScript : MonoBehaviour, IPointerClickHandler
 
     [Header("Animation")]
     [SerializeField, Range(0, 1f)] private float animationDuration = 0.5f;
-    [SerializeField]
-    private AnimationCurve slideEase = AnimationCurve.EaseInOut(0, 0, 1, 1);
+    [SerializeField] private AnimationCurve slideEase = AnimationCurve.EaseInOut(0, 0, 1, 1);
     private Coroutine animateSliderCoroutine;
 
     // Start is called before the first frame update

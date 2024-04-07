@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class AudioManagerScript : MonoBehaviour
 {
-    public AudioClip musicClip;
-    public GameObject musicObject;
+    [Header("Managers")]
+    [SerializeField] private GameObject UIManager;
 
+    [Header("Music")]
+    [SerializeField] private AudioClip musicClip;
+    [SerializeField] private GameObject musicObject;
     private AudioSource musicSource;
 
     // Start is called before the first frame update
@@ -14,6 +17,7 @@ public class AudioManagerScript : MonoBehaviour
     {
         musicSource = musicObject.GetComponent<AudioSource>();
         musicSource.clip = musicClip;
+        UIManager.GetComponent<UIManagerScript>().musicDuration = musicClip.length;
         PlayMusic();
     }
 

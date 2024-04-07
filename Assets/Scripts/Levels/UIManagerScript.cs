@@ -11,34 +11,39 @@ using UnityEngine.Audio;
 
 public class UIManagerScript : MonoBehaviour
 {
-    public int health;
-    public Image[] hearts;
-    public Sprite HeartEmpty;
-    public Sprite HeartFull;
-
-    public GameObject AudioManager;
-    public GameObject pauseUI;
-    public GameObject gameOverUI;
-    public TMP_Text gameOverText;
-    public GameObject restartSoonText;
-    public TMP_Text progressText;
-
-    public AudioMixer audioMixer;
-    public Slider musicSlider;
-
     public float beatMapStartTime;
+    public float musicDuration;
 
-    private float audioTotalDuration;
+    [Header("Audio")]
+    [SerializeField] private GameObject AudioManager;
+    [SerializeField] private GameObject musicObject;
+    [SerializeField] private AudioMixer audioMixer;
+
+    [Header("Health")]
+    [SerializeField] private int health;
+    [SerializeField] private Image[] hearts;
+    [SerializeField] private Sprite HeartEmpty;
+    [SerializeField] private Sprite HeartFull;
+
+    [Header("Pause UI")]
+    [SerializeField] private GameObject pauseUI;
+    [SerializeField] private GameObject normalModeProgressBar;
+    [SerializeField] private GameObject hardModeProgressBar;
+    [SerializeField] private Slider musicSlider;
+
+    [Header("Game Over UI")]
+    [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private TMP_Text gameOverText;
+    [SerializeField] private GameObject restartSoonText;
+
+    [Header("Others")]
+    [SerializeField] private TMP_Text progressText;
+
+    [Header("Input")]
+    [SerializeField] private InputActionReference pauseActionReference;
+
     private float audioCompletedDuration;
     private float progressPercentage;
-
-    [SerializeField]
-    private InputActionReference pauseActionReference;
-
-    [SerializeField]
-    private GameObject normalModeProgressBar;
-    [SerializeField]
-    private GameObject hardModeProgressBar;
 
     private void OnEnable()
     {
@@ -69,8 +74,6 @@ public class UIManagerScript : MonoBehaviour
 
         SetDifficulty();
         SetProgressBar();
-
-        audioTotalDuration = AudioManager.GetComponent<AudioManagerScript>().musicClip.length;
     }
 
     // Update is called once per frame
@@ -95,7 +98,7 @@ public class UIManagerScript : MonoBehaviour
         }
     }
 
-    void SetDifficulty()
+    private void SetDifficulty()
     {
         if (PlayerPrefs.GetString("Hard Mode") == "false")
         {
@@ -110,7 +113,7 @@ public class UIManagerScript : MonoBehaviour
     }
 
     // Load and set progress bars
-    void SetProgressBar()
+    private void SetProgressBar()
     {
         string levelName = SceneManager.GetActiveScene().name;
         float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
@@ -125,10 +128,10 @@ public class UIManagerScript : MonoBehaviour
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
     }
 
-    void updateProgressPercentage()
+    private void updateProgressPercentage()
     {
         audioCompletedDuration = Time.time - beatMapStartTime;
-        progressPercentage = (float) Math.Round(audioCompletedDuration / audioTotalDuration * 100f, 2);
+        progressPercentage = (float) Math.Round(audioCompletedDuration / musicDuration * 100f, 2);
     }
 
     public void DecreaseHealth()
@@ -156,7 +159,7 @@ public class UIManagerScript : MonoBehaviour
     }
 
     // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
-    IEnumerator GameOver(bool levelComplete)
+    private IEnumerator GameOver(bool levelComplete)
     {
         SetHighScore();
         SetProgressBar();
@@ -183,7 +186,7 @@ public class UIManagerScript : MonoBehaviour
     }
 
     // Setting of high score in player prefs
-    void SetHighScore()
+    private void SetHighScore()
     {
         string key;
         
@@ -203,17 +206,17 @@ public class UIManagerScript : MonoBehaviour
         }
     }
 
-    public void RestartScene()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    void PauseScene()
+    private void PauseScene()
     {
         pauseUI.SetActive(true);
         Time.timeScale = 0;
         AudioManager.GetComponent<AudioManagerScript>().PauseMusic();
+    }
+
+    public void RestartScene()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void ResumeScene()

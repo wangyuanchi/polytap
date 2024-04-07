@@ -489,11 +489,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a82ac0d20a9d5b740850c235b0137b2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beatMapStartTime: 0
   UIManager: {fileID: 783021154}
   circleActionReference: {fileID: 2861234422685222790, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
   squareActionReference: {fileID: -2785143678684464852, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
   triangleActionReference: {fileID: -3585319890446463770, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
+  beatMapStartTime: 0
+  bufferWindow: 0.15
+  expectedWindow: 0.5
 --- !u!4 &123170252
 Transform:
   m_ObjectHideFlags: 0
@@ -856,13 +858,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a64523bd9fb269479edfaa5ee1f420f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteSpeed: 5
   noteCircle: {fileID: 8569020730096176565, guid: 7f25d17055feb1845a60b061d06239cb, type: 3}
   noteSquare: {fileID: 8954147341167723780, guid: 3326235581d21664799dbae1ad11cb97, type: 3}
   noteTriangle: {fileID: 6818662013703148609, guid: 352ce96cf9e433a458986ce9592375da, type: 3}
   logicManager: {fileID: 123170250}
   UIManager: {fileID: 783021154}
-  noteSpeed: 5
-  currentNote: 0
 --- !u!4 &346430844
 Transform:
   m_ObjectHideFlags: 0
@@ -1446,6 +1447,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff77249d6913eb047a69c95601dcd2ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  beatMapStartTime: 0
+  musicDuration: 0
+  AudioManager: {fileID: 1138441062}
+  musicObject: {fileID: 58385075}
+  audioMixer: {fileID: 24100000, guid: 2e4df9c1023ccf44ca8f198bb4b7f337, type: 2}
   health: 3
   hearts:
   - {fileID: 2001017915}
@@ -1453,18 +1459,15 @@ MonoBehaviour:
   - {fileID: 1395311386}
   HeartEmpty: {fileID: 21300000, guid: a7a2d41e0c5aa364b8ba1c021241862a, type: 3}
   HeartFull: {fileID: 21300000, guid: b357d4299d89b3047a047728122e4d98, type: 3}
-  AudioManager: {fileID: 1138441062}
   pauseUI: {fileID: 1310174717}
+  normalModeProgressBar: {fileID: 1311821286}
+  hardModeProgressBar: {fileID: 49611882}
+  musicSlider: {fileID: 1697433320}
   gameOverUI: {fileID: 916529231}
   gameOverText: {fileID: 1794277639}
   restartSoonText: {fileID: 491342912}
   progressText: {fileID: 2046315652}
-  audioMixer: {fileID: 24100000, guid: 2e4df9c1023ccf44ca8f198bb4b7f337, type: 2}
-  musicSlider: {fileID: 1697433320}
-  beatMapStartTime: 0
   pauseActionReference: {fileID: 1906613333141810330, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
-  normalModeProgressBar: {fileID: 1311821286}
-  hardModeProgressBar: {fileID: 49611882}
 --- !u!4 &783021156
 Transform:
   m_ObjectHideFlags: 0
@@ -1999,6 +2002,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 660bd94d6cee1fe4d9e5ab0d12932e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UIManager: {fileID: 783021154}
   musicClip: {fileID: 8300000, guid: 1e317e2235468c543a97cddc6154309d, type: 3}
   musicObject: {fileID: 58385075}
 --- !u!4 &1138441065

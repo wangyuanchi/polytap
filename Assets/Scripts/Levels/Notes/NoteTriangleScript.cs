@@ -15,7 +15,7 @@ public class NoteTriangleScript : MonoBehaviour
     }
 
     // Scale the note to go to (6, 6, 6), where it passes JudgementLineCircle at (1, 1, 1) by timeSpawnToJudgement
-    IEnumerator ScaleOverTime(float timeSpawnToJudgement)
+    private IEnumerator ScaleOverTime(float timeSpawnToJudgement)
     {
         float elapsedTime = 0f;
         float timeSpawnToDestroy = timeSpawnToJudgement * 6f;

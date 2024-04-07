@@ -9,8 +9,9 @@ public class NoteSquareScript : MonoBehaviour
     public float timeSpawnToJudgement; 
     public float holdDuration;
 
-    public GameObject noteSquareStart;
-    public GameObject noteSquareEnd;
+    [Header("Child Square Objects")]
+    [SerializeField] private GameObject noteSquareStart;
+    [SerializeField] private GameObject noteSquareEnd;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,7 @@ public class NoteSquareScript : MonoBehaviour
     }
 
     // Scale the note to go to (3, 3, 3), where it passes JudgementLineSquare at (1, 1, 1) by timeSpawnToJudgement
-    IEnumerator ScaleOverTime(float timeSpawnToJudgement, GameObject noteSquareChild)
+    private IEnumerator ScaleOverTime(float timeSpawnToJudgement, GameObject noteSquareChild)
     {
         float elapsedTime = 0f;
         float timeSpawnToDestroy = timeSpawnToJudgement * 3f;

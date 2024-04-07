@@ -19,23 +19,27 @@ public class LevelSelectorManagerScript : MonoBehaviour
             {
                 continue;
             }
-
-            string levelName = level.name;
-            float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
-            float hardModeHighScore = PlayerPrefs.GetFloat($"{levelName}-H-HS");
-
-            GameObject levelGameObject = level.gameObject;
-            GameObject normalModeProgressBar = levelGameObject.transform.Find("NormalModeProgressBar").gameObject;
-            GameObject hardModeProgressBar = levelGameObject.transform.Find("HardModeProgressBar").gameObject;
-
-            // Set progress bar fill
-            normalModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = normalModeHighScore / 100;
-            hardModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = hardModeHighScore / 100;
-
-            // Set progress text
-            normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = normalModeHighScore.ToString() + "%";
-            hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
+            LoadProgressBars(level);
         }
+    }
+
+    private void LoadProgressBars(Transform level)
+    {
+        string levelName = level.name;
+        float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
+        float hardModeHighScore = PlayerPrefs.GetFloat($"{levelName}-H-HS");
+
+        GameObject levelGameObject = level.gameObject;
+        GameObject normalModeProgressBar = levelGameObject.transform.Find("NormalModeProgressBar").gameObject;
+        GameObject hardModeProgressBar = levelGameObject.transform.Find("HardModeProgressBar").gameObject;
+
+        // Set progress bar fill
+        normalModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = normalModeHighScore / 100;
+        hardModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = hardModeHighScore / 100;
+
+        // Set progress text
+        normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = normalModeHighScore.ToString() + "%";
+        hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
     }
 
     public void LoadScene(string sceneName)

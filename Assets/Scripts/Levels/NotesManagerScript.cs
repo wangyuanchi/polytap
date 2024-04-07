@@ -5,15 +5,16 @@ using UnityEngine.UIElements;
 
 public class NotesManagerScript : MonoBehaviour
 {
-    public GameObject noteCircle;
-    public GameObject noteSquare;
-    public GameObject noteTriangle;
+    [Header("Note Objects")]
+    public int noteSpeed;
+    [SerializeField] private GameObject noteCircle;
+    [SerializeField] private GameObject noteSquare;
+    [SerializeField] private GameObject noteTriangle;
 
-    public GameObject logicManager;
-    public GameObject UIManager;
+    [Header("Managers")]
+    [SerializeField] private GameObject logicManager;
+    [SerializeField] private GameObject UIManager;
     
-    public int noteSpeed = 5;
-
     // WARNING: timeStamp (near the start) cannot be at a timing earlier than that of timeSpawnToJudgement!
     // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
@@ -45,8 +46,9 @@ public class NotesManagerScript : MonoBehaviour
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 103.841f } },
         new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 106.068f }, { "timeStampRelease", 114.232f } }
     };
+
     // Referencing the index of beatMap
-    public int currentNote = 0;
+    private int currentNote = 0;
 
     // noteSpeed timings { noteSpeed, timeSpawnToJudgement }
     private Dictionary<int, float> noteSpeedTimings = new Dictionary<int, float>
@@ -68,7 +70,7 @@ public class NotesManagerScript : MonoBehaviour
         UIManager.GetComponent<UIManagerScript>().beatMapStartTime = Time.time;
     }
 
-    IEnumerator SpawnBeatMap(List<Dictionary<string, float>> beatMap)
+    private IEnumerator SpawnBeatMap(List<Dictionary<string, float>> beatMap)
     {
         // If the currentNote exists
         while (currentNote < beatMap.Count) {
@@ -85,7 +87,7 @@ public class NotesManagerScript : MonoBehaviour
     }
 
     // Spawn, update relevant variables in the instance of the new note and give it AND its timing(s) to logicManager 
-    void SpawnNote(Dictionary<string, float> note)
+    private void SpawnNote(Dictionary<string, float> note)
     {
         // noteCircle
         if (note["typeOfNote"] == 0f)

@@ -6,15 +6,17 @@ using UnityEngine.EventSystems;
 
 public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
 {
-    [SerializeField] int maxPage;
-    int currentPage;
-    Vector3 targetPos;
-    [SerializeField] Vector3 pageStep;
-    [SerializeField] RectTransform levelPagesRect;
-    
-    [SerializeField] float tweenTime;
-    [SerializeField] LeanTweenType tweenType;
-    float dragThreshold;
+    [Header("General")]
+    [SerializeField] private int maxPage;
+    private int currentPage;
+    private Vector3 targetPos;
+    [SerializeField] private Vector3 pageStep;
+    [SerializeField] private RectTransform levelPagesRect;
+
+    [Header("Animation")]
+    [SerializeField] private float tweenTime;
+    [SerializeField] private LeanTweenType tweenType;
+    private float dragThreshold;
 
     void Start()
     {
@@ -43,7 +45,7 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
         }
     }
     
-    void MovePage()
+    private void MovePage()
     {
         levelPagesRect.LeanMoveLocal(targetPos, tweenTime).setEase(tweenType);
     }

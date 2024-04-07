@@ -7,25 +7,26 @@ using UnityEngine.UIElements;
 
 public class LogicManagerScript : MonoBehaviour
 {
-    public float beatMapStartTime;
     public Queue<GameObject> circleObjectsQueue = new Queue<GameObject>();
     public Queue<GameObject> squareObjectsQueue = new Queue<GameObject>();
     public Queue<GameObject> triangleObjectsQueue = new Queue<GameObject>();
     public Queue<Dictionary<string, float>> circleTimingsQueue = new Queue<Dictionary<string, float>>();
     public Queue<Dictionary<string, float>> squareTimingsQueue = new Queue<Dictionary<string, float>>();
     public Queue<Dictionary<string, float>> triangleTimingsQueue = new Queue<Dictionary<string, float>>();
-    public GameObject UIManager;
 
-    [SerializeField]
-    private InputActionReference circleActionReference;
-    [SerializeField]
-    private InputActionReference squareActionReference;
-    [SerializeField]
-    private InputActionReference triangleActionReference;
+    [Header("Managers")]
+    [SerializeField] private GameObject UIManager;
+
+    [Header("Input Actions")]
+    [SerializeField] private InputActionReference circleActionReference;
+    [SerializeField] private InputActionReference squareActionReference;
+    [SerializeField] private InputActionReference triangleActionReference;
     private float inputDuration = 0;
 
-    private float bufferWindow = 0.15f; // The buffer window is a subset of the expected window
-    private float expectedWindow = 0.5f; // The expected window is where the user is expected to provide an input before the note is missed
+    [Header("Timings")]
+    public float beatMapStartTime;
+    [SerializeField] private float bufferWindow; // The buffer window is a subset of the expected window
+    [SerializeField] private float expectedWindow; // The expected window is where the user is expected to provide an input before the note is missed
     
     private void OnEnable()
     {
@@ -54,7 +55,8 @@ public class LogicManagerScript : MonoBehaviour
     // Circle -> Single Tap
     private void onCircle(InputAction.CallbackContext context)
     {
-        if (circleTimingsQueue.Count > 0) { checkInputCircle(Time.time - beatMapStartTime); }
+        if (circleTimingsQueue.Count > 0) 
+        { checkInputCircle(Time.time - beatMapStartTime); }
     }
 
     // Square -> Hold and Release
@@ -66,16 +68,18 @@ public class LogicManagerScript : MonoBehaviour
     {
         float inputEnd = Time.time;
         inputDuration = inputEnd - inputDuration;
-        if (squareTimingsQueue.Count > 0) { checkInputSquare(inputEnd - inputDuration - beatMapStartTime, inputDuration); }
+        if (squareTimingsQueue.Count > 0) 
+        { checkInputSquare(inputEnd - inputDuration - beatMapStartTime, inputDuration); }
     }
 
     // Triangle -> Double Tap
     private void onTriangle(InputAction.CallbackContext context)
     {
-        if (triangleTimingsQueue.Count > 0) { checkInputTriangle(Time.time - beatMapStartTime); }
+        if (triangleTimingsQueue.Count > 0) 
+        { checkInputTriangle(Time.time - beatMapStartTime); }
     }
 
-    void checkInputCircle(float inputTimeStamp)
+    private void checkInputCircle(float inputTimeStamp)
     {
         float requiredTimeStamp = circleTimingsQueue.Peek()["timeStamp"];
         if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
@@ -90,7 +94,7 @@ public class LogicManagerScript : MonoBehaviour
         }
     }
 
-    void checkInputSquare(float inputTimeStamp, float inputDuration)
+    private void checkInputSquare(float inputTimeStamp, float inputDuration)
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
         if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
@@ -112,7 +116,7 @@ public class LogicManagerScript : MonoBehaviour
         }
     }
 
-    void checkInputTriangle(float inputTimeStamp)
+    private void checkInputTriangle(float inputTimeStamp)
     {
         float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
         if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
@@ -151,7 +155,7 @@ public class LogicManagerScript : MonoBehaviour
         }
     }
 
-    void ProcessInput(bool inputCorrect, string inputDetails)
+    private void ProcessInput(bool inputCorrect, string inputDetails)
     {
         Debug.Log(inputDetails);
 
@@ -159,7 +163,7 @@ public class LogicManagerScript : MonoBehaviour
         { UIManager.GetComponent<UIManagerScript>().DecreaseHealth(); }
     }
 
-    void DequeueNote(Queue<GameObject> noteObjectsQueue, Queue<Dictionary<string, float>> noteTimingsQueue, bool destroyNote)
+    private void DequeueNote(Queue<GameObject> noteObjectsQueue, Queue<Dictionary<string, float>> noteTimingsQueue, bool destroyNote)
     {
         GameObject note = noteObjectsQueue.Dequeue();
         noteTimingsQueue.Dequeue();
