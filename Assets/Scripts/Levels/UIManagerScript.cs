@@ -35,6 +35,11 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField]
     private InputActionReference pauseActionReference;
 
+    [SerializeField]
+    private GameObject normalModeProgressBar;
+    [SerializeField]
+    private GameObject hardModeProgressBar;
+
     private void OnEnable()
     {
         pauseActionReference.action.Enable();
@@ -58,11 +63,12 @@ public class UIManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        setDifficulty();
-
         // Load and set the music volume
         musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
         SetMusicVolume();
+
+        SetDifficulty();
+        SetProgressBar();
 
         audioTotalDuration = AudioManager.GetComponent<AudioManagerScript>().musicClip.length;
     }
@@ -89,7 +95,7 @@ public class UIManagerScript : MonoBehaviour
         }
     }
 
-    void setDifficulty()
+    void SetDifficulty()
     {
         if (PlayerPrefs.GetString("Hard Mode") == "false")
         {
@@ -101,6 +107,22 @@ public class UIManagerScript : MonoBehaviour
             hearts[1].sprite = HeartEmpty;
             hearts[2].sprite = HeartEmpty;
         }
+    }
+
+    // Load and set progress bars
+    void SetProgressBar()
+    {
+        string levelName = SceneManager.GetActiveScene().name;
+        float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
+        float hardModeHighScore = PlayerPrefs.GetFloat($"{levelName}-H-HS");
+
+        // Set progress bar fill
+        normalModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = normalModeHighScore / 100;
+        hardModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = hardModeHighScore / 100;
+
+        // Set progress text
+        normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = normalModeHighScore.ToString() + "%";
+        hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
     }
 
     void updateProgressPercentage()
@@ -136,7 +158,10 @@ public class UIManagerScript : MonoBehaviour
     // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
     IEnumerator GameOver(bool levelComplete)
     {
-        if (levelComplete)
+        SetHighScore();
+        SetProgressBar();
+
+        if (levelComplete) 
         {
             gameOverText.text = "Level Complete!";
             restartSoonText.SetActive(false);
@@ -148,8 +173,6 @@ public class UIManagerScript : MonoBehaviour
 
         AudioManager.GetComponent<AudioManagerScript>().StopMusic();
         gameOverUI.SetActive(true);
-
-        SetHighScore();
 
         // Pause for 3 seconds before restarting the scene
         if (!levelComplete)
