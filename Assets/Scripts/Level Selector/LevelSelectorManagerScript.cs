@@ -41,10 +41,5 @@ public class LevelSelectorManagerScript : MonoBehaviour
         normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = normalModeHighScore.ToString() + "%";
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
     }
-
-    public void LoadScene(string sceneName)
-    { 
-        SceneManager.LoadSceneAsync(sceneName); 
-    }
 }
 
