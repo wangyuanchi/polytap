@@ -668,9 +668,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 783021155}
-        m_TargetAssemblyTypeName: UIManagerScript, Assembly-CSharp
-        m_MethodName: LoadScene
+      - m_Target: {fileID: 1378501988}
+        m_TargetAssemblyTypeName: SceneTransitionScript, Assembly-CSharp
+        m_MethodName: TransitionToScene
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1448,7 +1448,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beatMapStartTime: 0
-  musicDuration: 0
   AudioManager: {fileID: 1138441062}
   musicObject: {fileID: 58385075}
   audioMixer: {fileID: 24100000, guid: 2e4df9c1023ccf44ca8f198bb4b7f337, type: 2}
@@ -1459,6 +1458,7 @@ MonoBehaviour:
   - {fileID: 1395311386}
   HeartEmpty: {fileID: 21300000, guid: a7a2d41e0c5aa364b8ba1c021241862a, type: 3}
   HeartFull: {fileID: 21300000, guid: b357d4299d89b3047a047728122e4d98, type: 3}
+  progressText: {fileID: 2046315652}
   pauseUI: {fileID: 1310174717}
   normalModeProgressBar: {fileID: 1311821286}
   hardModeProgressBar: {fileID: 49611882}
@@ -1466,8 +1466,8 @@ MonoBehaviour:
   gameOverUI: {fileID: 916529231}
   gameOverText: {fileID: 1794277639}
   restartSoonText: {fileID: 491342912}
-  progressText: {fileID: 2046315652}
   pauseActionReference: {fileID: 1906613333141810330, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
+  sceneTransition: {fileID: 1378501987}
 --- !u!4 &783021156
 Transform:
   m_ObjectHideFlags: 0
@@ -2002,7 +2002,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 660bd94d6cee1fe4d9e5ab0d12932e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIManager: {fileID: 783021154}
   musicClip: {fileID: 8300000, guid: 1e317e2235468c543a97cddc6154309d, type: 3}
   musicObject: {fileID: 58385075}
 --- !u!4 &1138441065
@@ -2550,6 +2549,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370199032}
   m_CullTransparentMesh: 1
+--- !u!1001 &1378501986
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5694936753194931224, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_Name
+      value: SceneTransition
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8033037207641524527, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+--- !u!1 &1378501987 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5694936753194931224, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+  m_PrefabInstance: {fileID: 1378501986}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1378501988 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7471695354909235198, guid: 51c8236b2c7778344aec016eedb56a6f, type: 3}
+  m_PrefabInstance: {fileID: 1378501986}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378501987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bac614b7e65ff44da5a4a83e1240210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1395311384
 GameObject:
   m_ObjectHideFlags: 0
@@ -3568,8 +3640,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 783021155}
-        m_TargetAssemblyTypeName: UIManagerScript, Assembly-CSharp
+      - m_Target: {fileID: 1378501988}
+        m_TargetAssemblyTypeName: SceneTransitionScript, Assembly-CSharp
         m_MethodName: RestartScene
         m_Mode: 1
         m_Arguments:
@@ -3577,7 +3649,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: L1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1997540458
@@ -3915,3 +3987,4 @@ SceneRoots:
   - {fileID: 1811262079}
   - {fileID: 1157206534}
   - {fileID: 589707784}
+  - {fileID: 1378501986}

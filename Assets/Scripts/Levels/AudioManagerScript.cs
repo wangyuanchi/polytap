@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class AudioManagerScript : MonoBehaviour
 {
-    [Header("Managers")]
-    [SerializeField] private GameObject UIManager;
-
     [Header("Music")]
-    [SerializeField] private AudioClip musicClip;
+    public AudioClip musicClip;
     [SerializeField] private GameObject musicObject;
     private AudioSource musicSource;
 
@@ -17,11 +14,10 @@ public class AudioManagerScript : MonoBehaviour
     {
         musicSource = musicObject.GetComponent<AudioSource>();
         musicSource.clip = musicClip;
-        UIManager.GetComponent<UIManagerScript>().musicDuration = musicClip.length;
         PlayMusic();
     }
 
-    public void PlayMusic()
+    public void PlayMusic() 
     {
         if (!musicSource.isPlaying)
         { musicSource.Play(); }

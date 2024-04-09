@@ -14,8 +14,14 @@ public class SceneTransitionScript : MonoBehaviour
         animator.SetTrigger("FadeOut");
     }
 
+    public void RestartScene()
+    {
+        TransitionToScene(SceneManager.GetActiveScene().name);
+    }
+
     public void onFadeComplete()
     {
         SceneManager.LoadSceneAsync(levelToLoad);
+        Time.timeScale = 1; // Pause causes timeScale to be 0, reset to 1 after new scene
     }
 }

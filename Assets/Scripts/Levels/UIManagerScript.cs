@@ -12,18 +12,18 @@ using UnityEngine.Audio;
 public class UIManagerScript : MonoBehaviour
 {
     public float beatMapStartTime;
-    public float musicDuration;
 
     [Header("Audio")]
     [SerializeField] private GameObject AudioManager;
     [SerializeField] private GameObject musicObject;
     [SerializeField] private AudioMixer audioMixer;
 
-    [Header("Health")]
+    [Header("Health and Progress")]
     [SerializeField] private int health;
     [SerializeField] private Image[] hearts;
     [SerializeField] private Sprite HeartEmpty;
     [SerializeField] private Sprite HeartFull;
+    [SerializeField] private TMP_Text progressText;
 
     [Header("Pause UI")]
     [SerializeField] private GameObject pauseUI;
@@ -36,14 +36,16 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private TMP_Text gameOverText;
     [SerializeField] private GameObject restartSoonText;
 
-    [Header("Others")]
-    [SerializeField] private TMP_Text progressText;
-
     [Header("Input")]
     [SerializeField] private InputActionReference pauseActionReference;
 
+    [Header("Others")]
+    [SerializeField] private GameObject sceneTransition;
+
     private float audioCompletedDuration;
     private float progressPercentage;
+
+    private Coroutine UpdateProgressPercentageCoroutine;
 
     private void OnEnable()
     {
@@ -68,34 +70,23 @@ public class UIManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Load and set the music volume
-        musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
+        LoadMusicVolume();
         SetMusicVolume();
-
         SetDifficulty();
         SetProgressBar();
+        UpdateProgressPercentageCoroutine = StartCoroutine(UpdateProgressPercentage());
     }
 
-    // Update is called once per frame
-    void Update()
+    private void LoadMusicVolume()
     {
-        // Do not increase progress if game is over
-        if (!gameOverUI.activeSelf)
-        {
-            updateProgressPercentage();
+        musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
+    }
 
-            if (progressPercentage < 100f)
-            {
-                progressText.text = $"{progressPercentage}%";
-            }
-            else
-            {
-                // Make sure progressPercentage is at exactly 100
-                progressPercentage = 100f;
-                progressText.text = $"{progressPercentage}%";
-                StartCoroutine(GameOver(true));
-            }
-        }
+    public void SetMusicVolume()
+    {
+        float musicVolume = musicSlider.value;
+        audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume) * 25);
+        PlayerPrefs.SetFloat("Music Volume", musicVolume);
     }
 
     private void SetDifficulty()
@@ -128,10 +119,28 @@ public class UIManagerScript : MonoBehaviour
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
     }
 
-    private void updateProgressPercentage()
+    private IEnumerator UpdateProgressPercentage()
     {
-        audioCompletedDuration = Time.time - beatMapStartTime;
-        progressPercentage = (float) Math.Round(audioCompletedDuration / musicDuration * 100f, 2);
+        float musicDuration = AudioManager.GetComponent<AudioManagerScript>().musicClip.length;
+
+        while (progressPercentage < 100f)
+        {
+            audioCompletedDuration = Time.time - beatMapStartTime;
+            progressPercentage = (float)Math.Round(audioCompletedDuration / musicDuration * 100f, 2);
+            progressText.text = $"{progressPercentage}%";
+
+            if (progressPercentage >= 100f)
+            {
+                // Make sure progressPercentage is at exactly 100
+                progressPercentage = 100f;
+                progressText.text = $"{progressPercentage}%";
+            }
+
+            yield return null;
+        }
+
+        // Level complete
+        StartCoroutine(GameOver(true));
     }
 
     public void DecreaseHealth()
@@ -154,6 +163,7 @@ public class UIManagerScript : MonoBehaviour
         // End the game if no health is left
         if (health == 0)
         {
+            StopCoroutine(UpdateProgressPercentageCoroutine);
             StartCoroutine(GameOver(false));
         }
     }
@@ -181,7 +191,7 @@ public class UIManagerScript : MonoBehaviour
         if (!levelComplete)
         {
             yield return new WaitForSeconds(3);
-            RestartScene();
+            sceneTransition.GetComponent<SceneTransitionScript>().RestartScene();
         }
     }
 
@@ -213,12 +223,6 @@ public class UIManagerScript : MonoBehaviour
         AudioManager.GetComponent<AudioManagerScript>().PauseMusic();
     }
 
-    public void RestartScene()
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
     public void ResumeScene()
     {
         pauseUI.SetActive(false);
@@ -226,21 +230,6 @@ public class UIManagerScript : MonoBehaviour
 
         // Prevent clash where audio resumes if user pauses then unpauses after the game has ended
         if (!gameOverUI.activeSelf)
-        { 
-            AudioManager.GetComponent<AudioManagerScript>().ResumeMusic();
-        }
-    }
-
-    public void LoadScene(string sceneName)
-    {
-        Time.timeScale = 1;
-        SceneManager.LoadSceneAsync(sceneName); 
-    }
-
-    public void SetMusicVolume()
-    {
-        float musicVolume = musicSlider.value;
-        audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume) * 25);
-        PlayerPrefs.SetFloat("Music Volume", musicVolume);
+        { AudioManager.GetComponent<AudioManagerScript>().ResumeMusic(); }
     }
 }
