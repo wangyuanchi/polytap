@@ -22,4 +22,9 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("L1-N-HS", PlayerPrefs.GetFloat("L1-N-HS", 0f));
         PlayerPrefs.SetFloat("L1-H-HS", PlayerPrefs.GetFloat("L1-H-HS", 0f));
     }
+
+    public void TransitionToScene(string levelName)
+    {
+        SceneTransitionScript.instance.TransitionToScene(levelName);
+    }
 }

@@ -191,7 +191,7 @@ public class UIManagerScript : MonoBehaviour
         if (!levelComplete)
         {
             yield return new WaitForSeconds(3);
-            sceneTransition.GetComponent<SceneTransitionScript>().RestartScene();
+            RestartScene();
         }
     }
 
@@ -231,5 +231,15 @@ public class UIManagerScript : MonoBehaviour
         // Prevent clash where audio resumes if user pauses then unpauses after the game has ended
         if (!gameOverUI.activeSelf)
         { AudioManager.GetComponent<AudioManagerScript>().ResumeMusic(); }
+    }
+
+    public void RestartScene()
+    {
+        TransitionToScene(SceneManager.GetActiveScene().name);
+    }    
+
+    public void TransitionToScene(string levelName)
+    {
+        SceneTransitionScript.instance.TransitionToScene(levelName);
     }
 }
