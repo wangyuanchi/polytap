@@ -16,6 +16,7 @@ public class LevelMusicScript : MonoBehaviour
         PlayMusic();
     }
 
+    // No fading in and out required to preserve the raw audio, if required, should manually include the fades
     public void PlayMusic() 
     {
         if (!musicSource.isPlaying)

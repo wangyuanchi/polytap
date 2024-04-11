@@ -11,7 +11,7 @@ public class SceneTransitionScript : MonoBehaviour
     public void TransitionToScene(string levelName)
     {
         levelToLoad = levelName;
-        animator.SetTrigger("FadeOut");
+        animator.SetTrigger("TransitionFadeOut");
     }
 
     public void onFadeComplete()

@@ -58,8 +58,12 @@ public class LevelSelectorManagerScript : MonoBehaviour
     public void TransitionToScene(string levelName)
     {
         sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
+
+        // If not going back to main menu, fade music out and destroy music object
         if (levelName != "Main Menu")
-        { LobbyMusicScript.instance.DestroyObject(); }
+        {
+            LobbyMusicScript.instance.MusicFadeOutAndDestroy();
+        }
     }    
 }
 
