@@ -11,11 +11,8 @@ using UnityEngine.Audio;
 
 public class UIManagerScript : MonoBehaviour
 {
-    public float beatMapStartTime;
-
     [Header("Audio")]
-    [SerializeField] private GameObject AudioManager;
-    [SerializeField] private GameObject musicObject;
+    [SerializeField] private GameObject levelMusic;
     [SerializeField] private AudioMixer audioMixer;
 
     [Header("Health and Progress")]
@@ -40,6 +37,7 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private InputActionReference pauseActionReference;
 
     [Header("Others")]
+    public float beatMapStartTime;
     [SerializeField] private GameObject sceneTransition;
 
     private float audioCompletedDuration;
@@ -121,7 +119,7 @@ public class UIManagerScript : MonoBehaviour
 
     private IEnumerator UpdateProgressPercentage()
     {
-        float musicDuration = AudioManager.GetComponent<AudioManagerScript>().musicClip.length;
+        float musicDuration = levelMusic.GetComponent<LevelMusicScript>().musicClip.length;
 
         while (progressPercentage < 100f)
         {
@@ -184,7 +182,7 @@ public class UIManagerScript : MonoBehaviour
             gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
         }
 
-        AudioManager.GetComponent<AudioManagerScript>().StopMusic();
+        levelMusic.GetComponent<LevelMusicScript>().StopMusic();
         gameOverUI.SetActive(true);
 
         // Pause for 3 seconds before restarting the scene
@@ -220,7 +218,7 @@ public class UIManagerScript : MonoBehaviour
     {
         pauseUI.SetActive(true);
         Time.timeScale = 0;
-        AudioManager.GetComponent<AudioManagerScript>().PauseMusic();
+        levelMusic.GetComponent<LevelMusicScript>().PauseMusic();
     }
 
     public void ResumeScene()
@@ -230,7 +228,7 @@ public class UIManagerScript : MonoBehaviour
 
         // Prevent clash where audio resumes if user pauses then unpauses after the game has ended
         if (!gameOverUI.activeSelf)
-        { AudioManager.GetComponent<AudioManagerScript>().ResumeMusic(); }
+        { levelMusic.GetComponent<LevelMusicScript>().ResumeMusic(); }
     }
 
     public void RestartScene()
@@ -240,6 +238,6 @@ public class UIManagerScript : MonoBehaviour
 
     public void TransitionToScene(string levelName)
     {
-        SceneTransitionScript.instance.TransitionToScene(levelName);
+        sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
     }
 }

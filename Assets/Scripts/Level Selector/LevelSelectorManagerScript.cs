@@ -2,16 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelSelectorManagerScript : MonoBehaviour
 {
+    [Header("General")]
+    [SerializeField] private GameObject sceneTransition;
+    [SerializeField] private AudioMixer audioMixer;
+
+    [Header("Levels")]
     [SerializeField] private GameObject allLevelsGameObject;
 
     // Start is called before the first frame update
     void Start()
     {
+        LoadMusicVolume();
+
         foreach (Transform level in allLevelsGameObject.transform)
         {
             // Remove this after all levels have been made
@@ -21,6 +29,11 @@ public class LevelSelectorManagerScript : MonoBehaviour
             }
             LoadProgressBars(level);
         }
+    }
+
+    private void LoadMusicVolume()
+    {
+        audioMixer.SetFloat("Music Volume", Mathf.Log10(PlayerPrefs.GetFloat("Music Volume")) * 25);
     }
 
     private void LoadProgressBars(Transform level)
@@ -44,7 +57,9 @@ public class LevelSelectorManagerScript : MonoBehaviour
 
     public void TransitionToScene(string levelName)
     {
-        SceneTransitionScript.instance.TransitionToScene(levelName);
+        sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
+        if (levelName != "Main Menu")
+        { LobbyMusicScript.instance.DestroyObject(); }
     }    
 }
 

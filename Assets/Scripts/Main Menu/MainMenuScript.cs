@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour
 {
-    public void QuitGame()
-    { Application.Quit(); }
+    [Header("General")]
+    [SerializeField] private GameObject sceneTransition;
+    [SerializeField] private AudioMixer audioMixer;
 
     // Called once per lifetime
     void Awake()
     {
-        // DO NOT UNCOMMENT THIS LINE
+        // Uncomment, reset and recomment player prefs before building the game!        
         // PlayerPrefs.DeleteAll();
 
         // Setting of player preferences
@@ -23,8 +25,22 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("L1-H-HS", PlayerPrefs.GetFloat("L1-H-HS", 0f));
     }
 
+    // Start is called before the first frame update
+    void Start()
+    { 
+        LoadMusicVolume();
+    }
+
+    private void LoadMusicVolume()
+    {
+        audioMixer.SetFloat("Music Volume", Mathf.Log10(PlayerPrefs.GetFloat("Music Volume")) * 25);
+    }
+
     public void TransitionToScene(string levelName)
     {
-        SceneTransitionScript.instance.TransitionToScene(levelName);
+        sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
     }
+
+    public void QuitGame()
+    { Application.Quit(); }
 }
