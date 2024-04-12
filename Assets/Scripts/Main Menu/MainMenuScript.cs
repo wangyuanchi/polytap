@@ -19,6 +19,7 @@ public class MainMenuScript : MonoBehaviour
 
         // Setting of player preferences
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
+        PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Hard Mode", PlayerPrefs.GetString("Hard Mode", "false"));
 
         PlayerPrefs.SetFloat("L1-N-HS", PlayerPrefs.GetFloat("L1-N-HS", 0f));
@@ -28,12 +29,13 @@ public class MainMenuScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     { 
-        LoadMusicVolume();
+        LoadAudioVolume();
     }
 
-    private void LoadMusicVolume()
+    private void LoadAudioVolume()
     {
         audioMixer.SetFloat("Music Volume", Mathf.Log10(PlayerPrefs.GetFloat("Music Volume")) * 25);
+        audioMixer.SetFloat("SFX Volume", Mathf.Log10(PlayerPrefs.GetFloat("SFX Volume")) * 25);
     }
 
     public void TransitionToScene(string levelName)

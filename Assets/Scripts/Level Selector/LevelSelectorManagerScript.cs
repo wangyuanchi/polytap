@@ -14,11 +14,12 @@ public class LevelSelectorManagerScript : MonoBehaviour
 
     [Header("Levels")]
     [SerializeField] private GameObject allLevelsGameObject;
+    [SerializeField] private AudioClip levelStartSFX;
 
     // Start is called before the first frame update
     void Start()
     {
-        LoadMusicVolume();
+        LoadAudioVolume();
 
         foreach (Transform level in allLevelsGameObject.transform)
         {
@@ -31,9 +32,10 @@ public class LevelSelectorManagerScript : MonoBehaviour
         }
     }
 
-    private void LoadMusicVolume()
+    private void LoadAudioVolume()
     {
         audioMixer.SetFloat("Music Volume", Mathf.Log10(PlayerPrefs.GetFloat("Music Volume")) * 25);
+        audioMixer.SetFloat("SFX Volume", Mathf.Log10(PlayerPrefs.GetFloat("SFX Volume")) * 25);
     }
 
     private void LoadProgressBars(Transform level)
@@ -63,7 +65,9 @@ public class LevelSelectorManagerScript : MonoBehaviour
         if (levelName != "Main Menu")
         {
             LobbyMusicScript.instance.MusicFadeOutAndDestroy();
-        }
+            GetComponent<AudioSource>().clip = levelStartSFX;
+            GetComponent<AudioSource>().Play();
+        }   
     }    
 }
 

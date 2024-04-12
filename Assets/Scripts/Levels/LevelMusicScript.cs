@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class LevelMusicScript : MonoBehaviour
 {
-    public AudioClip musicClip;
-
+    [SerializeField] private AudioClip musicClip;
     private AudioSource musicSource;
 
     // Start is called before the first frame update
@@ -14,6 +13,11 @@ public class LevelMusicScript : MonoBehaviour
         musicSource = GetComponent<AudioSource>();
         musicSource.clip = musicClip;
         PlayMusic();
+    }
+
+    public float GetMusicLength()
+    {
+        return musicClip.length;
     }
 
     // No fading in and out required to preserve the raw audio, if required, should manually include the fades

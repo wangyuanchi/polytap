@@ -11,6 +11,10 @@ using UnityEngine.Audio;
 
 public class UIManagerScript : MonoBehaviour
 {
+    [Header("General")]
+    public float beatMapStartTime;
+    [SerializeField] private GameObject sceneTransition;
+
     [Header("Audio")]
     [SerializeField] private GameObject levelMusic;
     [SerializeField] private AudioMixer audioMixer;
@@ -27,6 +31,7 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private GameObject normalModeProgressBar;
     [SerializeField] private GameObject hardModeProgressBar;
     [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider SFXSlider;
 
     [Header("Game Over UI")]
     [SerializeField] private GameObject gameOverUI;
@@ -35,10 +40,6 @@ public class UIManagerScript : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionReference pauseActionReference;
-
-    [Header("Others")]
-    public float beatMapStartTime;
-    [SerializeField] private GameObject sceneTransition;
 
     private float audioCompletedDuration;
     private float progressPercentage;
@@ -68,16 +69,19 @@ public class UIManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LoadMusicVolume();
+        LoadAudioVolume();
         SetMusicVolume();
+        SetSFXVolume();
         SetDifficulty();
         SetProgressBar();
         UpdateProgressPercentageCoroutine = StartCoroutine(UpdateProgressPercentage());
     }
 
-    private void LoadMusicVolume()
+    // Indirect loading by setting slider value, for both music and SFX
+    private void LoadAudioVolume()
     {
         musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
+        SFXSlider.value = PlayerPrefs.GetFloat("SFX Volume");
     }
 
     public void SetMusicVolume()
@@ -86,6 +90,13 @@ public class UIManagerScript : MonoBehaviour
         audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume) * 25);
         PlayerPrefs.SetFloat("Music Volume", musicVolume);
     }
+
+    public void SetSFXVolume()
+    {
+        float SFXVolume = SFXSlider.value;
+        audioMixer.SetFloat("SFX Volume", Mathf.Log10(SFXVolume) * 25);
+        PlayerPrefs.SetFloat("SFX Volume", SFXVolume);
+    }    
 
     private void SetDifficulty()
     {
@@ -119,7 +130,7 @@ public class UIManagerScript : MonoBehaviour
 
     private IEnumerator UpdateProgressPercentage()
     {
-        float musicDuration = levelMusic.GetComponent<LevelMusicScript>().musicClip.length;
+        float musicDuration = levelMusic.GetComponent<LevelMusicScript>().GetMusicLength();
 
         while (progressPercentage < 100f)
         {
