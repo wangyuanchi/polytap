@@ -27,37 +27,10 @@ public class LobbyMusicScript : MonoBehaviour
     void Start()
     {
         musicSource = GetComponent<AudioSource>();
-        StartCoroutine(PlayMusic(lobbyMusicClip));
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // For manual looping to include fade in and out everytime
-        if (!musicSource.isPlaying) 
-        {
-            StartCoroutine(PlayMusic(lobbyMusicClip));
-        }
-    }
-
-    private IEnumerator PlayMusic(AudioClip musicClip)
-    {
-        musicSource.clip = musicClip;
+        musicSource.clip = lobbyMusicClip;
         musicSource.Play();
-        MusicFadeIn();
-
-        float currentTime = 0;
-
-        while (currentTime < musicClip.length - fadeDuration)
-        {
-            currentTime += Time.deltaTime;
-            yield return null;
-        }
-
-        MusicFadeOut();
     }
-
-    private IEnumerator FadeToVolume(float targetVolume, float fadeDuration, bool destroyObject)
+    private IEnumerator FadeToVolume(float targetVolume, float fadeDuration)
     {
         float currentTime = 0;
         float startVolume = musicSource.volume;
@@ -68,23 +41,18 @@ public class LobbyMusicScript : MonoBehaviour
             musicSource.volume = Mathf.Lerp(startVolume, targetVolume, currentTime / fadeDuration);
             yield return null;
         }
-
-        if (destroyObject) { Destroy(gameObject); }
     }
 
-    private void MusicFadeIn()
-    {
-        StartCoroutine(FadeToVolume(1f, fadeDuration, false));
+    // Destroy object so that it is not carried into the level
+    private IEnumerator WaitAndDestroy(float duration)
+    { 
+        yield return new WaitForSeconds(duration);
+        Destroy(gameObject);
     }
 
-    private void MusicFadeOut()
-    {
-        StartCoroutine(FadeToVolume(0f, fadeDuration, false));
-    }
-
-    // Used when entering a level from level selector
     public void MusicFadeOutAndDestroy()
     {
-        StartCoroutine(FadeToVolume(0f, fadeDuration, true));
+        StartCoroutine(FadeToVolume(0f, fadeDuration));
+        StartCoroutine(WaitAndDestroy(fadeDuration));
     }
 }

@@ -45,9 +45,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -8739318140098832806, guid: 2e4df9c1023ccf44ca8f198bb4b7f337, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0
+  m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -141,5 +141,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e47e962f35a01248af4843563e221d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lobbyMusicClip: {fileID: 8300000, guid: 5f79f87762662c243ae62ebe4ddc7811, type: 3}
+  lobbyMusicClip: {fileID: 8300000, guid: ffcbcbe3db44f424fb062950fd55a506, type: 3}
   fadeDuration: 1
