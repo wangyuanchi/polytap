@@ -30,8 +30,6 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private GameObject pauseUI;
     [SerializeField] private GameObject normalModeProgressBar;
     [SerializeField] private GameObject hardModeProgressBar;
-    [SerializeField] private Slider musicSlider;
-    [SerializeField] private Slider SFXSlider;
 
     [Header("Game Over UI")]
     [SerializeField] private GameObject gameOverUI;
@@ -70,33 +68,16 @@ public class UIManagerScript : MonoBehaviour
     void Start()
     {
         LoadAudioVolume();
-        SetMusicVolume();
-        SetSFXVolume();
         SetDifficulty();
         SetProgressBar();
         UpdateProgressPercentageCoroutine = StartCoroutine(UpdateProgressPercentage());
     }
 
-    // Indirect loading by setting slider value, for both music and SFX
     private void LoadAudioVolume()
     {
-        musicSlider.value = PlayerPrefs.GetFloat("Music Volume");
-        SFXSlider.value = PlayerPrefs.GetFloat("SFX Volume");
+        audioMixer.SetFloat("Music Volume", Mathf.Log10(PlayerPrefs.GetFloat("Music Volume")) * 25);
+        audioMixer.SetFloat("SFX Volume", Mathf.Log10(PlayerPrefs.GetFloat("SFX Volume")) * 25);
     }
-
-    public void SetMusicVolume()
-    {
-        float musicVolume = musicSlider.value;
-        audioMixer.SetFloat("Music Volume", Mathf.Log10(musicVolume) * 25);
-        PlayerPrefs.SetFloat("Music Volume", musicVolume);
-    }
-
-    public void SetSFXVolume()
-    {
-        float SFXVolume = SFXSlider.value;
-        audioMixer.SetFloat("SFX Volume", Mathf.Log10(SFXVolume) * 25);
-        PlayerPrefs.SetFloat("SFX Volume", SFXVolume);
-    }    
 
     private void SetDifficulty()
     {
