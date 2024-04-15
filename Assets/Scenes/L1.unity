@@ -1509,7 +1509,7 @@ MonoBehaviour:
   gameOverUI: {fileID: 916529231}
   gameOverText: {fileID: 1794277639}
   restartSoonText: {fileID: 491342912}
-  pauseActionReference: {fileID: 1906613333141810330, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
+  pauseActionReference: {fileID: -3778414233636504608, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
 --- !u!4 &783021156
 Transform:
   m_ObjectHideFlags: 0
