@@ -22,6 +22,8 @@ public class OptionsManagerScript : MonoBehaviour
     void Start()
     {
         LoadAudioVolume();
+
+        // Make sure correct page at scene start
         PrevButton.SetActive(false);
         ShowPage(1);
     }

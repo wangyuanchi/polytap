@@ -28,8 +28,23 @@ public class LobbyMusicScript : MonoBehaviour
     {
         musicSource = GetComponent<AudioSource>();
         musicSource.clip = lobbyMusicClip;
+
+        if (PlayerPrefs.GetString("Lobby Music") == "true")
+        {
+            PlayLobbyMusic();
+        }
+    }
+
+    public void PlayLobbyMusic()
+    {
         musicSource.Play();
     }
+
+    public void StopLobbyMusic()
+    {
+        musicSource.Stop();
+    }
+
     private IEnumerator FadeToVolume(float targetVolume, float fadeDuration)
     {
         float currentTime = 0;
