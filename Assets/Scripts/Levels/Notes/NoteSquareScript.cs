@@ -17,15 +17,15 @@ public class NoteSquareScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ScaleOverTime(timeSpawnToJudgement, noteSquareStart));
-        StartCoroutine(ScaleOverTime(timeSpawnToJudgement, noteSquareEnd));
+        StartCoroutine(ScaleOverTime(timeSpawnToJudgement, 3f, noteSquareStart));
+        StartCoroutine(ScaleOverTime(timeSpawnToJudgement, 3f, noteSquareEnd));
     }
 
     // Scale the note to go to (3, 3, 3), where it passes JudgementLineSquare at (1, 1, 1) by timeSpawnToJudgement
-    private IEnumerator ScaleOverTime(float timeSpawnToJudgement, GameObject noteSquareChild)
+    private IEnumerator ScaleOverTime(float timeSpawnToJudgement, float finalScale, GameObject noteSquareChild)
     {
         // Variables here are catered to noteSquareStart
-        float defaultTimeSpawnToDestroy = noteSpeedTiming * 3;
+        float defaultTimeSpawnToDestroy = noteSpeedTiming * finalScale;
         float elapsedTime = noteSpeedTiming - timeSpawnToJudgement;
 
         if (noteSquareChild == noteSquareEnd)
@@ -40,20 +40,20 @@ public class NoteSquareScript : MonoBehaviour
             else
             {
                 elapsedTime = elapsedTime - holdDuration;
-                noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3f, 3f, 3f), elapsedTime / defaultTimeSpawnToDestroy);
+                noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), elapsedTime / defaultTimeSpawnToDestroy);
             }
         }
 
         // Move preSpawned note to starting position if required
         if (noteSquareChild == noteSquareStart && elapsedTime > 0)
         {
-            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3f, 3f, 3f), elapsedTime / defaultTimeSpawnToDestroy);
+            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), elapsedTime / defaultTimeSpawnToDestroy);
         }
 
         while (elapsedTime < defaultTimeSpawnToDestroy)
         {
             elapsedTime += Time.deltaTime;
-            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3f, 3f, 3f), elapsedTime / defaultTimeSpawnToDestroy);
+            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), elapsedTime / defaultTimeSpawnToDestroy);
             yield return null;
         }
 

@@ -827,7 +827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a64523bd9fb269479edfaa5ee1f420f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteSpeed: 3
+  noteSpeed: 0
   noteCircle: {fileID: 8569020730096176565, guid: 7f25d17055feb1845a60b061d06239cb, type: 3}
   noteSquare: {fileID: 8954147341167723780, guid: 3326235581d21664799dbae1ad11cb97, type: 3}
   noteTriangle: {fileID: 6818662013703148609, guid: 352ce96cf9e433a458986ce9592375da, type: 3}

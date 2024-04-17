@@ -19,7 +19,7 @@ public class NotesManagerScript : MonoBehaviour
     // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
     {
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 2f }, { "timeStampRelease", 6f } },
+        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 5.277f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 10.151f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 14.931f } },
         new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 19.661f } },
@@ -54,10 +54,15 @@ public class NotesManagerScript : MonoBehaviour
     private Dictionary<int, float> noteSpeedTimings = new Dictionary<int, float>
     {
         { 1, 10f },
-        { 2, 8f },
-        { 3, 6f },
-        { 4, 4f },
-        { 5, 2f }
+        { 2, 9f },
+        { 3, 8f },
+        { 4, 7f },
+        { 5, 6f },
+        { 6, 5f },
+        { 7, 4f },
+        { 8, 3f },
+        { 9, 2f },
+        { 10, 1f }
     };
 
     // Start is called before the first frame update
