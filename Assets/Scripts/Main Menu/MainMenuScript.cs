@@ -21,6 +21,7 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Lobby Music", PlayerPrefs.GetString("Lobby Music", "true"));
+        PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 3));
         PlayerPrefs.SetString("Hard Mode", PlayerPrefs.GetString("Hard Mode", "false"));
 
         PlayerPrefs.SetFloat("L1-N-HS", PlayerPrefs.GetFloat("L1-N-HS", 0f));

@@ -19,7 +19,7 @@ public class NotesManagerScript : MonoBehaviour
     // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
     {
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 5.277f } },
+        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 2f }, { "timeStampRelease", 6f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 10.151f } },
         new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 14.931f } },
         new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 19.661f } },
@@ -63,6 +63,7 @@ public class NotesManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        noteSpeed = PlayerPrefs.GetInt("Note Speed");
         StartCoroutine(SpawnBeatMap(beatMap));
 
         // Give LogicManagerScript and UIManagerScript the exact timing the beatmap starts
@@ -72,28 +73,52 @@ public class NotesManagerScript : MonoBehaviour
 
     private IEnumerator SpawnBeatMap(List<Dictionary<string, float>> beatMap)
     {
-        // If the currentNote exists
-        while (currentNote < beatMap.Count) {
-            float timeUntilSpawn = beatMap[currentNote]["timeStamp"] - noteSpeedTimings[noteSpeed];
-            if (currentNote > 0)
+        float beatMapStartTime = Time.time;
+
+        // Pre-spawning notes to cater to noteSpeedTimings being longer than the "timeStamp" of the note
+        while (currentNote < beatMap.Count)
+        {
+            if (beatMap[currentNote]["timeStamp"] - noteSpeedTimings[noteSpeed] >= 0)
             {
-                timeUntilSpawn = beatMap[currentNote]["timeStamp"] - beatMap[currentNote - 1]["timeStamp"];
+                break;
             }
-            // Wait for timing to hit spawn time, then spawn the note and go to the next note
-            yield return new WaitForSeconds(timeUntilSpawn);
-            SpawnNote(beatMap[currentNote]);
+
+            SpawnNote(beatMap[currentNote], true);
             currentNote++;
+        }
+
+        // Spanws notes that are not pre-spawned
+        while (currentNote < beatMap.Count) {
+            float currentTimeStamp = Time.time - beatMapStartTime;
+            if (currentTimeStamp >= beatMap[currentNote]["timeStamp"] - noteSpeedTimings[noteSpeed])
+            {
+                SpawnNote(beatMap[currentNote], false);
+                currentNote++;
+            }    
+            yield return null;
         }
     }
 
     // Spawn, update relevant variables in the instance of the new note and give it AND its timing(s) to logicManager 
-    private void SpawnNote(Dictionary<string, float> note)
+    private void SpawnNote(Dictionary<string, float> note, bool preSpawn)
     {
+        GameObject newNote;
+
         // noteCircle
         if (note["typeOfNote"] == 0f)
         {
-            GameObject newNote = Instantiate(noteCircle, transform.position, transform.rotation);
-            newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            newNote = Instantiate(noteCircle, transform.position, transform.rotation);
+            newNote.GetComponent<NoteCircleScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
+
+            if (preSpawn)
+            {
+                newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = note["timeStamp"];
+            }
+            else
+            {
+                newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            }
+
             logicManager.GetComponent<LogicManagerScript>().circleObjectsQueue.Enqueue(newNote);
             logicManager.GetComponent<LogicManagerScript>().circleTimingsQueue.Enqueue
                 (
@@ -107,9 +132,19 @@ public class NotesManagerScript : MonoBehaviour
         // noteSquare
         else if (note["typeOfNote"] == 1f)
         {
-            GameObject newNote = Instantiate(noteSquare, transform.position, transform.rotation);
-            newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            newNote = Instantiate(noteSquare, transform.position, transform.rotation);
             newNote.GetComponent<NoteSquareScript>().holdDuration = note["timeStampRelease"] - note["timeStamp"];
+            newNote.GetComponent<NoteSquareScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
+
+            if (preSpawn)
+            {
+                newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = note["timeStamp"];
+            }
+            else
+            {
+                newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            }
+
             logicManager.GetComponent<LogicManagerScript>().squareObjectsQueue.Enqueue(newNote);
             logicManager.GetComponent<LogicManagerScript>().squareTimingsQueue.Enqueue
                 (
@@ -124,8 +159,18 @@ public class NotesManagerScript : MonoBehaviour
         // noteTriangle
         else if (note["typeOfNote"] == 2f)
         {
-            GameObject newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
-            newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
+            newNote.GetComponent<NoteTriangleScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
+
+            if (preSpawn)
+            {
+                newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = note["timeStamp"];
+            }
+            else
+            {
+                newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
+            }
+
             logicManager.GetComponent<LogicManagerScript>().triangleObjectsQueue.Enqueue(newNote);
             logicManager.GetComponent<LogicManagerScript>().triangleTimingsQueue.Enqueue
                 (

@@ -7,6 +7,7 @@ public class NoteCircleScript : MonoBehaviour
 {
 
     public float timeSpawnToJudgement;
+    public float noteSpeedTiming;
 
     // Start is called before the first frame update
     void Start()
@@ -17,13 +18,19 @@ public class NoteCircleScript : MonoBehaviour
     // Scale the note to go to (3, 3, 3), where it passes JudgementLineCircle at (1, 1, 1) by timeSpawnToJudgement
     private IEnumerator ScaleOverTime(float timeSpawnToJudgement)
     {
-        float elapsedTime = 0f;
-        float timeSpawnToDestroy = timeSpawnToJudgement * 3f;
+        float defaultTimeSpawnToDestroy = noteSpeedTiming * 3;
+        float elapsedTime = noteSpeedTiming - timeSpawnToJudgement;
 
-        while (elapsedTime < timeSpawnToDestroy)
+        // Move preSpawned note to starting position if required
+        if (elapsedTime > 0)
+        {
+            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3f, 3f, 3f), elapsedTime / defaultTimeSpawnToDestroy);
+        }
+
+        while (elapsedTime < defaultTimeSpawnToDestroy)
         {
             elapsedTime += Time.deltaTime;
-            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3f, 3f, 3f), elapsedTime / timeSpawnToDestroy);
+            transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(3f, 3f, 3f), elapsedTime / defaultTimeSpawnToDestroy);
             yield return null;
         }
 
