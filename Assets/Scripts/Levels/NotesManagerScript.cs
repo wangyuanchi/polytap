@@ -19,32 +19,9 @@ public class NotesManagerScript : MonoBehaviour
     // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
     private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
     {
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 5.277f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 10.151f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 14.931f } },
-        new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 19.661f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 24.326f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 29.311f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 34.111f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 38.896f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 43.621f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 48.421f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 53.201f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 58.037f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 62.862f }, { "timeStampRelease", 71.182f } },
-        new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 72.376f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 77.242f }, { "timeStampRelease", 78.372f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 79.602f }, { "timeStampRelease", 80.802f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 82.007f }, { "timeStampRelease", 83.208f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 84.432f }, { "timeStampRelease", 85.563f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 86.792f }, { "timeStampRelease", 87.972f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 89.202f }, { "timeStampRelease", 90.382f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 91.642f }, { "timeStampRelease", 94.032f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 96.407f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 98.782f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 101.411f } },
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 103.841f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 106.068f }, { "timeStampRelease", 114.232f } }
+        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 3f } },
+        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 4f } , { "timeStampRelease", 5f } },
+        new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 6f } }
     };
 
     // Referencing the index of beatMap
