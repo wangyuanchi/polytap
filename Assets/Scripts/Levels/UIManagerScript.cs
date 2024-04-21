@@ -34,7 +34,7 @@ public class UIManagerScript : MonoBehaviour
     [Header("Game Over UI")]
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private TMP_Text gameOverText;
-    [SerializeField] private GameObject restartSoonText;
+    [SerializeField] private GameObject levelCompleteOverlay;
 
     [Header("Input")]
     [SerializeField] private InputActionReference pauseActionReference;
@@ -166,16 +166,15 @@ public class UIManagerScript : MonoBehaviour
 
         if (levelComplete) 
         {
-            gameOverText.text = "Level Complete!";
-            restartSoonText.SetActive(false);
+            Instantiate(levelCompleteOverlay, transform.position, transform.rotation);
         }
         else
         {
             gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
+            gameOverUI.SetActive(true);
         }
 
         levelMusic.GetComponent<LevelMusicScript>().StopMusic();
-        gameOverUI.SetActive(true);
 
         // Pause for 3 seconds before restarting the scene
         if (!levelComplete)

@@ -1508,7 +1508,7 @@ MonoBehaviour:
   hardModeProgressBar: {fileID: 49611882}
   gameOverUI: {fileID: 916529231}
   gameOverText: {fileID: 1794277639}
-  restartSoonText: {fileID: 491342912}
+  levelCompleteOverlay: {fileID: 7057847710957590787, guid: d1e03ded3d1f3684884e23c4d30accd8, type: 3}
   pauseActionReference: {fileID: -3778414233636504608, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
 --- !u!4 &783021156
 Transform:
