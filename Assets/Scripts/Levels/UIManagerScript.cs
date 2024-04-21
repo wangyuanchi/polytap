@@ -68,6 +68,7 @@ public class UIManagerScript : MonoBehaviour
     void Start()
     {
         LoadAudioVolume();
+        SetTotalAttempts();
         SetDifficulty();
         SetProgressBar();
         UpdateProgressPercentageCoroutine = StartCoroutine(UpdateProgressPercentage());
@@ -79,9 +80,18 @@ public class UIManagerScript : MonoBehaviour
         audioMixer.SetFloat("SFX Volume", Mathf.Log10(PlayerPrefs.GetFloat("SFX Volume")) * 25);
     }
 
+    // Increasing total number of attempts every time the scene is loaded
+    private void SetTotalAttempts()
+    {
+        string key;
+
+        key = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-TA";
+        PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key) + 1);
+    }
+
     private void SetDifficulty()
     {
-        if (PlayerPrefs.GetString("Hard Mode") == "false")
+        if (PlayerPrefs.GetString("Mode") == "N")
         {
             health = 3;
         }
@@ -189,7 +199,7 @@ public class UIManagerScript : MonoBehaviour
     {
         string key;
         
-        if (PlayerPrefs.GetString("Hard Mode") == "false")
+        if (PlayerPrefs.GetString("Mode") == "N")
         {
             key = SceneManager.GetActiveScene().name + "-N-HS";
         }

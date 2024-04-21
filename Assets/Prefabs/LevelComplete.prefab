@@ -216,7 +216,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &3181254792086267443
 MonoBehaviour:
@@ -607,8 +607,9 @@ GameObject:
   - component: {fileID: 2374975080682351038}
   - component: {fileID: 3269161910540473126}
   - component: {fileID: 6567159879191628766}
+  - component: {fileID: 8393883684916680945}
   m_Layer: 5
-  m_Name: AttemptsText
+  m_Name: LevelInfoText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -661,7 +662,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Mode: Easy          Attempts: 1000'
+  m_text: 'Mode: Normal     Attempts: 0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
   m_sharedMaterial: {fileID: 1510713269788925125, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
@@ -730,6 +731,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8393883684916680945
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8191417410861531061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aadf9496b67f3ab4faaff0cb539d5d74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelInfoText: {fileID: 6567159879191628766}
 --- !u!1 &8701367216430072572
 GameObject:
   m_ObjectHideFlags: 0

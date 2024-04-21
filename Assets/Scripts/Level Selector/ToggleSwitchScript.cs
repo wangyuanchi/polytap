@@ -26,7 +26,7 @@ public class ToggleSwitchScript : MonoBehaviour, IPointerClickHandler
         slider.colors = sliderColors;
         slider.transition = Selectable.Transition.None;
 
-        if (PlayerPrefs.GetString("Hard Mode") == "false")
+        if (PlayerPrefs.GetString("Mode") == "N")
         {
             slider.value = 0;
             isEnabled = false;
@@ -50,8 +50,8 @@ public class ToggleSwitchScript : MonoBehaviour, IPointerClickHandler
 
         isEnabled = enabledState;
 
-        if (isEnabled) PlayerPrefs.SetString("Hard Mode", "true");
-        else PlayerPrefs.SetString("Hard Mode", "false");
+        if (isEnabled) PlayerPrefs.SetString("Mode", "H");
+        else PlayerPrefs.SetString("Mode", "N");
 
         // Prevents slider from moving to the end if the toggles are fast
         if (animateSliderCoroutine != null)

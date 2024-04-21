@@ -22,10 +22,12 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Lobby Music", PlayerPrefs.GetString("Lobby Music", "true"));
         PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 5));
-        PlayerPrefs.SetString("Hard Mode", PlayerPrefs.GetString("Hard Mode", "false"));
+        PlayerPrefs.SetString("Mode", PlayerPrefs.GetString("Mode", "N"));
 
         PlayerPrefs.SetFloat("L1-N-HS", PlayerPrefs.GetFloat("L1-N-HS", 0f));
         PlayerPrefs.SetFloat("L1-H-HS", PlayerPrefs.GetFloat("L1-H-HS", 0f));
+        PlayerPrefs.SetInt("L1-N-TA", PlayerPrefs.GetInt("L1-N-TA", 0));
+        PlayerPrefs.SetInt("L1-H-TA", PlayerPrefs.GetInt("L1-H-TA", 0));
     }
 
     // Start is called before the first frame update

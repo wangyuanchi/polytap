@@ -43,6 +43,8 @@ public class LevelSelectorManagerScript : MonoBehaviour
         string levelName = level.name;
         float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
         float hardModeHighScore = PlayerPrefs.GetFloat($"{levelName}-H-HS");
+        int normalModeAttempts = PlayerPrefs.GetInt($"{levelName}-N-TA");
+        int hardModeAttempts = PlayerPrefs.GetInt($"{levelName}-H-TA");
 
         GameObject levelGameObject = level.gameObject;
         GameObject normalModeProgressBar = levelGameObject.transform.Find("NormalModeProgressBar").gameObject;
@@ -52,9 +54,9 @@ public class LevelSelectorManagerScript : MonoBehaviour
         normalModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = normalModeHighScore / 100;
         hardModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = hardModeHighScore / 100;
 
-        // Set progress text
-        normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = normalModeHighScore.ToString() + "%";
-        hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
+        // Set progress text and total attempts
+        normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{normalModeHighScore}% ({normalModeAttempts})";
+        hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{hardModeHighScore}% ({hardModeAttempts})";
     }
 
     public void TransitionToScene(string levelName)
