@@ -173,22 +173,19 @@ public class UIManagerScript : MonoBehaviour
     {
         SetHighScore();
         SetProgressBar();
+        levelMusic.GetComponent<LevelMusicScript>().StopMusic();
 
         if (levelComplete) 
         {
+            pauseActionReference.action.Disable();
             Instantiate(levelCompleteOverlay, transform.position, transform.rotation);
         }
         else
         {
             gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
             gameOverUI.SetActive(true);
-        }
 
-        levelMusic.GetComponent<LevelMusicScript>().StopMusic();
-
-        // Pause for 3 seconds before restarting the scene
-        if (!levelComplete)
-        {
+            // Pause for 3 seconds before restarting the scene
             yield return new WaitForSeconds(3);
             RestartScene();
         }
