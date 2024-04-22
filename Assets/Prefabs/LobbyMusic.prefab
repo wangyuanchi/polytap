@@ -142,4 +142,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lobbyMusicClip: {fileID: 8300000, guid: ffcbcbe3db44f424fb062950fd55a506, type: 3}
-  fadeDuration: 1
+  fadeDuration: 0.66

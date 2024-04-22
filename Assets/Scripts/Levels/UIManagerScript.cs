@@ -19,12 +19,11 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private GameObject levelMusic;
     [SerializeField] private AudioMixer audioMixer;
 
-    [Header("Health and Progress")]
-    [SerializeField] private int health;
-    [SerializeField] private Image[] hearts;
-    [SerializeField] private Sprite HeartEmpty;
-    [SerializeField] private Sprite HeartFull;
+    [Header("Progress and Health")]
     [SerializeField] private TMP_Text progressText;
+    [SerializeField] private int health;
+    [SerializeField] private RectTransform heartMask;
+    private Coroutine animateHeartMaskCoroutine;
 
     [Header("Pause UI")]
     [SerializeField] private GameObject pauseUI;
@@ -94,12 +93,12 @@ public class UIManagerScript : MonoBehaviour
         if (PlayerPrefs.GetString("Mode") == "N")
         {
             health = 3;
+            heartMask.sizeDelta = new Vector2(350f, 100f);
         }
         else
         {
             health = 1;
-            hearts[1].sprite = HeartEmpty;
-            hearts[2].sprite = HeartEmpty;
+            heartMask.sizeDelta = new Vector2(110f, 100f);
         }
     }
 
@@ -147,24 +146,43 @@ public class UIManagerScript : MonoBehaviour
     {
         health--;
 
-        // Change sprite of hearts based on health
-        for (int heart = 0; heart < hearts.Count(); heart++)
+        // Prevent coroutine clashing if health decreases faster than animation
+        if (animateHeartMaskCoroutine != null) 
         {
-            if (heart < health)
-            {
-                hearts[heart].sprite = HeartFull;
-            }
-            else
-            {
-                hearts[heart].sprite = HeartEmpty;
-            }
+            StopCoroutine(animateHeartMaskCoroutine);
         }
 
-        // End the game if no health is left
-        if (health == 0)
+        if (health == 2)
         {
+            animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(230f, 100f)));
+        }   
+        else if (health == 1)
+        {
+            animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(110f, 100f)));
+        }
+        // End the game if health == 0
+        else
+        {
+            animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(0f, 100f)));
             StopCoroutine(UpdateProgressPercentageCoroutine);
             StartCoroutine(GameOver(false));
+        }
+    }
+
+    private IEnumerator AnimateHeartMask(Vector2 targetPosition)
+    {
+        float currentTime = 0f;
+        float animationTime = 0.3f;
+        Vector2 currentPosition = heartMask.sizeDelta;
+
+        AnimationCurve slideEase = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+        while (currentTime < animationTime) 
+        {
+            float lerpFactor = slideEase.Evaluate(currentTime / animationTime);
+            heartMask.sizeDelta = Vector2.Lerp(currentPosition, targetPosition, lerpFactor);
+            currentTime += Time.deltaTime;
+            yield return null;
         }
     }
 
