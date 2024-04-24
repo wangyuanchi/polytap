@@ -8,19 +8,23 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.Audio;
+using UnityEngine.Rendering.PostProcessing;
 
 public class UIManagerScript : MonoBehaviour
 {
     [Header("General")]
     public float beatMapStartTime;
     [SerializeField] private GameObject sceneTransition;
+    [SerializeField] private GameObject PostProcessing;
 
     [Header("Audio")]
     [SerializeField] private GameObject levelMusic;
     [SerializeField] private AudioMixer audioMixer;
 
-    [Header("Progress and Health")]
+    [Header("Progress")]
     [SerializeField] private TMP_Text progressText;
+
+    [Header("Health")]
     [SerializeField] private int health;
     [SerializeField] private RectTransform heartMask;
     private Coroutine animateHeartMaskCoroutine;
@@ -142,9 +146,15 @@ public class UIManagerScript : MonoBehaviour
         StartCoroutine(GameOver(true));
     }
 
-    public void DecreaseHealth()
+    public void TakeDamage()
     {
         health--;
+
+        bool enableDamageVignette = PlayerPrefs.GetString("Damage Vignette") == "true" ? true : false;
+        if (enableDamageVignette)
+        {
+            PostProcessing.GetComponent<VignetteScript>().DamageVignette(health);
+        }
 
         // Prevent coroutine clashing if health decreases faster than animation
         if (animateHeartMaskCoroutine != null) 
@@ -155,7 +165,7 @@ public class UIManagerScript : MonoBehaviour
         if (health == 2)
         {
             animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(230f, 100f)));
-        }   
+        }
         else if (health == 1)
         {
             animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(110f, 100f)));

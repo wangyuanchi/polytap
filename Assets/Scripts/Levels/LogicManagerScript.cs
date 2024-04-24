@@ -138,19 +138,19 @@ public class LogicManagerScript : MonoBehaviour
         if (circleTimingsQueue.Count > 0 && currentTimeStamp > circleTimingsQueue.Peek()["timeStamp"] + expectedWindow)
         {
             DequeueNote(circleObjectsQueue, circleTimingsQueue, false);
-            UIManager.GetComponent<UIManagerScript>().DecreaseHealth();
+            UIManager.GetComponent<UIManagerScript>().TakeDamage();
             Debug.Log("Missed Note!");
         }
         if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindow)
         {
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
-            UIManager.GetComponent<UIManagerScript>().DecreaseHealth();
+            UIManager.GetComponent<UIManagerScript>().TakeDamage();
             Debug.Log("Missed Note!");
         }
         if (triangleTimingsQueue.Count > 0 && currentTimeStamp > triangleTimingsQueue.Peek()["timeStamp"] + expectedWindow)
         {
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
-            UIManager.GetComponent<UIManagerScript>().DecreaseHealth();
+            UIManager.GetComponent<UIManagerScript>().TakeDamage();
             Debug.Log("Missed Note!");
         }
     }
@@ -160,7 +160,7 @@ public class LogicManagerScript : MonoBehaviour
         Debug.Log(inputDetails);
 
         if (!inputCorrect)
-        { UIManager.GetComponent<UIManagerScript>().DecreaseHealth(); }
+        { UIManager.GetComponent<UIManagerScript>().TakeDamage(); }
     }
 
     private void DequeueNote(Queue<GameObject> noteObjectsQueue, Queue<Dictionary<string, float>> noteTimingsQueue, bool destroyNote)
