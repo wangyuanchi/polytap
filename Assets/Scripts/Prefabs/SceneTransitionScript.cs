@@ -8,6 +8,11 @@ public class SceneTransitionScript : MonoBehaviour
     [SerializeField] private Animator animator;
     private string levelToLoad;
 
+    public void SceneFadeIn()
+    {
+        animator.SetTrigger("TransitionFadeIn");
+    }
+
     public void TransitionToScene(string levelName)
     {
         levelToLoad = levelName;

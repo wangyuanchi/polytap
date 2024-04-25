@@ -16,13 +16,17 @@ public class UIManagerScript : MonoBehaviour
     public float beatMapStartTime;
     [SerializeField] private GameObject sceneTransition;
     [SerializeField] private GameObject PostProcessing;
+    private static bool firstAttempt = true;
 
     [Header("Audio")]
     [SerializeField] private GameObject levelMusic;
     [SerializeField] private AudioMixer audioMixer;
+    private float audioCompletedDuration;
 
     [Header("Progress")]
     [SerializeField] private TMP_Text progressText;
+    private float progressPercentage;
+    private Coroutine UpdateProgressPercentageCoroutine;
 
     [Header("Health")]
     [SerializeField] private int health;
@@ -40,11 +44,6 @@ public class UIManagerScript : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionReference pauseActionReference;
-
-    private float audioCompletedDuration;
-    private float progressPercentage;
-
-    private Coroutine UpdateProgressPercentageCoroutine;
 
     private void OnEnable()
     {
@@ -69,6 +68,12 @@ public class UIManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Do not load fade in transition for subsequent attempts for better flow
+        if (firstAttempt)
+        { 
+            sceneTransition.GetComponent<SceneTransitionScript>().SceneFadeIn(); 
+            firstAttempt = false;
+        }
         LoadAudioVolume();
         SetTotalAttempts();
         SetDifficulty();
@@ -96,12 +101,12 @@ public class UIManagerScript : MonoBehaviour
         if (PlayerPrefs.GetString("Mode") == "N")
         {
             health = 3;
-            heartMask.sizeDelta = new Vector2(350f, 100f);
+            animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(350f, 100f)));
         }
         else
         {
             health = 1;
-            heartMask.sizeDelta = new Vector2(110f, 100f);
+            animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(110f, 100f)));
         }
     }
 
@@ -177,18 +182,18 @@ public class UIManagerScript : MonoBehaviour
         }
     }
 
-    private IEnumerator AnimateHeartMask(Vector2 targetPosition)
+    private IEnumerator AnimateHeartMask(Vector2 targetSize)
     {
         float currentTime = 0f;
         float animationTime = 0.3f;
-        Vector2 currentPosition = heartMask.sizeDelta;
+        Vector2 currentSize = heartMask.sizeDelta;
 
         AnimationCurve slideEase = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
         while (currentTime < animationTime) 
         {
             float lerpFactor = slideEase.Evaluate(currentTime / animationTime);
-            heartMask.sizeDelta = Vector2.Lerp(currentPosition, targetPosition, lerpFactor);
+            heartMask.sizeDelta = Vector2.Lerp(currentSize, targetSize, lerpFactor);
             currentTime += Time.deltaTime;
             yield return null;
         }
@@ -210,8 +215,7 @@ public class UIManagerScript : MonoBehaviour
         {
             judgementLines.GetComponent<JudgementLinesScript>().GameOver();
             yield return new WaitForSeconds(1.5f);
-            // Restart scene but without the transition
-            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+            RestartScene();
         }
     }
 
@@ -250,10 +254,12 @@ public class UIManagerScript : MonoBehaviour
         levelMusic.GetComponent<LevelMusicScript>().ResumeMusic();
     }
 
+    // Restart scene but without the transition
     public void RestartScene()
     {
-        TransitionToScene(SceneManager.GetActiveScene().name);
-    }    
+        Time.timeScale = 1;
+        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+    }
 
     public void TransitionToScene(string levelName)
     {

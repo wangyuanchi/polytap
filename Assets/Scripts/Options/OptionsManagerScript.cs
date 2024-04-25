@@ -21,6 +21,7 @@ public class OptionsManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sceneTransition.GetComponent<SceneTransitionScript>().SceneFadeIn();
         LoadAudioVolume();
 
         // Make sure correct page at scene start

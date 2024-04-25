@@ -19,6 +19,7 @@ public class LevelSelectorManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sceneTransition.GetComponent<SceneTransitionScript>().SceneFadeIn();
         LoadAudioVolume();
 
         foreach (Transform level in allLevelsGameObject.transform)
