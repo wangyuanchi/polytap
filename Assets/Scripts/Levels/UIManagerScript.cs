@@ -34,10 +34,9 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private GameObject normalModeProgressBar;
     [SerializeField] private GameObject hardModeProgressBar;
 
-    [Header("Game Over UI")]
-    [SerializeField] private GameObject gameOverUI;
-    [SerializeField] private TMP_Text gameOverText;
+    [Header("Game Over")]
     [SerializeField] private GameObject levelCompleteOverlay;
+    [SerializeField] private GameObject judgementLines;
 
     [Header("Input")]
     [SerializeField] private InputActionReference pauseActionReference;
@@ -170,8 +169,7 @@ public class UIManagerScript : MonoBehaviour
         {
             animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(110f, 100f)));
         }
-        // End the game if health == 0
-        else
+        else if (health == 0)
         {
             animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(0f, 100f)));
             StopCoroutine(UpdateProgressPercentageCoroutine);
@@ -210,12 +208,10 @@ public class UIManagerScript : MonoBehaviour
         }
         else
         {
-            gameOverText.text = "Game Over!" + Environment.NewLine + $"Progress: {progressPercentage}%";
-            gameOverUI.SetActive(true);
-
-            // Pause for 3 seconds before restarting the scene
-            yield return new WaitForSeconds(3);
-            RestartScene();
+            judgementLines.GetComponent<JudgementLinesScript>().GameOver();
+            yield return new WaitForSeconds(1.5f);
+            // Restart scene but without the transition
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -251,10 +247,7 @@ public class UIManagerScript : MonoBehaviour
     {
         pauseUI.SetActive(false);
         Time.timeScale = 1;
-
-        // Prevent clash where audio resumes if user pauses then unpauses after the game has ended
-        if (!gameOverUI.activeSelf)
-        { levelMusic.GetComponent<LevelMusicScript>().ResumeMusic(); }
+        levelMusic.GetComponent<LevelMusicScript>().ResumeMusic();
     }
 
     public void RestartScene()

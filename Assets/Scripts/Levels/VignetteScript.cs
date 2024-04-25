@@ -98,7 +98,7 @@ public class VignetteScript : MonoBehaviour
         {
             ChangeVignetteIntensityCoroutine = StartCoroutine(ChangeVignetteIntensity(peakIntensity1, targetIntensity1));
         }
-        else
+        else if (currentHealth == 0)
         {
             ChangeVignetteIntensityCoroutine = StartCoroutine(ChangeVignetteIntensity(peakIntensity0, targetIntensity0));
         }
