@@ -20,6 +20,7 @@ public class UIManagerScript : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private GameObject levelMusic;
+    [SerializeField] private AudioClip gameOverSFX;
     [SerializeField] private AudioMixer audioMixer;
     private float audioCompletedDuration;
 
@@ -101,12 +102,12 @@ public class UIManagerScript : MonoBehaviour
         if (PlayerPrefs.GetString("Mode") == "N")
         {
             health = 3;
-            animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(350f, 100f)));
+            heartMask.sizeDelta = new Vector2(350f, 100f);
         }
         else
         {
             health = 1;
-            animateHeartMaskCoroutine = StartCoroutine(AnimateHeartMask(new Vector2(110f, 100f)));
+            heartMask.sizeDelta = new Vector2(110f, 100f);
         }
     }
 
@@ -213,8 +214,10 @@ public class UIManagerScript : MonoBehaviour
         }
         else
         {
+            PlaySFX(gameOverSFX);
             judgementLines.GetComponent<JudgementLinesScript>().GameOver();
-            yield return new WaitForSeconds(1.5f);
+            // Wait for 2 seconds before restarting the game
+            yield return new WaitForSeconds(2f);
             RestartScene();
         }
     }
@@ -240,6 +243,12 @@ public class UIManagerScript : MonoBehaviour
         }
     }
 
+    private void PlaySFX(AudioClip SFX)
+    {
+        GetComponent<AudioSource>().clip = SFX;
+        GetComponent<AudioSource>().Play();
+    }
+
     private void PauseScene()
     {
         pauseUI.SetActive(true);
@@ -263,6 +272,8 @@ public class UIManagerScript : MonoBehaviour
 
     public void TransitionToScene(string levelName)
     {
+        // Reset first attempt so that transition is loaded in the future
+        firstAttempt = true;
         sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
     }
 }

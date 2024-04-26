@@ -68,9 +68,14 @@ public class LevelSelectorManagerScript : MonoBehaviour
         if (levelName != "Main Menu")
         {
             LobbyMusicScript.instance.MusicFadeOutAndDestroy();
-            GetComponent<AudioSource>().clip = levelStartSFX;
-            GetComponent<AudioSource>().Play();
+            PlaySFX(levelStartSFX);
         }   
     }    
+
+    private void PlaySFX(AudioClip SFX)
+    {
+        GetComponent<AudioSource>().clip = SFX;
+        GetComponent<AudioSource>().Play();
+    }
 }
 
