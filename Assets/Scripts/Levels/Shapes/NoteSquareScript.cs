@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class NoteSquareScript : MonoBehaviour
 {
-
     public float timeSpawnToJudgement; 
     public float holdDuration;
     public float noteSpeedTiming;
@@ -50,7 +49,7 @@ public class NoteSquareScript : MonoBehaviour
             noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), elapsedTime / defaultTimeSpawnToDestroy);
         }
 
-        while (elapsedTime < defaultTimeSpawnToDestroy)
+        while (elapsedTime < defaultTimeSpawnToDestroy && noteSquareChild != null)
         {
             elapsedTime += Time.deltaTime;
             noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), elapsedTime / defaultTimeSpawnToDestroy);
@@ -58,5 +57,14 @@ public class NoteSquareScript : MonoBehaviour
         }
 
         Destroy(noteSquareChild);
+    }
+
+    public void DestroyNoteSquareStart()
+    {
+        Destroy(noteSquareStart);
+    }
+    public void DestroyNoteSquareEnd()
+    {
+        Destroy(noteSquareEnd);
     }
 }

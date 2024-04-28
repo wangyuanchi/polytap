@@ -21,7 +21,9 @@ public class LogicManagerScript : MonoBehaviour
     [SerializeField] private InputActionReference circleActionReference;
     [SerializeField] private InputActionReference squareActionReference;
     [SerializeField] private InputActionReference triangleActionReference;
-    private float inputDuration = 0;
+
+    [Header("Note Square")]
+    private bool initialInput = false;
 
     [Header("Timings")]
     public float beatMapStartTime;
@@ -62,14 +64,16 @@ public class LogicManagerScript : MonoBehaviour
     // Square -> Hold and Release
     private void onSquareHold(InputAction.CallbackContext context)
     {
-        inputDuration = Time.time;
+        if (squareTimingsQueue.Count > 0)
+        { checkInputSquareInitial(Time.time - beatMapStartTime); }
     }
     private void onSquareRelease(InputAction.CallbackContext context)
     {
-        float inputEnd = Time.time;
-        inputDuration = inputEnd - inputDuration;
-        if (squareTimingsQueue.Count > 0) 
-        { checkInputSquare(inputEnd - inputDuration - beatMapStartTime, inputDuration); }
+        if (initialInput && squareTimingsQueue.Count > 0) 
+        { 
+            checkInputSquareFinal(Time.time - beatMapStartTime);
+            initialInput = false;
+        }
     }
 
     // Triangle -> Double Tap
@@ -89,33 +93,40 @@ public class LogicManagerScript : MonoBehaviour
         }
         else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
         {
-            ProcessInput(false, "Wrong Input: Too Early/Late");
+            ProcessInput(false, "Wrong Input: Too Early/Late [Circle]");
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
         }
     }
 
-    private void checkInputSquare(float inputTimeStamp, float inputDuration)
+    private void checkInputSquareInitial(float inputTimeStamp)
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
         if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
         {
-            if (Math.Abs(squareTimingsQueue.Peek()["duration"] - inputDuration) <= bufferWindow)
-            {
-                ProcessInput(true, "Correct Input!");
-            }
-            else
-            {
-                ProcessInput(false, "Wrong Input: Too Early/Late Release");
-            }
-            DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
+            squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareStart();
+            initialInput = true;
         }
         else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
         {
-            ProcessInput(false, "Wrong Input: Too Early/Late");
+            ProcessInput(false, "Wrong Input: Too Early/Late [Square (Start)]");
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
         }
     }
 
+    private void checkInputSquareFinal(float inputTimeStamp)
+    {
+        float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"];
+        if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
+        {
+            ProcessInput(true, "Correct Input!");
+            DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
+        }
+        else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
+        {
+            ProcessInput(false, "Wrong Input: Too Early/Late [Square (End)]");
+            DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
+        }
+    }
     private void checkInputTriangle(float inputTimeStamp)
     {
         float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
@@ -126,7 +137,7 @@ public class LogicManagerScript : MonoBehaviour
         }
         else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
         {
-            ProcessInput(false, "Wrong Input: Too Early/Late");
+            ProcessInput(false, "Wrong Input: Too Early/Late [Triangle]");
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
         }
     }
@@ -138,23 +149,27 @@ public class LogicManagerScript : MonoBehaviour
         if (circleTimingsQueue.Count > 0 && currentTimeStamp > circleTimingsQueue.Peek()["timeStamp"] + expectedWindow)
         {
             DequeueNote(circleObjectsQueue, circleTimingsQueue, false);
-            UIManager.GetComponent<UIManagerScript>().TakeDamage();
-            Debug.Log("Missed Note!");
+            ProcessInput(false, "Missed Note! [Circle]");
+        }
+        if (squareTimingsQueue.Count > 0 && !initialInput && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + expectedWindow)
+        {
+            squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd();
+            DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
+            ProcessInput(false, "Missed Note! [Square (Start)]");
         }
         if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindow)
         {
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
-            UIManager.GetComponent<UIManagerScript>().TakeDamage();
-            Debug.Log("Missed Note!");
+            ProcessInput(false, "Missed Note! [Square (End)]");
         }
         if (triangleTimingsQueue.Count > 0 && currentTimeStamp > triangleTimingsQueue.Peek()["timeStamp"] + expectedWindow)
         {
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
-            UIManager.GetComponent<UIManagerScript>().TakeDamage();
-            Debug.Log("Missed Note!");
+            ProcessInput(false, "Missed Note! [Triangle]");
         }
     }
 
+    // For missed note, inputCorrect is false even though there was no input
     private void ProcessInput(bool inputCorrect, string inputDetails)
     {
         Debug.Log(inputDetails);
