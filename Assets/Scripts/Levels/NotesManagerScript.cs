@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class NotesManagerScript : MonoBehaviour
@@ -14,18 +16,10 @@ public class NotesManagerScript : MonoBehaviour
     [Header("Managers")]
     [SerializeField] private GameObject logicManager;
     [SerializeField] private GameObject UIManager;
-    
-    // WARNING: timeStamp (near the start) cannot be at a timing earlier than that of timeSpawnToJudgement!
-    // typeOfNote: 0f -> Circle, 1f -> Square, 2f -> Triangle
-    private List<Dictionary<string, float>> beatMap = new List<Dictionary<string, float>>
-    {
-        new Dictionary<string, float> { { "typeOfNote", 0f }, { "timeStamp", 2f } },
-        new Dictionary<string, float> { { "typeOfNote", 1f }, { "timeStamp", 3f } , { "timeStampRelease", 4f } },
-        new Dictionary<string, float> { { "typeOfNote", 2f }, { "timeStamp", 5f } }
-    };
 
     // Referencing the index of beatMap
     private int currentNote = 0;
+    private List<Dictionary<string, string>> beatMap;
 
     // noteSpeed timings { noteSpeed, timeSpawnToJudgement }
     private Dictionary<int, float> noteSpeedTimings = new Dictionary<int, float>
@@ -45,6 +39,10 @@ public class NotesManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        string levelName = SceneManager.GetActiveScene().name;
+        string filepath = $"Assets\\Resources\\{levelName}.csv";
+        beatMap = MarkersProcessingScript.ProcessMarkers(filepath);
+        
         noteSpeed = PlayerPrefs.GetInt("Note Speed");
         StartCoroutine(SpawnBeatMap(beatMap));
 
@@ -53,14 +51,29 @@ public class NotesManagerScript : MonoBehaviour
         UIManager.GetComponent<UIManagerScript>().beatMapStartTime = Time.time;
     }
 
-    private IEnumerator SpawnBeatMap(List<Dictionary<string, float>> beatMap)
+    // For checking the correctness of the beatmap
+    private string BeatMapToString(List<Dictionary<string, string>> beatMap)
+    {
+        string beatMapString = "";
+        foreach (var dict in beatMap)
+        {
+            beatMapString += "[New Note] ";
+            foreach (var kvp in dict)
+            {
+                beatMapString += $"Key: {kvp.Key}, Value: {kvp.Value} ";
+            }
+        }
+        return beatMapString; 
+    }
+
+    private IEnumerator SpawnBeatMap(List<Dictionary<string, string>> beatMap)
     {
         float beatMapStartTime = Time.time;
 
         // Pre-spawning notes to cater to noteSpeedTimings being longer than the "timeStamp" of the note
         while (currentNote < beatMap.Count)
         {
-            if (beatMap[currentNote]["timeStamp"] - noteSpeedTimings[noteSpeed] >= 0)
+            if (float.Parse(beatMap[currentNote]["timeStamp"]) - noteSpeedTimings[noteSpeed] >= 0)
             {
                 break;
             }
@@ -72,7 +85,7 @@ public class NotesManagerScript : MonoBehaviour
         // Spanws notes that are not pre-spawned
         while (currentNote < beatMap.Count) {
             float currentTimeStamp = Time.time - beatMapStartTime;
-            if (currentTimeStamp >= beatMap[currentNote]["timeStamp"] - noteSpeedTimings[noteSpeed])
+            if (currentTimeStamp >= float.Parse(beatMap[currentNote]["timeStamp"]) - noteSpeedTimings[noteSpeed])
             {
                 SpawnNote(beatMap[currentNote], false);
                 currentNote++;
@@ -82,19 +95,18 @@ public class NotesManagerScript : MonoBehaviour
     }
 
     // Spawn, update relevant variables in the instance of the new note and give it AND its timing(s) to logicManager 
-    private void SpawnNote(Dictionary<string, float> note, bool preSpawn)
+    private void SpawnNote(Dictionary<string, string> note, bool preSpawn)
     {
         GameObject newNote;
 
-        // noteCircle
-        if (note["typeOfNote"] == 0f)
+        if (note["typeOfNote"] == "C")
         {
             newNote = Instantiate(noteCircle, transform.position, transform.rotation);
             newNote.GetComponent<NoteCircleScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
 
             if (preSpawn)
             {
-                newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = note["timeStamp"];
+                newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = float.Parse(note["timeStamp"]);
             }
             else
             {
@@ -106,21 +118,20 @@ public class NotesManagerScript : MonoBehaviour
                 (
                     new Dictionary<string, float>
                     {
-                        { "timeStamp", note["timeStamp"] }
+                        { "timeStamp", float.Parse(note["timeStamp"]) }
                     }
                 );
         }
 
-        // noteSquare
-        else if (note["typeOfNote"] == 1f)
+        else if (note["typeOfNote"] == "S")
         {
             newNote = Instantiate(noteSquare, transform.position, transform.rotation);
-            newNote.GetComponent<NoteSquareScript>().holdDuration = note["timeStampRelease"] - note["timeStamp"];
+            newNote.GetComponent<NoteSquareScript>().holdDuration = float.Parse(note["timeStampRelease"]) - float.Parse(note["timeStamp"]);
             newNote.GetComponent<NoteSquareScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
 
             if (preSpawn)
             {
-                newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = note["timeStamp"];
+                newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = float.Parse(note["timeStamp"]);
             }
             else
             {
@@ -132,21 +143,20 @@ public class NotesManagerScript : MonoBehaviour
                 (
                     new Dictionary<string, float>
                     {
-                        { "timeStamp", note["timeStamp"] },
-                        { "duration", note["timeStampRelease"] - note["timeStamp"] }
+                        { "timeStamp", float.Parse(note["timeStamp"]) },
+                        { "duration", float.Parse(note["timeStampRelease"]) - float.Parse(note["timeStamp"]) }
                     }
                 );
         }
 
-        // noteTriangle
-        else if (note["typeOfNote"] == 2f)
+        else if (note["typeOfNote"] == "T")
         {
             newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
             newNote.GetComponent<NoteTriangleScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
 
             if (preSpawn)
             {
-                newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = note["timeStamp"];
+                newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = float.Parse(note["timeStamp"]);
             }
             else
             {
@@ -158,7 +168,7 @@ public class NotesManagerScript : MonoBehaviour
                 (
                     new Dictionary<string, float>
                     {
-                        { "timeStamp", note["timeStamp"] },
+                        { "timeStamp", float.Parse(note["timeStamp"]) },
                     }
                 );
         }

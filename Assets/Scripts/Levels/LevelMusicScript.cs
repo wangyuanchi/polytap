@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class LevelMusicScript : MonoBehaviour
 {
+    [Header("Beat Map")]
+    public float beatMapEndTime; // Make sure the end timing set is at least 0.5s after the last correct input to prevent clashes
+                                 // where wrong user input on last note is performed after level complete
+
+    [Header("Music")]
     [SerializeField] private AudioClip musicClip;
     private AudioSource musicSource;
 
@@ -13,11 +18,6 @@ public class LevelMusicScript : MonoBehaviour
         musicSource = GetComponent<AudioSource>();
         musicSource.clip = musicClip;
         PlayMusic();
-    }
-
-    public float GetMusicLength()
-    {
-        return musicClip.length;
     }
 
     // No fading in and out required to preserve the raw audio, if required, should manually include the fades

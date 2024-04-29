@@ -129,12 +129,12 @@ public class UIManagerScript : MonoBehaviour
 
     private IEnumerator UpdateProgressPercentage()
     {
-        float musicDuration = levelMusic.GetComponent<LevelMusicScript>().GetMusicLength();
+        float beatMapEndTime = levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime;
 
         while (progressPercentage < 100f)
         {
             audioCompletedDuration = Time.time - beatMapStartTime;
-            progressPercentage = (float)Math.Round(audioCompletedDuration / musicDuration * 100f, 2);
+            progressPercentage = (float)Math.Round(audioCompletedDuration / beatMapEndTime * 100f, 2);
             progressText.text = $"{progressPercentage}%";
 
             if (progressPercentage >= 100f)

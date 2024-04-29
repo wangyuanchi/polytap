@@ -2285,6 +2285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 660bd94d6cee1fe4d9e5ab0d12932e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  beatMapEndTime: 97.72
   musicClip: {fileID: 8300000, guid: 3c5bae8726c38434da6c463b5863deb7, type: 3}
 --- !u!4 &1138441065
 Transform:
