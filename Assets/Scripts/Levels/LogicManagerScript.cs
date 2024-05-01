@@ -30,8 +30,8 @@ public class LogicManagerScript : MonoBehaviour
     [SerializeField] private float bufferWindow; // The buffer window is a subset of the expected window
     [SerializeField] private float expectedWindow; // The expected window is where the user is expected to provide an input before the note is missed
 
-    [SerializeField] private ParticleSystem hitParticles;
-    private ParticleSystem hitParticlesInstance;
+    [Header("Particles")]
+    [SerializeField] private GameObject inputParticles;
 
     private void OnEnable()
     {
@@ -89,13 +89,14 @@ public class LogicManagerScript : MonoBehaviour
     private void checkInputCircle(float inputTimeStamp)
     {
         float requiredTimeStamp = circleTimingsQueue.Peek()["timeStamp"];
-        if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
+        float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
-            spawnHitParticles("perfect");
+            inputParticles.GetComponent<InputParticlesScript>().SpawnParticles(timeFromPerfect);
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
         }
-        else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
+        else if (timeFromPerfect <= expectedWindow)
         {
             ProcessInput(false, "Wrong Input: Too Early/Late [Circle]");
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
@@ -105,12 +106,13 @@ public class LogicManagerScript : MonoBehaviour
     private void checkInputSquareInitial(float inputTimeStamp)
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
-        if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
+        float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        if (timeFromPerfect <= bufferWindow)
         {
             squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareStart();
             initialInput = true;
         }
-        else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
+        else if (timeFromPerfect <= expectedWindow)
         {
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (Start)]");
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
@@ -120,13 +122,14 @@ public class LogicManagerScript : MonoBehaviour
     private void checkInputSquareFinal(float inputTimeStamp)
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"];
-        if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
+        float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
-            spawnHitParticles("perfect");
+            inputParticles.GetComponent<InputParticlesScript>().SpawnParticles(timeFromPerfect);
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
         }
-        else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
+        else if (timeFromPerfect <= expectedWindow)
         {
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (End)]");
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
@@ -135,13 +138,14 @@ public class LogicManagerScript : MonoBehaviour
     private void checkInputTriangle(float inputTimeStamp)
     {
         float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
-        if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
+        float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
-            spawnHitParticles("perfect");
+            inputParticles.GetComponent<InputParticlesScript>().SpawnParticles(timeFromPerfect);
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
         }
-        else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
+        else if (timeFromPerfect <= expectedWindow)
         {
             ProcessInput(false, "Wrong Input: Too Early/Late [Triangle]");
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
@@ -191,14 +195,5 @@ public class LogicManagerScript : MonoBehaviour
         noteTimingsQueue.Dequeue();
         if (destroyNote)
         { Destroy(note); }
-    }
-
-    private void spawnHitParticles(string timing)
-    {
-//        var main = GetComponent<ParticleSystem>().main;
-//        if (timing == "perfect") {main.startColor = new Color(249, 202, 0, 1);}
-//        if (timing == "early") { main.startColor = new Color(249, 20, 0, 1); }
-//        if (timing == "late") { main.startColor = new Color(46, 249, 0, 1); }
-        hitParticlesInstance = Instantiate(hitParticles, transform.position, Quaternion.LookRotation(Vector3.up));  //Quaternion 
     }
 }
