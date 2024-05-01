@@ -29,7 +29,10 @@ public class LogicManagerScript : MonoBehaviour
     public float beatMapStartTime;
     [SerializeField] private float bufferWindow; // The buffer window is a subset of the expected window
     [SerializeField] private float expectedWindow; // The expected window is where the user is expected to provide an input before the note is missed
-    
+
+    [SerializeField] private ParticleSystem hitParticles;
+    private ParticleSystem hitParticlesInstance;
+
     private void OnEnable()
     {
         circleActionReference.action.Enable();
@@ -89,6 +92,7 @@ public class LogicManagerScript : MonoBehaviour
         if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
+            spawnHitParticles("perfect");
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
         }
         else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
@@ -119,6 +123,7 @@ public class LogicManagerScript : MonoBehaviour
         if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
+            spawnHitParticles("perfect");
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
         }
         else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
@@ -133,6 +138,7 @@ public class LogicManagerScript : MonoBehaviour
         if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
+            spawnHitParticles("perfect");
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
         }
         else if (Math.Abs(requiredTimeStamp - inputTimeStamp) <= expectedWindow)
@@ -155,6 +161,7 @@ public class LogicManagerScript : MonoBehaviour
         {
             squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd();
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
+ 
             ProcessInput(false, "Missed Note! [Square (Start)]");
         }
         if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindow)
@@ -184,5 +191,14 @@ public class LogicManagerScript : MonoBehaviour
         noteTimingsQueue.Dequeue();
         if (destroyNote)
         { Destroy(note); }
+    }
+
+    private void spawnHitParticles(string timing)
+    {
+//        var main = GetComponent<ParticleSystem>().main;
+//        if (timing == "perfect") {main.startColor = new Color(249, 202, 0, 1);}
+//        if (timing == "early") { main.startColor = new Color(249, 20, 0, 1); }
+//        if (timing == "late") { main.startColor = new Color(46, 249, 0, 1); }
+        hitParticlesInstance = Instantiate(hitParticles, transform.position, Quaternion.LookRotation(Vector3.up));
     }
 }
