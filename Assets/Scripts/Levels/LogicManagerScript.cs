@@ -199,6 +199,6 @@ public class LogicManagerScript : MonoBehaviour
 //        if (timing == "perfect") {main.startColor = new Color(249, 202, 0, 1);}
 //        if (timing == "early") { main.startColor = new Color(249, 20, 0, 1); }
 //        if (timing == "late") { main.startColor = new Color(46, 249, 0, 1); }
-        hitParticlesInstance = Instantiate(hitParticles, transform.position, Quaternion.LookRotation(Vector3.up));
+        hitParticlesInstance = Instantiate(hitParticles, transform.position, Quaternion.LookRotation(Vector3.up));  //Quaternion 
     }
 }
