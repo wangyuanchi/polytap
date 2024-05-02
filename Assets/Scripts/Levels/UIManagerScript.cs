@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.Audio;
 using UnityEngine.Rendering.PostProcessing;
+using Unity.Properties;
 
 public class UIManagerScript : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class UIManagerScript : MonoBehaviour
 
     [Header("Game Over")]
     [SerializeField] private GameObject levelCompleteOverlay;
+    [SerializeField] private GameObject newBestOverlay;
     [SerializeField] private GameObject judgementLines;
 
     [Header("Input")]
@@ -204,8 +206,16 @@ public class UIManagerScript : MonoBehaviour
     // When game over happens, the progress is stopped and the audio is paused, but the beatmap still plays for aesthetics
     private IEnumerator GameOver(bool levelComplete)
     {
-        SetHighScore();
-        SetProgressBar();
+        bool newHighScore = SetHighScore();
+        if (newHighScore)
+        {
+            SetProgressBar();
+            if (!levelComplete)
+            { 
+                Instantiate(newBestOverlay, transform.position, transform.rotation); 
+            }
+        }
+
         levelMusic.GetComponent<LevelMusicScript>().StopMusic();
         logicManager.GetComponent<LogicManagerScript>().DisableInputs();
 
@@ -225,7 +235,7 @@ public class UIManagerScript : MonoBehaviour
     }
 
     // Setting of high score in player prefs
-    private void SetHighScore()
+    private bool SetHighScore()
     {
         string key;
         
@@ -242,7 +252,10 @@ public class UIManagerScript : MonoBehaviour
         if (highScore < progressPercentage)
         {
             PlayerPrefs.SetFloat(key, progressPercentage);
+            return true;
         }
+
+        return false;
     }
 
     private void PlaySFX(AudioClip SFX)

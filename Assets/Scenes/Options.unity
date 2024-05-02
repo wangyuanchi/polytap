@@ -4918,7 +4918,7 @@ MonoBehaviour:
   m_text: Gameplay
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: da0f7f4d322e7c5469b38a8ace15e62f, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: a5291e80f5bef7a4985eae8b98993a14, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5793,7 +5793,7 @@ MonoBehaviour:
   m_text: Audio
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: da0f7f4d322e7c5469b38a8ace15e62f, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: a5291e80f5bef7a4985eae8b98993a14, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6164,7 +6164,7 @@ MonoBehaviour:
   m_text: Keybinds
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: da0f7f4d322e7c5469b38a8ace15e62f, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: a5291e80f5bef7a4985eae8b98993a14, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

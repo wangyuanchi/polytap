@@ -14,10 +14,20 @@ public class MainMenuScript : MonoBehaviour
     // Called once per lifetime
     void Awake()
     {
-        // Uncomment, reset and recomment player prefs before building the game!        
-        // PlayerPrefs.DeleteAll();
+        SetAllPreferences();
+    }
 
-        // Setting of player preferences
+    // Start is called before the first frame update
+    void Start()
+    {
+        sceneTransition.GetComponent<SceneTransitionScript>().SceneFadeIn();
+        LoadAudioVolume();
+    }
+
+    // Setting of player preferences
+    private void SetAllPreferences()
+    {
+        // General
         PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 5));
         PlayerPrefs.SetString("Vignette", PlayerPrefs.GetString("Vignette", "true"));
         PlayerPrefs.SetString("Particles", PlayerPrefs.GetString("Particles", "true"));
@@ -26,17 +36,18 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Lobby Music", PlayerPrefs.GetString("Lobby Music", "true"));
 
+        // Levels
         PlayerPrefs.SetFloat("L1-N-HS", PlayerPrefs.GetFloat("L1-N-HS", 0f));
         PlayerPrefs.SetFloat("L1-H-HS", PlayerPrefs.GetFloat("L1-H-HS", 0f));
         PlayerPrefs.SetInt("L1-N-TA", PlayerPrefs.GetInt("L1-N-TA", 0));
         PlayerPrefs.SetInt("L1-H-TA", PlayerPrefs.GetInt("L1-H-TA", 0));
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void ResetAllPreferences()
     {
-        sceneTransition.GetComponent<SceneTransitionScript>().SceneFadeIn();
-        LoadAudioVolume();
+        Debug.Log("Resetted all preferences");
+        PlayerPrefs.DeleteAll();
+        SetAllPreferences();
     }
 
     private void LoadAudioVolume()
