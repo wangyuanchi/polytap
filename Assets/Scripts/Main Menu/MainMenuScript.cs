@@ -19,7 +19,8 @@ public class MainMenuScript : MonoBehaviour
 
         // Setting of player preferences
         PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 5));
-        PlayerPrefs.SetString("Damage Vignette", PlayerPrefs.GetString("Damage Vignette", "true"));
+        PlayerPrefs.SetString("Vignette", PlayerPrefs.GetString("Vignette", "true"));
+        PlayerPrefs.SetString("Particles", PlayerPrefs.GetString("Particles", "true"));
         PlayerPrefs.SetString("Mode", PlayerPrefs.GetString("Mode", "N"));
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));

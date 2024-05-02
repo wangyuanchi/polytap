@@ -14,7 +14,7 @@ public class VignetteScript : MonoBehaviour
     [SerializeField] private float targetIntensity1;
     [SerializeField] private float targetIntensity0;
 
-    private bool enableDamageVignette;
+    private bool enableVignette;
     private float intensity;
     private PostProcessVolume volume;
     private Vignette vignette;
@@ -23,12 +23,12 @@ public class VignetteScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enableDamageVignette = PlayerPrefs.GetString("Damage Vignette") == "true" ? true : false; 
+        enableVignette = PlayerPrefs.GetString("Vignette") == "true" ? true : false; 
        
         volume = GetComponent<PostProcessVolume>();
         volume.profile.TryGetSettings<Vignette>(out vignette);
 
-        if (!enableDamageVignette)
+        if (!enableVignette)
         {
             vignette.enabled.Override(false);
             return;
@@ -83,7 +83,7 @@ public class VignetteScript : MonoBehaviour
         }
     }
 
-    public void DamageVignette(int currentHealth)
+    public void SetVignette(int currentHealth)
     {
         if (ChangeVignetteIntensityCoroutine != null)
         {

@@ -45,6 +45,7 @@ public class UIManagerScript : MonoBehaviour
 
     [Header("Input")]
     [SerializeField] private InputActionReference pauseActionReference;
+    [SerializeField] private GameObject logicManager;
 
     private void OnEnable()
     {
@@ -155,10 +156,10 @@ public class UIManagerScript : MonoBehaviour
     {
         health--;
 
-        bool enableDamageVignette = PlayerPrefs.GetString("Damage Vignette") == "true" ? true : false;
-        if (enableDamageVignette)
+        bool enableVignette = PlayerPrefs.GetString("Vignette") == "true" ? true : false;
+        if (enableVignette)
         {
-            PostProcessing.GetComponent<VignetteScript>().DamageVignette(health);
+            PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
         }
 
         // Prevent coroutine clashing if health decreases faster than animation
@@ -206,6 +207,7 @@ public class UIManagerScript : MonoBehaviour
         SetHighScore();
         SetProgressBar();
         levelMusic.GetComponent<LevelMusicScript>().StopMusic();
+        logicManager.GetComponent<LogicManagerScript>().DisableInputs();
 
         if (levelComplete) 
         {

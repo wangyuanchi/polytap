@@ -57,6 +57,13 @@ public class LogicManagerScript : MonoBehaviour
         triangleActionReference.action.Disable();
     }
 
+    public void DisableInputs()
+    {
+        circleActionReference.action.Disable();
+        squareActionReference.action.Disable();
+        triangleActionReference.action.Disable();
+    }
+
     // Circle -> Single Tap
     private void onCircle(InputAction.CallbackContext context)
     {

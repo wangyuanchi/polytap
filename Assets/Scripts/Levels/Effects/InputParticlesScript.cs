@@ -6,7 +6,7 @@ using UnityEngine.Android;
 
 public class InputParticlesScript : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem ps;
+    private ParticleSystem ps;
 
     void Start()
     {
@@ -15,6 +15,8 @@ public class InputParticlesScript : MonoBehaviour
 
     public void SpawnParticles(float timing)
     {
+        if (PlayerPrefs.GetString("Particles") == "false") return;
+
         if (timing < 0.05f)
         {
             ModifyBurstCount(30);
