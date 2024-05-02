@@ -49,6 +49,9 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private InputActionReference pauseActionReference;
     [SerializeField] private GameObject logicManager;
 
+    [Header("Particles")]
+    [SerializeField] private ParticleSystem ambientParticles;
+
     private void OnEnable()
     {
         pauseActionReference.action.Enable();
@@ -82,6 +85,7 @@ public class UIManagerScript : MonoBehaviour
         SetTotalAttempts();
         SetDifficulty();
         SetProgressBar();
+        SetAmbientParticles();
         UpdateProgressPercentageCoroutine = StartCoroutine(UpdateProgressPercentage());
     }
 
@@ -130,6 +134,10 @@ public class UIManagerScript : MonoBehaviour
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
     }
 
+    private void SetAmbientParticles()
+    {
+        ambientParticles.Play();
+    }
     private IEnumerator UpdateProgressPercentage()
     {
         float beatMapEndTime = levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime;
