@@ -103,4 +103,19 @@ public class VignetteScript : MonoBehaviour
             ChangeVignetteIntensityCoroutine = StartCoroutine(ChangeVignetteIntensity(peakIntensity0, targetIntensity0));
         }
     }
+
+    public IEnumerator ChangeVignetteColor(Color targetColor)
+    {
+        Color currentColor = vignette.color;
+        float time = 0f;
+        float duration = 0.25f;
+
+        while (time < duration) 
+        {
+            time += Time.deltaTime;
+            Color lerpedColor = Color.Lerp(currentColor, targetColor, time / duration);
+            vignette.color.Override(lerpedColor);
+            yield return null;
+        }
+    }
 }

@@ -85,7 +85,7 @@ public class UIManagerScript : MonoBehaviour
         SetTotalAttempts();
         SetDifficulty();
         SetProgressBar();
-        SetAmbientParticles();
+        LoadParticles();
         UpdateProgressPercentageCoroutine = StartCoroutine(UpdateProgressPercentage());
     }
 
@@ -134,10 +134,12 @@ public class UIManagerScript : MonoBehaviour
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
     }
 
-    private void SetAmbientParticles()
+    private void LoadParticles()
     {
-        ambientParticles.Play();
+        if (PlayerPrefs.GetString("Particles") == "true")
+        { ambientParticles.Play(); }
     }
+
     private IEnumerator UpdateProgressPercentage()
     {
         float beatMapEndTime = levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime;

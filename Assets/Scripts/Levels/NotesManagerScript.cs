@@ -24,15 +24,15 @@ public class NotesManagerScript : MonoBehaviour
     // noteSpeed timings { noteSpeed, timeSpawnToJudgement }
     private Dictionary<int, float> noteSpeedTimings = new Dictionary<int, float>
     {
-        { 1, 10f },
-        { 2, 9f },
-        { 3, 8f },
-        { 4, 7f },
-        { 5, 6f },
-        { 6, 5f },
-        { 7, 4f },
-        { 8, 3f },
-        { 9, 2f },
+        { 1, 5.5f },
+        { 2, 5f },
+        { 3, 4.5f },
+        { 4, 4f },
+        { 5, 3.5f },
+        { 6, 3f },
+        { 7, 2.5f },
+        { 8, 2f },
+        { 9, 1.5f },
         { 10, 1f }
     };
 
