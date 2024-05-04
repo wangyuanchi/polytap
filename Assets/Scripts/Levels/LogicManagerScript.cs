@@ -23,7 +23,7 @@ public class LogicManagerScript : MonoBehaviour
     [SerializeField] private InputActionReference triangleActionReference;
 
     [Header("Note Square")]
-    private bool initialInput = false;
+    private bool initialSquareInput = false;
 
     [Header("Timings")]
     public float beatMapStartTime;
@@ -79,10 +79,11 @@ public class LogicManagerScript : MonoBehaviour
     }
     private void onSquareRelease(InputAction.CallbackContext context)
     {
-        if (initialInput && squareTimingsQueue.Count > 0) 
+        // initialSquareInput is only true if the first input is correct after checkInputSquareInitial is performed
+        if (initialSquareInput && squareTimingsQueue.Count > 0) 
         { 
             checkInputSquareFinal(Time.time - beatMapStartTime);
-            initialInput = false;
+            initialSquareInput = false;
         }
     }
 
@@ -91,6 +92,22 @@ public class LogicManagerScript : MonoBehaviour
     {
         if (triangleTimingsQueue.Count > 0) 
         { checkInputTriangle(Time.time - beatMapStartTime); }
+    }
+
+    // For missed note, inputCorrect is false even though there was no input
+    private void ProcessInput(bool inputCorrect, string inputDetails)
+    {
+        if (!inputCorrect)
+        { UIManager.GetComponent<UIManagerScript>().TakeDamage(); }
+        Debug.Log(inputDetails);
+    }
+
+    private void DequeueNote(Queue<GameObject> noteObjectsQueue, Queue<Dictionary<string, float>> noteTimingsQueue, bool destroyNote)
+    {
+        GameObject note = noteObjectsQueue.Dequeue();
+        noteTimingsQueue.Dequeue();
+        if (destroyNote)
+        { Destroy(note); }
     }
 
     private void checkInputCircle(float inputTimeStamp)
@@ -114,11 +131,14 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        // If the first input is correct, destroy noteSquareStart only and wait for second input
         if (timeFromPerfect <= bufferWindow)
         {
             squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareStart();
-            initialInput = true;
+            initialSquareInput = true; // Give a bool flag for the second input such that
+                                       // the second input is checked only if the first input is correct
         }
+        // If the first input is wrong, process the input and destroy the whole note 
         else if (timeFromPerfect <= expectedWindow)
         {
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (Start)]");
@@ -126,6 +146,7 @@ public class LogicManagerScript : MonoBehaviour
         }
     }
 
+    // This ignores accuracy of the first input
     private void checkInputSquareFinal(float inputTimeStamp)
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"];
@@ -163,16 +184,21 @@ public class LogicManagerScript : MonoBehaviour
     void Update()
     {
         float currentTimeStamp = Time.time - beatMapStartTime;
+
+        // Missed note checks is based on the fact that a non-missed note would have already been dequeued,
+        // and since it is not, it must be missed
         if (circleTimingsQueue.Count > 0 && currentTimeStamp > circleTimingsQueue.Peek()["timeStamp"] + expectedWindow)
         {
             DequeueNote(circleObjectsQueue, circleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Circle]");
         }
-        if (squareTimingsQueue.Count > 0 && !initialInput && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + expectedWindow)
+        // Only a missed note if the first input has not yet be detected, because the note is not dequeued upon first input check
+        if (squareTimingsQueue.Count > 0 && !initialSquareInput && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + expectedWindow)
         {
-            squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd();
+            // Prevent 2 notes being shown and causing confusion
+            // Only the first note will pass the judgement line and signify the loss of 1 health
+            squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd(); 
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
- 
             ProcessInput(false, "Missed Note! [Square (Start)]");
         }
         if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindow)
@@ -185,22 +211,5 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Triangle]");
         }
-    }
-
-    // For missed note, inputCorrect is false even though there was no input
-    private void ProcessInput(bool inputCorrect, string inputDetails)
-    {
-        Debug.Log(inputDetails);
-
-        if (!inputCorrect)
-        { UIManager.GetComponent<UIManagerScript>().TakeDamage(); }
-    }
-
-    private void DequeueNote(Queue<GameObject> noteObjectsQueue, Queue<Dictionary<string, float>> noteTimingsQueue, bool destroyNote)
-    {
-        GameObject note = noteObjectsQueue.Dequeue();
-        noteTimingsQueue.Dequeue();
-        if (destroyNote)
-        { Destroy(note); }
     }
 }

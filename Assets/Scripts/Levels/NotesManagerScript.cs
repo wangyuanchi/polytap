@@ -20,6 +20,7 @@ public class NotesManagerScript : MonoBehaviour
     // Referencing the index of beatMap
     private int currentNote = 0;
     private List<Dictionary<string, string>> beatMap;
+    private float beatMapStartTime;
 
     // noteSpeed timings { noteSpeed, timeSpawnToJudgement }
     private Dictionary<int, float> noteSpeedTimings = new Dictionary<int, float>
@@ -44,11 +45,12 @@ public class NotesManagerScript : MonoBehaviour
         beatMap = MarkersProcessingScript.ProcessMarkers(filepath);
         
         noteSpeed = PlayerPrefs.GetInt("Note Speed");
+        beatMapStartTime = Time.time;
         StartCoroutine(SpawnBeatMap(beatMap));
 
         // Give LogicManagerScript and UIManagerScript the exact timing the beatmap starts
-        logicManager.GetComponent<LogicManagerScript>().beatMapStartTime = Time.time;
-        UIManager.GetComponent<UIManagerScript>().beatMapStartTime = Time.time;
+        logicManager.GetComponent<LogicManagerScript>().beatMapStartTime = beatMapStartTime;
+        UIManager.GetComponent<UIManagerScript>().beatMapStartTime = beatMapStartTime;
     }
 
     // For checking the correctness of the beatmap
@@ -68,21 +70,18 @@ public class NotesManagerScript : MonoBehaviour
 
     private IEnumerator SpawnBeatMap(List<Dictionary<string, string>> beatMap)
     {
-        float beatMapStartTime = Time.time;
-
         // Pre-spawning notes to cater to noteSpeedTimings being longer than the "timeStamp" of the note
         while (currentNote < beatMap.Count)
         {
-            if (float.Parse(beatMap[currentNote]["timeStamp"]) - noteSpeedTimings[noteSpeed] >= 0)
+            if (float.Parse(beatMap[currentNote]["timeStamp"]) < noteSpeedTimings[noteSpeed])
             {
-                break;
+                SpawnNote(beatMap[currentNote], true);
+                currentNote++;
             }
-
-            SpawnNote(beatMap[currentNote], true);
-            currentNote++;
+            else { break; }
         }
 
-        // Spanws notes that are not pre-spawned
+        // Spawns notes that are not pre-spawned
         while (currentNote < beatMap.Count) {
             float currentTimeStamp = Time.time - beatMapStartTime;
             if (currentTimeStamp >= float.Parse(beatMap[currentNote]["timeStamp"]) - noteSpeedTimings[noteSpeed])
@@ -102,7 +101,7 @@ public class NotesManagerScript : MonoBehaviour
         if (note["typeOfNote"] == "C")
         {
             newNote = Instantiate(noteCircle, transform.position, transform.rotation);
-            newNote.GetComponent<NoteCircleScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
+            newNote.GetComponent<NoteCircleScript>().defaultTimeSpawnToJudgement = noteSpeedTimings[noteSpeed];
 
             if (preSpawn)
             {
@@ -127,7 +126,7 @@ public class NotesManagerScript : MonoBehaviour
         {
             newNote = Instantiate(noteSquare, transform.position, transform.rotation);
             newNote.GetComponent<NoteSquareScript>().holdDuration = float.Parse(note["timeStampRelease"]) - float.Parse(note["timeStamp"]);
-            newNote.GetComponent<NoteSquareScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
+            newNote.GetComponent<NoteSquareScript>().defaultTimeSpawnToJudgement = noteSpeedTimings[noteSpeed];
 
             if (preSpawn)
             {
@@ -152,7 +151,7 @@ public class NotesManagerScript : MonoBehaviour
         else if (note["typeOfNote"] == "T")
         {
             newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
-            newNote.GetComponent<NoteTriangleScript>().noteSpeedTiming = noteSpeedTimings[noteSpeed];
+            newNote.GetComponent<NoteTriangleScript>().defaultTimeSpawnToJudgement = noteSpeedTimings[noteSpeed];
 
             if (preSpawn)
             {

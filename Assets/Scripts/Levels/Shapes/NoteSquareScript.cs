@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class NoteSquareScript : MonoBehaviour
 {
-    public float timeSpawnToJudgement; 
+    public float timeSpawnToJudgement; // This is the time it takes for the note to move from its current position,
+                                       // not necessarily at (0, 0, 0) due to prespawns, to the judgement line at (1, 1, 1)
+    public float defaultTimeSpawnToJudgement; // This is the time it takes for a note to move from (0, 0, 0) to the judgement line at (1, 1, 1)
     public float holdDuration;
-    public float noteSpeedTiming;
 
     [Header("Child Square Objects")]
     [SerializeField] private GameObject noteSquareStart;
@@ -24,38 +25,42 @@ public class NoteSquareScript : MonoBehaviour
     private IEnumerator ScaleOverTime(float timeSpawnToJudgement, float finalScale, GameObject noteSquareChild)
     {
         // Variables here are catered to noteSquareStart
-        float defaultTimeSpawnToDestroy = noteSpeedTiming * finalScale;
-        float elapsedTime = noteSpeedTiming - timeSpawnToJudgement;
+        // "Default" means the expected time if or assuming the note is not prespawned
+        float defaultTimeSpawnToDestroy = defaultTimeSpawnToJudgement * finalScale;
+        float defaultElapsedTime = defaultTimeSpawnToJudgement - timeSpawnToJudgement;
+
+        // Move preSpawned note to starting position if required
+        if (noteSquareChild == noteSquareStart && defaultElapsedTime > 0)
+        {
+            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), defaultElapsedTime / defaultTimeSpawnToDestroy);
+        }
 
         if (noteSquareChild == noteSquareEnd)
         {
-            // If pre-spawning of noteSquareEnd is not required, wait for required time and set elapsedTime to 0
-            if (holdDuration >= elapsedTime)
+            // If pre-spawning of noteSquareEnd is not required, wait for required time and set defaultElapsedTime 
+            if (holdDuration >= defaultElapsedTime)
             {
-                yield return new WaitForSeconds(holdDuration - elapsedTime);
-                elapsedTime = 0;
+                yield return new WaitForSeconds(holdDuration - defaultElapsedTime);
+                defaultElapsedTime = 0; // Recater the variable to noteSqureEnd, because it was set for noteSquareStart initially
             }
-            // If pre-spawning of noteSquareEnd is required, set elapsedTime and its position
+            // If pre-spawning of noteSquareEnd is required, set defaultElapsedTime  and its position
             else
             {
-                elapsedTime = elapsedTime - holdDuration;
-                noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), elapsedTime / defaultTimeSpawnToDestroy);
+                defaultElapsedTime = defaultElapsedTime - holdDuration; // Recater the variable to noteSqureEnd, because it was set for noteSquareStart initially
+                noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), defaultElapsedTime / defaultTimeSpawnToDestroy);
             }
         }
 
-        // Move preSpawned note to starting position if required
-        if (noteSquareChild == noteSquareStart && elapsedTime > 0)
+        // Scaling up with time from starting position
+        // Check for null because notes can be deleted based on user input or if user misses the note
+        while (defaultElapsedTime < defaultTimeSpawnToDestroy && noteSquareChild != null)
         {
-            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), elapsedTime / defaultTimeSpawnToDestroy);
-        }
-
-        while (elapsedTime < defaultTimeSpawnToDestroy && noteSquareChild != null)
-        {
-            elapsedTime += Time.deltaTime;
-            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), elapsedTime / defaultTimeSpawnToDestroy);
+            defaultElapsedTime += Time.deltaTime;
+            noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), defaultElapsedTime / defaultTimeSpawnToDestroy);
             yield return null;
         }
 
+        // Destroy game object after it moves off the screen
         Destroy(noteSquareChild);
     }
 
