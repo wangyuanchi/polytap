@@ -732,8 +732,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 75
+  m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -842,6 +842,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81263e571f9a6644abd1e519918e027c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelCompleteText: {fileID: 2207171761514887192}
   levelInfoText: {fileID: 6567159879191628766}
   animator: {fileID: 331893920660584466}
   levelCompleteNSFX: {fileID: 8300000, guid: fb37f362e3307ac44ab255b7e7b7a767, type: 3}

@@ -12,11 +12,27 @@ public class LevelMusicScript : MonoBehaviour
     [SerializeField] private AudioClip musicClip;
     private AudioSource musicSource;
 
+    [Header("Managers")]
+    [SerializeField] private GameObject PracticeManager;
+
     // Start is called before the first frame update
     void Start()
     {
+        // Check for incorrect input
+        if (beatMapEndTime < 0 || beatMapEndTime > musicClip.length)
+        { Debug.Log("Invalid Beat Map End Time!"); }
+
         musicSource = GetComponent<AudioSource>();
         musicSource.clip = musicClip;
+        PlayMusic();
+    }
+
+    // [PRACTICE MODE] MAIN METHOD
+    // Set the new time position and play
+    public void SkipToTime(float timeSkipped)
+    {
+        StopMusic();
+        musicSource.time = Mathf.Clamp(timeSkipped, 0f, musicSource.clip.length);
         PlayMusic();
     }
 
@@ -42,5 +58,11 @@ public class LevelMusicScript : MonoBehaviour
     public void StopMusic()
     {
         musicSource.Stop();
+    }
+
+    public float getCurrentTimeStamp()
+    {
+        if (musicSource == null) return 0; // Music has not yet been set and start playing
+        return musicSource.time;
     }
 }

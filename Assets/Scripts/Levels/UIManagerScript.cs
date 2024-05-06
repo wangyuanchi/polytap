@@ -14,7 +14,6 @@ using Unity.Properties;
 public class UIManagerScript : MonoBehaviour
 {
     [Header("General")]
-    public float beatMapStartTime;
     [SerializeField] private GameObject sceneTransition;
     [SerializeField] private GameObject PostProcessing;
     private static bool firstAttempt = true;
@@ -23,7 +22,6 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private GameObject levelMusic;
     [SerializeField] private AudioClip gameOverSFX;
     [SerializeField] private AudioMixer audioMixer;
-    private float audioCompletedDuration;
 
     [Header("Progress")]
     [SerializeField] private TMP_Text progressText;
@@ -34,6 +32,10 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private int health;
     [SerializeField] private RectTransform heartMask;
     private Coroutine animateHeartMaskCoroutine;
+
+    [Header("Practice UI")]
+    [SerializeField] private Button forwardsButton;
+    [SerializeField] private Button backwardsButton;
 
     [Header("Pause UI")]
     [SerializeField] private GameObject pauseUI;
@@ -82,10 +84,10 @@ public class UIManagerScript : MonoBehaviour
             firstAttempt = false;
         }
         LoadAudioVolume();
-        SetTotalAttempts();
-        SetDifficulty();
-        SetProgressBar();
+        LoadDifficulty();
         LoadParticles();
+        SetTotalAttempts();
+        SetProgressBar();
         UpdateProgressPercentageCoroutine = StartCoroutine(UpdateProgressPercentage());
     }
 
@@ -95,27 +97,38 @@ public class UIManagerScript : MonoBehaviour
         audioMixer.SetFloat("SFX Volume", Mathf.Log10(PlayerPrefs.GetFloat("SFX Volume")) * 25);
     }
 
-    // Increasing total number of attempts every time the scene is loaded
-    private void SetTotalAttempts()
-    {
-        string key;
-
-        key = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-TA";
-        PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key) + 1);
-    }
-
-    private void SetDifficulty()
+    public void LoadDifficulty()
     {
         if (PlayerPrefs.GetString("Mode") == "N")
         {
             health = 3;
             heartMask.sizeDelta = new Vector2(350f, 100f);
+            PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
         }
         else
         {
             health = 1;
             heartMask.sizeDelta = new Vector2(110f, 100f);
+            PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
         }
+    }
+
+    private void LoadParticles()
+    {
+        if (PlayerPrefs.GetString("Particles") == "true")
+        { ambientParticles.Play(); }
+    }
+
+    // Increasing total number of attempts every time the scene is loaded
+    private void SetTotalAttempts()
+    {
+        // [PRACTICE MODE] Do not increase attempts count if in practice mode
+        if (PracticeManagerScript.practiceMode == true) return;
+
+        string key;
+
+        key = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-TA";
+        PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key) + 1);
     }
 
     // Load and set progress bars
@@ -134,20 +147,14 @@ public class UIManagerScript : MonoBehaviour
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
     }
 
-    private void LoadParticles()
-    {
-        if (PlayerPrefs.GetString("Particles") == "true")
-        { ambientParticles.Play(); }
-    }
-
     private IEnumerator UpdateProgressPercentage()
     {
         float beatMapEndTime = levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime;
 
         while (progressPercentage < 100f)
-        {
-            audioCompletedDuration = Time.time - beatMapStartTime;
-            progressPercentage = (float)Math.Round(audioCompletedDuration / beatMapEndTime * 100f, 2);
+        { 
+            float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
+            progressPercentage = (float)Math.Round(currentTimeStamp / beatMapEndTime * 100f, 2);
             progressText.text = $"{progressPercentage}%";
 
             if (progressPercentage >= 100f)
@@ -167,12 +174,7 @@ public class UIManagerScript : MonoBehaviour
     public void TakeDamage()
     {
         health--;
-
-        bool enableVignette = PlayerPrefs.GetString("Vignette") == "true" ? true : false;
-        if (enableVignette)
-        {
-            PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
-        }
+        PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
 
         // Prevent coroutine clashing if health decreases faster than animation
         if (animateHeartMaskCoroutine != null) 
@@ -225,9 +227,18 @@ public class UIManagerScript : MonoBehaviour
                 Instantiate(newBestOverlay, transform.position, transform.rotation); 
             }
         }
+        
+        // Allows music to continue at level complete screen
+        if (!levelComplete) 
+        { 
+            levelMusic.GetComponent<LevelMusicScript>().StopMusic();
+        }
 
-        levelMusic.GetComponent<LevelMusicScript>().StopMusic();
         logicManager.GetComponent<LogicManagerScript>().DisableInputs();
+
+        // [PRACTICE MODE] Disable forward/backward button pressing 
+        forwardsButton.interactable = false;
+        backwardsButton.interactable = false;  
 
         if (levelComplete) 
         {
@@ -247,6 +258,9 @@ public class UIManagerScript : MonoBehaviour
     // Setting of high score in player prefs
     private bool SetHighScore()
     {
+        // [PRACTICE MODE] Do not set any high scores if in practice mode
+        if (PracticeManagerScript.practiceMode == true) return false;
+
         string key;
         
         if (PlayerPrefs.GetString("Mode") == "N")
@@ -299,6 +313,8 @@ public class UIManagerScript : MonoBehaviour
     {
         // Reset first attempt so that transition is loaded in the future
         firstAttempt = true;
+        // [PRACTICE MODE] Reset so that practice is not loaded in the future
+        PracticeManagerScript.practiceMode = false;
         sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
     }
 }

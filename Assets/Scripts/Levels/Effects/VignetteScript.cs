@@ -85,12 +85,18 @@ public class VignetteScript : MonoBehaviour
 
     public void SetVignette(int currentHealth)
     {
+        if (!enableVignette) return;
+
         if (ChangeVignetteIntensityCoroutine != null)
         {
             StopCoroutine(ChangeVignetteIntensityCoroutine);
         }
-
-        if (currentHealth == 2)
+        
+        if (currentHealth == 3)
+        {
+            vignette.intensity.Override(0); // No animation
+        }
+        else if (currentHealth == 2)
         {
             ChangeVignetteIntensityCoroutine = StartCoroutine(ChangeVignetteIntensity(peakIntensity2, targetIntensity2));
         }

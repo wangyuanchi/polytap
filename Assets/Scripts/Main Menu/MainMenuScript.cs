@@ -31,12 +31,12 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 5));
         PlayerPrefs.SetString("Vignette", PlayerPrefs.GetString("Vignette", "true"));
         PlayerPrefs.SetString("Particles", PlayerPrefs.GetString("Particles", "true"));
-        PlayerPrefs.SetString("Mode", PlayerPrefs.GetString("Mode", "N"));
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Lobby Music", PlayerPrefs.GetString("Lobby Music", "true"));
 
         // Levels
+        PlayerPrefs.SetString("Mode", PlayerPrefs.GetString("Mode", "N"));
         PlayerPrefs.SetFloat("L1-N-HS", PlayerPrefs.GetFloat("L1-N-HS", 0f));
         PlayerPrefs.SetFloat("L1-H-HS", PlayerPrefs.GetFloat("L1-H-HS", 0f));
         PlayerPrefs.SetInt("L1-N-TA", PlayerPrefs.GetInt("L1-N-TA", 0));

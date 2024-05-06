@@ -10,12 +10,14 @@ public class LogicManagerScript : MonoBehaviour
     public Queue<GameObject> circleObjectsQueue = new Queue<GameObject>();
     public Queue<GameObject> squareObjectsQueue = new Queue<GameObject>();
     public Queue<GameObject> triangleObjectsQueue = new Queue<GameObject>();
+    private Queue<GameObject> missedNoteObjectsQueue = new Queue<GameObject>();
     public Queue<Dictionary<string, float>> circleTimingsQueue = new Queue<Dictionary<string, float>>();
     public Queue<Dictionary<string, float>> squareTimingsQueue = new Queue<Dictionary<string, float>>();
     public Queue<Dictionary<string, float>> triangleTimingsQueue = new Queue<Dictionary<string, float>>();
 
     [Header("Managers")]
     [SerializeField] private GameObject UIManager;
+    [SerializeField] private GameObject levelMusic;
 
     [Header("Input Actions")]
     [SerializeField] private InputActionReference circleActionReference;
@@ -26,7 +28,6 @@ public class LogicManagerScript : MonoBehaviour
     private bool initialSquareInput = false;
 
     [Header("Timings")]
-    public float beatMapStartTime;
     [SerializeField] private float bufferWindow; // The buffer window is a subset of the expected window
     [SerializeField] private float expectedWindow; // The expected window is where the user is expected to provide an input before the note is missed
 
@@ -57,6 +58,13 @@ public class LogicManagerScript : MonoBehaviour
         triangleActionReference.action.Disable();
     }
 
+    public void EnableInputs()
+    {
+        circleActionReference.action.Enable();
+        squareActionReference.action.Enable();
+        triangleActionReference.action.Enable();
+    }
+
     public void DisableInputs()
     {
         circleActionReference.action.Disable();
@@ -67,22 +75,25 @@ public class LogicManagerScript : MonoBehaviour
     // Circle -> Single Tap
     private void onCircle(InputAction.CallbackContext context)
     {
+        float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         if (circleTimingsQueue.Count > 0) 
-        { checkInputCircle(Time.time - beatMapStartTime); }
+        { checkInputCircle(currentTimeStamp); }
     }
 
     // Square -> Hold and Release
     private void onSquareHold(InputAction.CallbackContext context)
     {
+        float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         if (squareTimingsQueue.Count > 0)
-        { checkInputSquareInitial(Time.time - beatMapStartTime); }
+        { checkInputSquareInitial(currentTimeStamp); }
     }
     private void onSquareRelease(InputAction.CallbackContext context)
     {
+        float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         // initialSquareInput is only true if the first input is correct after checkInputSquareInitial is performed
         if (initialSquareInput && squareTimingsQueue.Count > 0) 
         { 
-            checkInputSquareFinal(Time.time - beatMapStartTime);
+            checkInputSquareFinal(currentTimeStamp);
             initialSquareInput = false;
         }
     }
@@ -90,8 +101,9 @@ public class LogicManagerScript : MonoBehaviour
     // Triangle -> Double Tap
     private void onTriangle(InputAction.CallbackContext context)
     {
+        float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         if (triangleTimingsQueue.Count > 0) 
-        { checkInputTriangle(Time.time - beatMapStartTime); }
+        { checkInputTriangle(Time.time - currentTimeStamp); }
     }
 
     // For missed note, inputCorrect is false even though there was no input
@@ -108,6 +120,8 @@ public class LogicManagerScript : MonoBehaviour
         noteTimingsQueue.Dequeue();
         if (destroyNote)
         { Destroy(note); }
+        else
+        { missedNoteObjectsQueue.Enqueue(note); }
     }
 
     private void checkInputCircle(float inputTimeStamp)
@@ -183,7 +197,7 @@ public class LogicManagerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float currentTimeStamp = Time.time - beatMapStartTime;
+        float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
 
         // Missed note checks is based on the fact that a non-missed note would have already been dequeued,
         // and since it is not, it must be missed
@@ -211,5 +225,43 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Triangle]");
         }
+    }
+
+    // Destroy all note game objects, clear note and timing queues
+    public void ResetBeatMap()
+    {
+        DisableInputs();
+
+        // Destroy all note game objects and clear its queue
+        while (circleObjectsQueue.Count > 0) 
+        {
+            GameObject note = circleObjectsQueue.Dequeue();
+            Destroy(note);
+        }
+
+        while (squareObjectsQueue.Count > 0)
+        {
+            GameObject note = squareObjectsQueue.Dequeue();
+            Destroy(note);
+        }
+
+        while (triangleObjectsQueue.Count > 0)
+        {
+            GameObject note = triangleObjectsQueue.Dequeue();
+            Destroy(note);
+        }
+
+        while (missedNoteObjectsQueue.Count > 0)
+        {
+            GameObject missedNote = missedNoteObjectsQueue.Dequeue();
+            Destroy(missedNote);
+        }
+
+        // Clear note timing queues
+        circleTimingsQueue.Clear();
+        squareTimingsQueue.Clear();
+        triangleTimingsQueue.Clear();
+
+        EnableInputs(); 
     }
 }

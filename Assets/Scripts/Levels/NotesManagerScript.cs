@@ -16,11 +16,14 @@ public class NotesManagerScript : MonoBehaviour
     [Header("Managers")]
     [SerializeField] private GameObject logicManager;
     [SerializeField] private GameObject UIManager;
+    [SerializeField] private GameObject PracticeManager;
+    [SerializeField] private GameObject levelMusic;
 
+    [Header("Managers")]
     // Referencing the index of beatMap
     private int currentNote = 0;
     private List<Dictionary<string, string>> beatMap;
-    private float beatMapStartTime;
+    [SerializeField] private Coroutine beatMapCoroutine;
 
     // noteSpeed timings { noteSpeed, timeSpawnToJudgement }
     private Dictionary<int, float> noteSpeedTimings = new Dictionary<int, float>
@@ -43,14 +46,11 @@ public class NotesManagerScript : MonoBehaviour
         string levelName = SceneManager.GetActiveScene().name;
         string filepath = $"Assets\\Resources\\{levelName}.csv";
         beatMap = MarkersProcessingScript.ProcessMarkers(filepath);
-        
-        noteSpeed = PlayerPrefs.GetInt("Note Speed");
-        beatMapStartTime = Time.time;
-        StartCoroutine(SpawnBeatMap(beatMap));
 
-        // Give LogicManagerScript and UIManagerScript the exact timing the beatmap starts
-        logicManager.GetComponent<LogicManagerScript>().beatMapStartTime = beatMapStartTime;
-        UIManager.GetComponent<UIManagerScript>().beatMapStartTime = beatMapStartTime;
+        noteSpeed = PlayerPrefs.GetInt("Note Speed");
+
+        // Non-practice mode AND practice mode both starts at 0.00%
+        beatMapCoroutine = StartCoroutine(SpawnBeatMap(beatMap, 0f));
     }
 
     // For checking the correctness of the beatmap
@@ -68,14 +68,44 @@ public class NotesManagerScript : MonoBehaviour
         return beatMapString; 
     }
 
-    private IEnumerator SpawnBeatMap(List<Dictionary<string, string>> beatMap)
+    // [PRACTICE MODE] MAIN METHOD
+    public void SkipToTime(float timeSkipped)
     {
-        // Pre-spawning notes to cater to noteSpeedTimings being longer than the "timeStamp" of the note
+        // Stop current running beatmap
+        if (beatMapCoroutine != null)
+        {
+            StopCoroutine(beatMapCoroutine);
+        }
+
+        // Destroy all note game objects, clear note and timing queues
+        logicManager.GetComponent<LogicManagerScript>().ResetBeatMap();
+
+        // Start a new beatmap 
+        currentNote = 0;
+        beatMapCoroutine = StartCoroutine(SpawnBeatMap(beatMap, timeSkipped));
+        UIManager.GetComponent<UIManagerScript>().LoadDifficulty();
+    }
+
+    // [PRACTICE MODE] Using timeSkipped to change values only take place in the spawning of beat map (and prespawning),
+    // but not logic calculation in logicManager or anywhere else
+    private IEnumerator SpawnBeatMap(List<Dictionary<string, string>> beatMap, float timeSkipped)
+    {
+        // Initial processing of notes that are not spawned and notes that are pre-spawned
         while (currentNote < beatMap.Count)
         {
-            if (float.Parse(beatMap[currentNote]["timeStamp"]) < noteSpeedTimings[noteSpeed])
+            float currentNoteTimeStamp = float.Parse(beatMap[currentNote]["timeStamp"]) - timeSkipped;
+
+            // If the note has a "negative" timeStamp
+            if (currentNoteTimeStamp < 0)
             {
-                SpawnNote(beatMap[currentNote], true);
+                currentNote++;
+                continue;
+            }
+
+            // Pre-spawning notes to cater to noteSpeedTimings being longer than the "timeStamp" of the note
+            if (currentNoteTimeStamp < noteSpeedTimings[noteSpeed])
+            {
+                SpawnNote(beatMap[currentNote], true, timeSkipped);
                 currentNote++;
             }
             else { break; }
@@ -83,10 +113,12 @@ public class NotesManagerScript : MonoBehaviour
 
         // Spawns notes that are not pre-spawned
         while (currentNote < beatMap.Count) {
-            float currentTimeStamp = Time.time - beatMapStartTime;
-            if (currentTimeStamp >= float.Parse(beatMap[currentNote]["timeStamp"]) - noteSpeedTimings[noteSpeed])
+            float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp() - timeSkipped;
+            float currentNoteTimeStamp = float.Parse(beatMap[currentNote]["timeStamp"]) - timeSkipped;
+
+            if (currentTimeStamp >= currentNoteTimeStamp - noteSpeedTimings[noteSpeed])
             {
-                SpawnNote(beatMap[currentNote], false);
+                SpawnNote(beatMap[currentNote], false, timeSkipped);
                 currentNote++;
             }    
             yield return null;
@@ -94,9 +126,12 @@ public class NotesManagerScript : MonoBehaviour
     }
 
     // Spawn, update relevant variables in the instance of the new note and give it AND its timing(s) to logicManager 
-    private void SpawnNote(Dictionary<string, string> note, bool preSpawn)
+    private void SpawnNote(Dictionary<string, string> note, bool preSpawn, float timeSkipped)
     {
         GameObject newNote;
+
+        // [PRACTICE MODE] Need to include timeSkipped for prespawns if not it will base off old timestamps
+        float noteTimeStamp = float.Parse(note["timeStamp"]) - timeSkipped;
 
         if (note["typeOfNote"] == "C")
         {
@@ -105,7 +140,7 @@ public class NotesManagerScript : MonoBehaviour
 
             if (preSpawn)
             {
-                newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = float.Parse(note["timeStamp"]);
+                newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = noteTimeStamp;
             }
             else
             {
@@ -130,7 +165,7 @@ public class NotesManagerScript : MonoBehaviour
 
             if (preSpawn)
             {
-                newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = float.Parse(note["timeStamp"]);
+                newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = noteTimeStamp;
             }
             else
             {
@@ -155,7 +190,7 @@ public class NotesManagerScript : MonoBehaviour
 
             if (preSpawn)
             {
-                newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = float.Parse(note["timeStamp"]);
+                newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteTimeStamp;
             }
             else
             {

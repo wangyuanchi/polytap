@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class LevelCompleteScript : MonoBehaviour
 { 
     [Header("Overlay")]
+    [SerializeField] private TextMeshProUGUI levelCompleteText;
     [SerializeField] private TextMeshProUGUI levelInfoText;
     [SerializeField] private Animator animator;
 
@@ -14,8 +15,11 @@ public class LevelCompleteScript : MonoBehaviour
     [SerializeField] private AudioClip levelCompleteNSFX;
     [SerializeField] private AudioClip levelCompleteHSFX;
 
+    private GameObject UIManager;
+
     void Awake()
     {
+        SetLevelCompleteText();
         SetLevelInfoText();
         if (PlayerPrefs.GetString("Mode") == "N")
         {
@@ -27,14 +31,37 @@ public class LevelCompleteScript : MonoBehaviour
             PlaySFX(levelCompleteHSFX);
             animator.SetTrigger("LevelCompleteH");
         }
+
+        UIManager = GameObject.Find("UIManager");
+    }
+
+    private void SetLevelCompleteText()
+    {
+        if (!PracticeManagerScript.practiceMode)
+        {
+            levelCompleteText.text = "Level Complete!";
+        }
+        else
+        {
+            levelCompleteText.text = "Practice Complete!";
+        }
     }
 
     private void SetLevelInfoText()
     {
-        string mode = PlayerPrefs.GetString("Mode") == "N" ? "Normal" : "Hard";
-        string attemptsKey = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-TA";
-        string attempts = PlayerPrefs.GetInt(attemptsKey).ToString();
-        levelInfoText.text = $"Mode: {mode} \t Attempts: {attempts}";
+        if (!PracticeManagerScript.practiceMode)
+        {
+            string mode = PlayerPrefs.GetString("Mode") == "N" ? "Normal" : "Hard";
+            string attemptsKey = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-TA";
+            string attempts = PlayerPrefs.GetInt(attemptsKey).ToString();
+            levelInfoText.fontSize = 65;
+            levelInfoText.text = $"Mode: {mode} \t Attempts: {attempts}";
+        }
+        else
+        {
+            levelInfoText.fontSize = 50;
+            levelInfoText.text = "Try to beat the level without checkpoints!";
+        }
     }
 
     private void PlaySFX(AudioClip SFX)
@@ -45,12 +72,11 @@ public class LevelCompleteScript : MonoBehaviour
 
     public void RestartScene()
     {
-        TransitionToScene(SceneManager.GetActiveScene().name);
+        UIManager.GetComponent<UIManagerScript>().RestartScene();
     }
 
     public void TransitionToScene(string levelName)
     {
-        GameObject sceneTransition = GameObject.FindGameObjectWithTag("SceneTransition");
-        sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
+        UIManager.GetComponent<UIManagerScript>().TransitionToScene(levelName);
     }
 }
