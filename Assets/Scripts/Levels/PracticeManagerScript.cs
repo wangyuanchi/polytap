@@ -7,8 +7,8 @@ public class PracticeManagerScript : MonoBehaviour
 {
     [Header("Practice Mode")]
     public static bool practiceMode = false;
-    public float practiceTimeSkipped = 0f; // Linked to amount of time skipped in beatmap and music
-                                           // Defaulted to start at 0.00%  
+    public static float checkpointTimeStamp = 0f; // Defaulted to start at 0f
+                                                  // Linked to amount of time skipped in beatmap and music
 
     [Header("Managers")]
     [SerializeField] private GameObject UIManager;
@@ -25,76 +25,95 @@ public class PracticeManagerScript : MonoBehaviour
     [SerializeField] private Button forwardsButton;
     [SerializeField] private Button backwardsButton;
 
+    private Coroutine TOORCCoroutine;
+
     void Start()
     {
         if (practiceMode)   
         {
             practiceButton.GetComponent<Image>().sprite = practiceDisabled;
+            PracticeCheckpointLoad(); // Plays the beatmap and music at default 0.00% initially
+            TOORCCoroutine = StartCoroutine(TimeOutOfRangeCheck()); 
         }
         else
         {
             practiceButton.GetComponent<Image>().sprite = practiceEnabled;
         }
-        LoadPracticeUI();
-        TimeOutOfRangeCheck();  
+        LoadPracticeUI(practiceMode);
     }
 
-    private void LoadPracticeUI()
+    private void LoadPracticeUI(bool isPracticeMode)
     {
-        // Activate buttons because they are disabled during game over or level complete
-        forwardsButton.interactable = true;
-        backwardsButton.interactable = true;
+        // (Re)activate buttons because they are disabled during game over or level complete
+        forwardsButton.interactable = isPracticeMode;
+        backwardsButton.interactable = isPracticeMode;
+        practiceUI.SetActive(isPracticeMode);
+    }
 
-        if (practiceMode == false)
+    private IEnumerator TimeOutOfRangeCheck()
+    {
+        // Make sure that buttons are disabled the instant they would go out of range
+        while (true)
         {
-            practiceUI.SetActive(false);
-        }
-        else
-        {
-            practiceUI.SetActive(true);
+            // Break if the level is complete
+            if (levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp() >= levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime)
+            {
+                break;
+            }
+
+            // Check for forwards overflow
+            if (checkpointTimeStamp + 5f > levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime)
+            {
+                forwardsButton.interactable = false;
+            }
+            else
+            {
+                forwardsButton.interactable = true;
+            }
+
+            // Check for backwards overflow
+            if (checkpointTimeStamp - 5f < 0)
+            {
+                backwardsButton.interactable = false;
+            }
+            else
+            {
+                backwardsButton.interactable = true;
+            }
+
+            yield return null;           
         }
     }
 
-    private void TimeOutOfRangeCheck()
+    private void PracticeCheckpointLoad()
     {
-        if (practiceTimeSkipped + 5f > levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime)
-        {
-            forwardsButton.interactable = false;
-        }
-        else
-        {
-            forwardsButton.interactable = true;
-        }
-
-        if (practiceTimeSkipped - 5f < 0)
-        {
-            backwardsButton.interactable = false;
-        }
-        else
-        {
-            backwardsButton.interactable = true;
-        }
-    }
-
-    public void TogglePracticeMode()
-    {
-        practiceMode = !practiceMode;
-        UIManager.GetComponent<UIManagerScript>().RestartScene();
+        levelMusic.GetComponent<LevelMusicScript>().SkipToTime(checkpointTimeStamp);
+        notesManager.GetComponent<NotesManagerScript>().SkipToTime(checkpointTimeStamp);
     }
 
     public void OnPracticeTimeSkippedForward()
     {
-        practiceTimeSkipped += 5f;
-        levelMusic.GetComponent<LevelMusicScript>().SkipToTime(practiceTimeSkipped);
-        notesManager.GetComponent<NotesManagerScript>().SkipToTime(practiceTimeSkipped);
-        TimeOutOfRangeCheck();
+        checkpointTimeStamp += 5f;
+        levelMusic.GetComponent<LevelMusicScript>().SkipToTime(checkpointTimeStamp);
+        notesManager.GetComponent<NotesManagerScript>().SkipToTime(checkpointTimeStamp);
     }
 
     public void OnPracticeTimeSkippedBackwards()
     {
-        practiceTimeSkipped -= 5f;
-        levelMusic.GetComponent<LevelMusicScript>().SkipToTime(practiceTimeSkipped);
-        notesManager.GetComponent<NotesManagerScript>().SkipToTime(practiceTimeSkipped);
-        TimeOutOfRangeCheck();
+        checkpointTimeStamp -= 5f;
+        levelMusic.GetComponent<LevelMusicScript>().SkipToTime(checkpointTimeStamp);
+        notesManager.GetComponent<NotesManagerScript>().SkipToTime(checkpointTimeStamp);
+    }
+
+    public void DisablePracticeButtons()
+    {
+        forwardsButton.interactable = false;
+        backwardsButton.interactable = false;
+
+        // Prevents while loop triggering interactable after it is supposed to be false during game over
+        if (TOORCCoroutine != null)
+        {
+            StopCoroutine(TOORCCoroutine);
+        }
     }
 }

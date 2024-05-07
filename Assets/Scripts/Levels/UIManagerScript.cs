@@ -34,6 +34,7 @@ public class UIManagerScript : MonoBehaviour
     private Coroutine animateHeartMaskCoroutine;
 
     [Header("Practice UI")]
+    [SerializeField] private GameObject practiceManager;
     [SerializeField] private Button forwardsButton;
     [SerializeField] private Button backwardsButton;
 
@@ -79,7 +80,7 @@ public class UIManagerScript : MonoBehaviour
     {
         // Do not load fade in transition for subsequent attempts for better flow
         if (firstAttempt)
-        { 
+        {
             sceneTransition.GetComponent<SceneTransitionScript>().SceneFadeIn(); 
             firstAttempt = false;
         }
@@ -237,8 +238,7 @@ public class UIManagerScript : MonoBehaviour
         logicManager.GetComponent<LogicManagerScript>().DisableInputs();
 
         // [PRACTICE MODE] Disable forward/backward button pressing 
-        forwardsButton.interactable = false;
-        backwardsButton.interactable = false;  
+        practiceManager.GetComponent<PracticeManagerScript>().DisablePracticeButtons();
 
         if (levelComplete) 
         {
@@ -313,8 +313,17 @@ public class UIManagerScript : MonoBehaviour
     {
         // Reset first attempt so that transition is loaded in the future
         firstAttempt = true;
-        // [PRACTICE MODE] Reset so that practice is not loaded in the future
+        // [PRACTICE MODE] Reset so that practice and checkpoint is not loaded in the future
         PracticeManagerScript.practiceMode = false;
+        PracticeManagerScript.checkpointTimeStamp = 0f;
         sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
+    }
+
+    // [PRACTICE MODE]
+    public void TogglePracticeMode()
+    {
+        PracticeManagerScript.practiceMode = !PracticeManagerScript.practiceMode;
+        PracticeManagerScript.checkpointTimeStamp = 0f; // Checkpoint should be 0f regardless of entering or exiting practice mode
+        RestartScene();
     }
 }

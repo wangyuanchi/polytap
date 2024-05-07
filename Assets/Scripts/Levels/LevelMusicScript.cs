@@ -9,8 +9,7 @@ public class LevelMusicScript : MonoBehaviour
                                  // where wrong user input on last note is performed after level complete
 
     [Header("Music")]
-    [SerializeField] private AudioClip musicClip;
-    private AudioSource musicSource;
+    [SerializeField] private AudioSource musicSource;
 
     [Header("Managers")]
     [SerializeField] private GameObject PracticeManager;
@@ -19,12 +18,14 @@ public class LevelMusicScript : MonoBehaviour
     void Start()
     {
         // Check for incorrect input
-        if (beatMapEndTime < 0 || beatMapEndTime > musicClip.length)
+        if (beatMapEndTime < 0 || beatMapEndTime > musicSource.clip.length)
         { Debug.Log("Invalid Beat Map End Time!"); }
 
-        musicSource = GetComponent<AudioSource>();
-        musicSource.clip = musicClip;
-        PlayMusic();
+        // Non-practice mode playing, practice mode playing is done in PracticeManagerScript
+        if (!PracticeManagerScript.practiceMode)
+        {
+            PlayMusic();
+        }
     }
 
     // [PRACTICE MODE] MAIN METHOD

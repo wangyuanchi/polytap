@@ -24,12 +24,26 @@ public class LevelCompleteScript : MonoBehaviour
         if (PlayerPrefs.GetString("Mode") == "N")
         {
             PlaySFX(levelCompleteNSFX);
-            animator.SetTrigger("LevelCompleteN");
+            if (!PracticeManagerScript.practiceMode)
+            {
+                animator.SetTrigger("LevelCompleteN");
+            }
+            else
+            {
+                animator.SetTrigger("PracticeCompleteN");
+            }
         }
         else
         {
             PlaySFX(levelCompleteHSFX);
-            animator.SetTrigger("LevelCompleteH");
+            if (!PracticeManagerScript.practiceMode)
+            {
+                animator.SetTrigger("LevelCompleteH");
+            }
+            else
+            {
+                animator.SetTrigger("PracticeCompleteH");
+            }
         }
 
         UIManager = GameObject.Find("UIManager");
@@ -78,5 +92,13 @@ public class LevelCompleteScript : MonoBehaviour
     public void TransitionToScene(string levelName)
     {
         UIManager.GetComponent<UIManagerScript>().TransitionToScene(levelName);
+    }
+
+    public void ExitPracticeMode()
+    {
+        // [PRACTICE MODE] Reset so that practice and checkpoint is not loaded in the future
+        PracticeManagerScript.practiceMode = false;
+        PracticeManagerScript.checkpointTimeStamp = 0f;
+        RestartScene();
     }
 }

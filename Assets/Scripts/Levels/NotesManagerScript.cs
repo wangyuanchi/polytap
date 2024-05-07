@@ -49,8 +49,11 @@ public class NotesManagerScript : MonoBehaviour
 
         noteSpeed = PlayerPrefs.GetInt("Note Speed");
 
-        // Non-practice mode AND practice mode both starts at 0.00%
-        beatMapCoroutine = StartCoroutine(SpawnBeatMap(beatMap, 0f));
+        // Non-practice mode spawning, practice mode spawning is done in PracticeManagerScript
+        if (!PracticeManagerScript.practiceMode)
+        {
+            beatMapCoroutine = StartCoroutine(SpawnBeatMap(beatMap, 0f));
+        }
     }
 
     // For checking the correctness of the beatmap

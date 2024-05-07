@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1621,6 +1621,7 @@ MonoBehaviour:
   progressText: {fileID: 2046315652}
   health: 3
   heartMask: {fileID: 1232000856}
+  practiceManager: {fileID: 1036583455}
   forwardsButton: {fileID: 1857009332}
   backwardsButton: {fileID: 189335688}
   pauseUI: {fileID: 625055308}
@@ -2470,7 +2471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c749b548a984b24fb9718f28aabaa69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  practiceTimeSkipped: 0
   UIManager: {fileID: 783021154}
   levelMusic: {fileID: 1138441062}
   notesManager: {fileID: 346430842}
@@ -2757,7 +2757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beatMapEndTime: 97.72
-  musicClip: {fileID: 8300000, guid: 3c5bae8726c38434da6c463b5863deb7, type: 3}
+  musicSource: {fileID: 1138441066}
   PracticeManager: {fileID: 1036583455}
 --- !u!4 &1138441065
 Transform:
@@ -2784,7 +2784,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -8739318140098832806, guid: 2e4df9c1023ccf44ca8f198bb4b7f337, type: 2}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 3c5bae8726c38434da6c463b5863deb7, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -4323,8 +4323,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1036583456}
-        m_TargetAssemblyTypeName: PracticeManagerScript, Assembly-CSharp
+      - m_Target: {fileID: 783021155}
+        m_TargetAssemblyTypeName: UIManagerScript, Assembly-CSharp
         m_MethodName: TogglePracticeMode
         m_Mode: 1
         m_Arguments:
@@ -4898,7 +4898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
