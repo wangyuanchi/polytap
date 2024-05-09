@@ -29,6 +29,7 @@ public class MainMenuScript : MonoBehaviour
     {
         // General
         PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 5));
+        PlayerPrefs.SetFloat("Practice Skip Duration", PlayerPrefs.GetFloat("Practice Skip Duration", 5f));
         PlayerPrefs.SetString("Vignette", PlayerPrefs.GetString("Vignette", "true"));
         PlayerPrefs.SetString("Particles", PlayerPrefs.GetString("Particles", "true"));
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));

@@ -94,6 +94,13 @@ public class LevelCompleteScript : MonoBehaviour
         UIManager.GetComponent<UIManagerScript>().TransitionToScene(levelName);
     }
 
+    // [PRACTICE MODE] For pressing the reset button in pause UI or level complete UI,
+    // because putting this in the normal RestartScene() function will conflict with the normal restarting of scene after game over
+    public void PracticeCheckpointReset()
+    {
+        PracticeManagerScript.checkpointTimeStamp = 0f;
+    }
+
     public void ExitPracticeMode()
     {
         // [PRACTICE MODE] Reset so that practice and checkpoint is not loaded in the future

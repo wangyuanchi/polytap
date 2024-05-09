@@ -40,32 +40,32 @@ public class LogicManagerScript : MonoBehaviour
         squareActionReference.action.Enable();
         triangleActionReference.action.Enable();
 
-        circleActionReference.action.performed += onCircle;
-        squareActionReference.action.started += onSquareHold;
-        squareActionReference.action.canceled += onSquareRelease;
-        triangleActionReference.action.performed += onTriangle;
+        circleActionReference.action.performed += OnCircle;
+        squareActionReference.action.started += OnSquareHold;
+        squareActionReference.action.canceled += OnSquareRelease;
+        triangleActionReference.action.performed += OnTriangle;
     }
 
     private void OnDisable()
     {
-        circleActionReference.action.performed -= onCircle;
-        squareActionReference.action.started -= onSquareHold;
-        squareActionReference.action.canceled -= onSquareRelease;
-        triangleActionReference.action.performed -= onTriangle;
+        circleActionReference.action.performed -= OnCircle;
+        squareActionReference.action.started -= OnSquareHold;
+        squareActionReference.action.canceled -= OnSquareRelease;
+        triangleActionReference.action.performed -= OnTriangle;
 
         circleActionReference.action.Disable();
         squareActionReference.action.Disable();
         triangleActionReference.action.Disable();
     }
 
-    public void EnableInputs()
+    public void EnableShapeInputs()
     {
         circleActionReference.action.Enable();
         squareActionReference.action.Enable();
         triangleActionReference.action.Enable();
     }
 
-    public void DisableInputs()
+    public void DisableShapeInputs()
     {
         circleActionReference.action.Disable();
         squareActionReference.action.Disable();
@@ -73,37 +73,37 @@ public class LogicManagerScript : MonoBehaviour
     }
 
     // Circle -> Single Tap
-    private void onCircle(InputAction.CallbackContext context)
+    private void OnCircle(InputAction.CallbackContext context)
     {
         float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         if (circleTimingsQueue.Count > 0) 
-        { checkInputCircle(currentTimeStamp); }
+        { CheckInputCircle(currentTimeStamp); }
     }
 
     // Square -> Hold and Release
-    private void onSquareHold(InputAction.CallbackContext context)
+    private void OnSquareHold(InputAction.CallbackContext context)
     {
         float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         if (squareTimingsQueue.Count > 0)
-        { checkInputSquareInitial(currentTimeStamp); }
+        { CheckInputSquareInitial(currentTimeStamp); }
     }
-    private void onSquareRelease(InputAction.CallbackContext context)
+    private void OnSquareRelease(InputAction.CallbackContext context)
     {
         float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         // initialSquareInput is only true if the first input is correct after checkInputSquareInitial is performed
         if (initialSquareInput && squareTimingsQueue.Count > 0) 
         { 
-            checkInputSquareFinal(currentTimeStamp);
+            CheckInputSquareFinal(currentTimeStamp);
             initialSquareInput = false;
         }
     }
 
     // Triangle -> Double Tap
-    private void onTriangle(InputAction.CallbackContext context)
+    private void OnTriangle(InputAction.CallbackContext context)
     {
         float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         if (triangleTimingsQueue.Count > 0) 
-        { checkInputTriangle(Time.time - currentTimeStamp); }
+        { CheckInputTriangle(Time.time - currentTimeStamp); }
     }
 
     // For missed note, inputCorrect is false even though there was no input
@@ -124,7 +124,7 @@ public class LogicManagerScript : MonoBehaviour
         { missedNoteObjectsQueue.Enqueue(note); }
     }
 
-    private void checkInputCircle(float inputTimeStamp)
+    private void CheckInputCircle(float inputTimeStamp)
     {
         float requiredTimeStamp = circleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
@@ -141,7 +141,7 @@ public class LogicManagerScript : MonoBehaviour
         }
     }
 
-    private void checkInputSquareInitial(float inputTimeStamp)
+    private void CheckInputSquareInitial(float inputTimeStamp)
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
@@ -161,7 +161,7 @@ public class LogicManagerScript : MonoBehaviour
     }
 
     // This ignores accuracy of the first input
-    private void checkInputSquareFinal(float inputTimeStamp)
+    private void CheckInputSquareFinal(float inputTimeStamp)
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
@@ -177,7 +177,7 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
         }
     }
-    private void checkInputTriangle(float inputTimeStamp)
+    private void CheckInputTriangle(float inputTimeStamp)
     {
         float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
@@ -230,7 +230,7 @@ public class LogicManagerScript : MonoBehaviour
     // Destroy all note game objects, clear note and timing queues
     public void ResetBeatMap()
     {
-        DisableInputs();
+        DisableShapeInputs();
 
         // Destroy all note game objects and clear its queue
         while (circleObjectsQueue.Count > 0) 
@@ -262,6 +262,6 @@ public class LogicManagerScript : MonoBehaviour
         squareTimingsQueue.Clear();
         triangleTimingsQueue.Clear();
 
-        EnableInputs(); 
+        EnableShapeInputs(); 
     }
 }

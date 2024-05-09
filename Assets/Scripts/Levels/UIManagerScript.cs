@@ -24,7 +24,7 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private AudioMixer audioMixer;
 
     [Header("Progress")]
-    [SerializeField] private TMP_Text progressText;
+    [SerializeField] private TMP_Text currentProgressText;
     private float progressPercentage;
     private Coroutine UpdateProgressPercentageCoroutine;
 
@@ -100,6 +100,14 @@ public class UIManagerScript : MonoBehaviour
 
     public void LoadDifficulty()
     {
+        // If a new checkpoint is set using forward/backward buttons right after a note passes judgement line,
+        // loses health and animation is still playing, health may not be full afterwards
+        // Hence, stop the animation first.
+        if (animateHeartMaskCoroutine != null)
+        {
+            StopCoroutine(animateHeartMaskCoroutine);
+        }
+
         if (PlayerPrefs.GetString("Mode") == "N")
         {
             health = 3;
@@ -153,16 +161,25 @@ public class UIManagerScript : MonoBehaviour
         float beatMapEndTime = levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime;
 
         while (progressPercentage < 100f)
-        { 
+        {
+            float checkpointTimeStamp = PracticeManagerScript.checkpointTimeStamp;
+            float checkpointPercentage = (float)Math.Round(checkpointTimeStamp / beatMapEndTime * 100f, 2);
+
             float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
             progressPercentage = (float)Math.Round(currentTimeStamp / beatMapEndTime * 100f, 2);
-            progressText.text = $"{progressPercentage}%";
+
+            // [PRACTICE MODE] Include checkpoint percentage if in practice mode
+            currentProgressText.text = PracticeManagerScript.practiceMode ?
+                $"{checkpointPercentage}% - \n{progressPercentage}%" : $"{progressPercentage}%";
 
             if (progressPercentage >= 100f)
             {
                 // Make sure progressPercentage is at exactly 100
                 progressPercentage = 100f;
-                progressText.text = $"{progressPercentage}%";
+
+                // [PRACTICE MODE] Include checkpoint percentage if in practice mode
+                currentProgressText.text = PracticeManagerScript.practiceMode ? 
+                    $"{checkpointPercentage}% - \n{progressPercentage}%" : $"{progressPercentage}%";
             }
 
             yield return null;
@@ -235,7 +252,7 @@ public class UIManagerScript : MonoBehaviour
             levelMusic.GetComponent<LevelMusicScript>().StopMusic();
         }
 
-        logicManager.GetComponent<LogicManagerScript>().DisableInputs();
+        logicManager.GetComponent<LogicManagerScript>().DisableShapeInputs();
 
         // [PRACTICE MODE] Disable forward/backward button pressing 
         practiceManager.GetComponent<PracticeManagerScript>().DisablePracticeButtons();
@@ -305,6 +322,7 @@ public class UIManagerScript : MonoBehaviour
     // Restart scene but without the transition
     public void RestartScene()
     {
+        StopCoroutine(UpdateProgressPercentageCoroutine); // Fix bug where the checkpoint percentage would blink out before scene restarts
         Time.timeScale = 1;
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
     }
@@ -325,5 +343,12 @@ public class UIManagerScript : MonoBehaviour
         PracticeManagerScript.practiceMode = !PracticeManagerScript.practiceMode;
         PracticeManagerScript.checkpointTimeStamp = 0f; // Checkpoint should be 0f regardless of entering or exiting practice mode
         RestartScene();
+    }
+
+    // [PRACTICE MODE] For pressing the reset button in pause UI or level complete UI,
+    // because putting this in the normal RestartScene() function will conflict with the normal restarting of scene after game over
+    public void PracticeCheckpointReset()
+    {
+        PracticeManagerScript.checkpointTimeStamp = 0f;
     }
 }

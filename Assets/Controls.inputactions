@@ -11,7 +11,7 @@
                     "id": "ebead7f7-4207-433e-8da7-a375c732c664",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Tap",
                     "initialStateCheck": false
                 },
                 {
@@ -29,13 +29,40 @@
                     "id": "d1f7dc27-f5da-4336-ab56-713e0c78a487",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "MultiTap",
                     "initialStateCheck": false
                 },
                 {
                     "name": "Pause",
                     "type": "Button",
                     "id": "e634ad7a-28cb-46d0-9275-ef8a9df3f1cb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Forwards",
+                    "type": "Button",
+                    "id": "7b19dc99-4348-460e-b326-53dc46ee1d8f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Backwards",
+                    "type": "Button",
+                    "id": "8d2330d0-8530-49ed-bddd-c3f366d284e5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Checkpoint",
+                    "type": "Button",
+                    "id": "ca9e7cd2-19c1-4af0-ba46-ded4f13f419d",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -47,7 +74,7 @@
                     "name": "",
                     "id": "03de0102-5ed0-4cba-858d-fd4a189a9c28",
                     "path": "<Keyboard>/enter",
-                    "interactions": "MultiTap",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Triangle",
@@ -69,7 +96,7 @@
                     "name": "",
                     "id": "108ba45d-91cb-4040-89a9-28469b9840ca",
                     "path": "<Keyboard>/space",
-                    "interactions": "Tap",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Circle",
@@ -84,6 +111,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd04de7b-6dbc-4510-b3e3-80b2f3972fb6",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Forwards",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f28b9647-2016-472c-ae0d-a66777bd7bd2",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Backwards",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aa598a3f-4294-4d60-831e-864f11f74712",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Checkpoint",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
