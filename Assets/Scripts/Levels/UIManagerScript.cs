@@ -55,6 +55,10 @@ public class UIManagerScript : MonoBehaviour
     [Header("Particles")]
     [SerializeField] private ParticleSystem ambientParticles;
 
+    [Header("Options")]
+    [SerializeField] private GameObject accuracyObject;
+    [SerializeField] private TMP_Text accuracyText;
+
     private void OnEnable()
     {
         pauseActionReference.action.Enable();
@@ -350,5 +354,40 @@ public class UIManagerScript : MonoBehaviour
     public void PracticeCheckpointReset()
     {
         PracticeManagerScript.checkpointTimeStamp = 0f;
+    }
+
+
+    private IEnumerator accuracyCouroutine;
+    public void UpdateAccuracyText(double accuracy)
+    {
+
+        accuracyObject.SetActive(true);
+        accuracyCouroutine = accuracyTextVisibility(1.0f);
+        StartCoroutine(accuracyCouroutine);
+        if (accuracy > 0)
+        {
+            accuracyText.text = "+" + accuracy.ToString() + "ms";
+            accuracyText.color = Color.green;
+        }
+        else
+        {
+            accuracyText.text = accuracy.ToString() + "ms"; //dont need "-" cause it already has it
+            accuracyText.color = Color.red;
+        }
+    }
+
+    private IEnumerator accuracyTextVisibility(float waitTime)
+    {
+        if (accuracyObject.activeSelf)
+        {
+            StopCoroutine(accuracyCouroutine);
+            StartCoroutine(accuracyCouroutine);
+        }
+        else
+        {
+            yield return new WaitForSeconds(waitTime);
+            accuracyObject.SetActive(false);
+        }
+        
     }
 }

@@ -128,6 +128,12 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = circleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        //Shows the timing of the tap if showTiming toggle is true
+        if (PlayerPrefs.GetString("ShowTiming") == "true")
+        {
+            float accuracy = requiredTimeStamp - inputTimeStamp;
+            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(Math.Round(accuracy * 100, 0));
+        }
         if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
@@ -145,6 +151,11 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        if (PlayerPrefs.GetString("ShowTiming") == "true")
+        {
+            float accuracy = requiredTimeStamp - inputTimeStamp;
+            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(Math.Round(accuracy*100, 0));
+        }
         // If the first input is correct, destroy noteSquareStart only and wait for second input
         if (timeFromPerfect <= bufferWindow)
         {
@@ -165,6 +176,11 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        if (PlayerPrefs.GetString("ShowTiming") == "true")
+        {
+            float accuracy = requiredTimeStamp - inputTimeStamp;
+            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(Math.Round(accuracy * 100, 0));
+        }
         if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
@@ -181,6 +197,11 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
+        if (PlayerPrefs.GetString("ShowTiming") == "true")
+        {
+            float accuracy = requiredTimeStamp - inputTimeStamp;
+            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(Math.Round(accuracy * 100, 0));
+        }
         if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");

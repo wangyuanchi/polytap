@@ -8,6 +8,7 @@ public class AllTogglesScript : MonoBehaviour
 {
     [SerializeField] private Toggle vignetteToggle;
     [SerializeField] private Toggle particlesToggle;
+    [SerializeField] private Toggle timingToggle;
 
     private Dictionary<string, Toggle> prefToggleDict = new Dictionary<string, Toggle>();
 
@@ -17,6 +18,7 @@ public class AllTogglesScript : MonoBehaviour
         // Make sure that the key is the same as PlayerPrefs and in the onValueChanged function of each toggle
         prefToggleDict.Add("Vignette", vignetteToggle);
         prefToggleDict.Add("Particles", particlesToggle);
+        prefToggleDict.Add("ShowTiming", timingToggle);
         LoadAllToggles();
     }
 
