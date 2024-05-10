@@ -55,9 +55,10 @@ public class UIManagerScript : MonoBehaviour
     [Header("Particles")]
     [SerializeField] private ParticleSystem ambientParticles;
 
-    [Header("Options")]
-    [SerializeField] private GameObject accuracyObject;
+    [Header("Accuracy")]
+    [SerializeField] private GameObject accuracyUI;
     [SerializeField] private TMP_Text accuracyText;
+    private Coroutine displayAccuracyCoroutine;
 
     private void OnEnable()
     {
@@ -356,38 +357,40 @@ public class UIManagerScript : MonoBehaviour
         PracticeManagerScript.checkpointTimeStamp = 0f;
     }
 
-
-    private IEnumerator accuracyCouroutine;
-    public void UpdateAccuracyText(double accuracy)
+    public void UpdateAccuracyText(float accuracy)
     {
-
-        accuracyObject.SetActive(true);
-        accuracyCouroutine = accuracyTextVisibility(1.0f);
-        StartCoroutine(accuracyCouroutine);
-        if (accuracy > 0)
+        // Do not show accuracy for unexpected inputs
+        // accuracy is in ms but expectedWindow is in seconds
+        if (Math.Abs(accuracy) > logicManager.GetComponent<LogicManagerScript>().expectedWindow * 1000)
         {
-            accuracyText.text = "+" + accuracy.ToString() + "ms";
+            return;
+        }
+        else if (accuracy > 0)
+        {
+            accuracyText.text = $"+{accuracy}ms";
             accuracyText.color = Color.green;
         }
         else
         {
-            accuracyText.text = accuracy.ToString() + "ms"; //dont need "-" cause it already has it
+            accuracyText.text = $"{accuracy}ms"; // Don't need "-" because it is already included
             accuracyText.color = Color.red;
         }
+
+        // If this function is ever called, "Accuracy" player preference must be set to true, hence, can set accuracyUI to be active
+        accuracyUI.SetActive(true);
+
+        if (displayAccuracyCoroutine != null)
+        {
+            StopCoroutine(displayAccuracyCoroutine);
+        }
+        displayAccuracyCoroutine = StartCoroutine(DisplayAccuracyText());
     }
 
-    private IEnumerator accuracyTextVisibility(float waitTime)
+    // Displays the accuracy text if there is a constant input, and stops displaying if no input is detected for waitTime
+    private IEnumerator DisplayAccuracyText()
     {
-        if (accuracyObject.activeSelf)
-        {
-            StopCoroutine(accuracyCouroutine);
-            StartCoroutine(accuracyCouroutine);
-        }
-        else
-        {
-            yield return new WaitForSeconds(waitTime);
-            accuracyObject.SetActive(false);
-        }
-        
+        float waitTime = 1f;
+        yield return new WaitForSeconds(waitTime);
+        accuracyUI.SetActive(false);
     }
 }

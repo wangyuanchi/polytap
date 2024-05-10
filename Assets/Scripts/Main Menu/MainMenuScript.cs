@@ -32,6 +32,7 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("Practice Skip Duration", PlayerPrefs.GetFloat("Practice Skip Duration", 5f));
         PlayerPrefs.SetString("Vignette", PlayerPrefs.GetString("Vignette", "true"));
         PlayerPrefs.SetString("Particles", PlayerPrefs.GetString("Particles", "true"));
+        PlayerPrefs.SetString("Accuracy", PlayerPrefs.GetString("Accuracy", "false"));
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Lobby Music", PlayerPrefs.GetString("Lobby Music", "true"));

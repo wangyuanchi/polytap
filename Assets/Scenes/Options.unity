@@ -1096,7 +1096,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Show Timing
+  m_text: Accuracy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
   m_sharedMaterial: {fileID: 1510713269788925125, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
@@ -1184,7 +1184,7 @@ GameObject:
   - component: {fileID: 176182706}
   - component: {fileID: 176182707}
   m_Layer: 5
-  m_Name: ShowTiming
+  m_Name: AccuracyToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1266,10 +1266,10 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: ShowTiming
+          m_StringArgument: Accuracy
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &201564066
 GameObject:
   m_ObjectHideFlags: 0
@@ -1801,7 +1801,7 @@ GameObject:
   m_Component:
   - component: {fileID: 276458301}
   m_Layer: 5
-  m_Name: ShowTiming
+  m_Name: Accuracy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8634,7 +8634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vignetteToggle: {fileID: 1318310217}
   particlesToggle: {fileID: 2089324937}
-  timingToggle: {fileID: 176182707}
+  accuracyToggle: {fileID: 176182707}
 --- !u!1 &2089324935
 GameObject:
   m_ObjectHideFlags: 0

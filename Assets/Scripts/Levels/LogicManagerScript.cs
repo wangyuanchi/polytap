@@ -29,7 +29,7 @@ public class LogicManagerScript : MonoBehaviour
 
     [Header("Timings")]
     [SerializeField] private float bufferWindow; // The buffer window is a subset of the expected window
-    [SerializeField] private float expectedWindow; // The expected window is where the user is expected to provide an input before the note is missed
+    public float expectedWindow; // The expected window is where the user is expected to provide an input before the note is missed
 
     [Header("Particles")]
     [SerializeField] private GameObject inputParticles;
@@ -124,16 +124,21 @@ public class LogicManagerScript : MonoBehaviour
         { missedNoteObjectsQueue.Enqueue(note); }
     }
 
+    // Updates the text displaying the accuracy of each input
+    private void UpdateAccuracyText(float accuracy)
+    {
+        if (PlayerPrefs.GetString("Accuracy") == "true")
+        {
+            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText((float)Math.Round(accuracy * 1000, 0));
+        }
+    }
+
     private void CheckInputCircle(float inputTimeStamp)
     {
         float requiredTimeStamp = circleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        //Shows the timing of the tap if showTiming toggle is true
-        if (PlayerPrefs.GetString("ShowTiming") == "true")
-        {
-            float accuracy = requiredTimeStamp - inputTimeStamp;
-            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(Math.Round(accuracy * 100, 0));
-        }
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp);
+        
         if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
@@ -151,11 +156,8 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        if (PlayerPrefs.GetString("ShowTiming") == "true")
-        {
-            float accuracy = requiredTimeStamp - inputTimeStamp;
-            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(Math.Round(accuracy*100, 0));
-        }
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp);
+
         // If the first input is correct, destroy noteSquareStart only and wait for second input
         if (timeFromPerfect <= bufferWindow)
         {
@@ -176,11 +178,8 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        if (PlayerPrefs.GetString("ShowTiming") == "true")
-        {
-            float accuracy = requiredTimeStamp - inputTimeStamp;
-            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(Math.Round(accuracy * 100, 0));
-        }
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp);
+
         if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
@@ -197,11 +196,8 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        if (PlayerPrefs.GetString("ShowTiming") == "true")
-        {
-            float accuracy = requiredTimeStamp - inputTimeStamp;
-            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(Math.Round(accuracy * 100, 0));
-        }
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp);
+
         if (timeFromPerfect <= bufferWindow)
         {
             ProcessInput(true, "Correct Input!");
