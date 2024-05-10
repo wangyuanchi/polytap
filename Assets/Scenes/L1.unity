@@ -1922,6 +1922,7 @@ MonoBehaviour:
   pauseActionReference: {fileID: -3778414233636504608, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
   logicManager: {fileID: 123170250}
   ambientParticles: {fileID: 2141498962}
+  accuracyObject: {fileID: 1727056110}
   accuracyText: {fileID: 21681871}
 --- !u!4 &783021156
 Transform:
@@ -4872,7 +4873,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1727056111
 RectTransform:
   m_ObjectHideFlags: 0
