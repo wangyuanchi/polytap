@@ -125,11 +125,11 @@ public class LogicManagerScript : MonoBehaviour
     }
 
     // Updates the text displaying the accuracy of each input
-    private void UpdateAccuracyText(float accuracy)
+    private void UpdateAccuracyText(float accuracy, bool bypass)
     {
         if (PlayerPrefs.GetString("Accuracy") == "true")
         {
-            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText((float)Math.Round(accuracy * 1000, 0));
+            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText((float)Math.Round(accuracy * 1000, 0), bypass);
         }
     }
 
@@ -137,7 +137,7 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = circleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp);
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, false);
         
         if (timeFromPerfect <= bufferWindow)
         {
@@ -156,7 +156,7 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp);
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, false);
 
         // If the first input is correct, destroy noteSquareStart only and wait for second input
         if (timeFromPerfect <= bufferWindow)
@@ -178,7 +178,7 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp);
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, true); // Expected input regardless of how accurate it is, hence, bypass expected window check
 
         if (timeFromPerfect <= bufferWindow)
         {
@@ -196,7 +196,7 @@ public class LogicManagerScript : MonoBehaviour
     {
         float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp);
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, false);
 
         if (timeFromPerfect <= bufferWindow)
         {

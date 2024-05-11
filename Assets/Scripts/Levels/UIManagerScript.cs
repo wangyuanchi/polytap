@@ -357,15 +357,19 @@ public class UIManagerScript : MonoBehaviour
         PracticeManagerScript.checkpointTimeStamp = 0f;
     }
 
-    public void UpdateAccuracyText(float accuracy)
+    public void UpdateAccuracyText(float accuracy, bool bypass)
     {
-        // Do not show accuracy for unexpected inputs
-        // accuracy is in ms but expectedWindow is in seconds
-        if (Math.Abs(accuracy) > logicManager.GetComponent<LogicManagerScript>().expectedWindow * 1000)
-        {
-            return;
+        // Do not show accuracy for unexpected inputs, with exception to noteSquareEnd
+        if (!bypass)
+        {   
+            // accuracy is in ms but expectedWindow is in seconds
+            if (Math.Abs(accuracy) > logicManager.GetComponent<LogicManagerScript>().expectedWindow * 1000)
+            {
+                return;
+            }
         }
-        else if (accuracy > 0)
+
+        if (accuracy > 0)
         {
             accuracyText.text = $"+{accuracy}ms";
             accuracyText.color = Color.green;
