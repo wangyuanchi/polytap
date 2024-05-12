@@ -132,7 +132,6 @@ public class NotesManagerScript : MonoBehaviour
     private void SpawnNote(Dictionary<string, string> note, bool preSpawn, float timeSkipped)
     {
         GameObject newNote;
-
         // [PRACTICE MODE] Need to include timeSkipped for prespawns if not it will base off old timestamps
         float noteTimeStamp = float.Parse(note["timeStamp"]) - timeSkipped;
 

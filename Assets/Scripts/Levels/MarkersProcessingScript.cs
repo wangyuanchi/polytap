@@ -34,7 +34,7 @@ public class MarkersProcessingScript : MonoBehaviour
                         beatMap[squareIndex].Add("timeStampRelease", timeStamp);
                         continue;
                     }
-
+                    
                     Dictionary<string, string> note = new Dictionary<string, string>()
                     {
                         { "typeOfNote", typeOfNote },
@@ -63,10 +63,11 @@ public class MarkersProcessingScript : MonoBehaviour
     {
         // Split the string at the colon
         string[] parts = time.Split(':');
-
+        // Changes the timing based on the player offset
+        int offset = PlayerPrefs.GetInt("GlobalOffset");
         // Parse minutes and seconds parts to float
         float minutes = float.Parse(parts[0]);
-        float seconds = float.Parse(parts[1]);
+        float seconds = float.Parse(parts[1]) + offset/1000;
 
         // Convert to seconds and add
         float totalTime = minutes * 60 + seconds;
