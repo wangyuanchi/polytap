@@ -28,16 +28,15 @@ public class NotesManagerScript : MonoBehaviour
     // noteSpeed timings { noteSpeed, timeSpawnToJudgement }
     private Dictionary<int, float> noteSpeedTimings = new Dictionary<int, float>
     {
-        { 1, 5.5f },
-        { 2, 5f },
-        { 3, 4.5f },
-        { 4, 4f },
-        { 5, 3.5f },
-        { 6, 3f },
-        { 7, 2.5f },
-        { 8, 2f },
-        { 9, 1.5f },
-        { 10, 1f }
+        { 1, 5f },
+        { 2, 4.5f },
+        { 3, 4f },
+        { 4, 3.5f },
+        { 5, 3f },
+        { 6, 2.5f },
+        { 7, 2f },
+        { 8, 1.5f },
+        { 9, 1f }
     };
 
     // Start is called before the first frame update
