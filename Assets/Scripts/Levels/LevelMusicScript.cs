@@ -41,7 +41,7 @@ public class LevelMusicScript : MonoBehaviour
     public void PlayMusic() 
     {
         if (!musicSource.isPlaying)
-        { musicSource.Play();}
+        { musicSource.Play(); }
     }
 
     public void PauseMusic()

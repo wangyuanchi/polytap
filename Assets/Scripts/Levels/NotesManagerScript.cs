@@ -132,6 +132,10 @@ public class NotesManagerScript : MonoBehaviour
     private void SpawnNote(Dictionary<string, string> note, bool preSpawn, float timeSkipped)
     {
         GameObject newNote;
+        // Example: If the player is always 10ms late on every note,
+        // global offset will be -10ms and every note needs to be detected 10ms later.
+        // Hence, the global offset needs to be DEDUCTED from the normal timeStamp in the notesTimingsQueue
+        float globalOffset = (float)PlayerPrefs.GetInt("Global Offset") / 1000; // Convert ms to s
         // [PRACTICE MODE] Need to include timeSkipped for prespawns if not it will base off old timestamps
         float noteTimeStamp = float.Parse(note["timeStamp"]) - timeSkipped;
 
@@ -154,7 +158,7 @@ public class NotesManagerScript : MonoBehaviour
                 (
                     new Dictionary<string, float>
                     {
-                        { "timeStamp", float.Parse(note["timeStamp"]) }
+                        { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset }
                     }
                 );
         }
@@ -179,7 +183,7 @@ public class NotesManagerScript : MonoBehaviour
                 (
                     new Dictionary<string, float>
                     {
-                        { "timeStamp", float.Parse(note["timeStamp"]) },
+                        { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset },
                         { "duration", float.Parse(note["timeStampRelease"]) - float.Parse(note["timeStamp"]) }
                     }
                 );
@@ -204,7 +208,7 @@ public class NotesManagerScript : MonoBehaviour
                 (
                     new Dictionary<string, float>
                     {
-                        { "timeStamp", float.Parse(note["timeStamp"]) },
+                        { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset },
                     }
                 );
         }

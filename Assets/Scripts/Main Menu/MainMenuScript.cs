@@ -28,12 +28,12 @@ public class MainMenuScript : MonoBehaviour
     private void SetAllPreferences()
     {
         // General
-        PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 5));
-        PlayerPrefs.SetFloat("Practice Skip Duration", PlayerPrefs.GetFloat("Practice Skip Duration", 5f));
+        PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 5)); // // Units: arbitrary
+        PlayerPrefs.SetFloat("Practice Skip Duration", PlayerPrefs.GetFloat("Practice Skip Duration", 5f)); // Units: seconds
+        PlayerPrefs.SetInt("Global Offset", PlayerPrefs.GetInt("Global Offset", 0)); // Units: milliseconds
         PlayerPrefs.SetString("Vignette", PlayerPrefs.GetString("Vignette", "true"));
         PlayerPrefs.SetString("Particles", PlayerPrefs.GetString("Particles", "true"));
         PlayerPrefs.SetString("Accuracy", PlayerPrefs.GetString("Accuracy", "false"));
-        PlayerPrefs.SetInt("GlobalOffset", PlayerPrefs.GetInt("GlobalOffset", 0));
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Lobby Music", PlayerPrefs.GetString("Lobby Music", "true"));
@@ -48,7 +48,7 @@ public class MainMenuScript : MonoBehaviour
 
     public void ResetAllPreferences()
     {
-        Debug.Log("Resetted all preferences");
+        Debug.Log("Preferences Reset!");
         PlayerPrefs.DeleteAll();
         SetAllPreferences();
     }
