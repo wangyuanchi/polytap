@@ -5,6 +5,19 @@ using UnityEngine;
 
 public class NoteSquareScript : MonoBehaviour
 {
+    [Header("Sprites")]
+    [SerializeField] private Sprite noteSquareStart10;
+    [SerializeField] private Sprite noteSquareStart25;
+    [SerializeField] private Sprite noteSquareStart50;
+    [SerializeField] private Sprite noteSquareStart75;
+    [SerializeField] private Sprite noteSquareStart100;
+    [SerializeField] private Sprite noteSquareEnd10;
+    [SerializeField] private Sprite noteSquareEnd25;
+    [SerializeField] private Sprite noteSquareEnd50;
+    [SerializeField] private Sprite noteSquareEnd75;
+    [SerializeField] private Sprite noteSquareEnd100;
+
+    [Header("Timings")]
     public float timeSpawnToJudgement; // This is the time it takes for the note to move from its current position,
                                        // not necessarily at (0, 0, 0) due to prespawns, to the judgement line at (1, 1, 1)
     public float defaultTimeSpawnToJudgement; // This is the time it takes for a note to move from (0, 0, 0) to the judgement line at (1, 1, 1)
@@ -71,5 +84,18 @@ public class NoteSquareScript : MonoBehaviour
     public void DestroyNoteSquareEnd()
     {
         Destroy(noteSquareEnd);
+    }
+
+    public void SetSprite(float accuracyWindow)
+    {
+        SpriteRenderer spriteRendererNSS = noteSquareStart.GetComponent<SpriteRenderer>();
+        SpriteRenderer spriteRendererNSE = noteSquareEnd.GetComponent<SpriteRenderer>();
+
+        if (accuracyWindow == 0.01f) { spriteRendererNSS.sprite = noteSquareStart10; spriteRendererNSE.sprite = noteSquareEnd10; }
+        else if (accuracyWindow == 0.025f) { spriteRendererNSS.sprite = noteSquareStart25; spriteRendererNSE.sprite = noteSquareEnd25; }
+        else if (accuracyWindow == 0.05f) { spriteRendererNSS.sprite = noteSquareStart50; spriteRendererNSE.sprite = noteSquareEnd50; }
+        else if (accuracyWindow == 0.075f) { spriteRendererNSS.sprite = noteSquareStart75; spriteRendererNSE.sprite = noteSquareEnd75; }
+        else if (accuracyWindow == 0.1f) { spriteRendererNSS.sprite = noteSquareStart100; spriteRendererNSE.sprite = noteSquareEnd100; }
+        else { Debug.Log("Invalid Accuracy Window! Sprite set as default [noteSquareStartDefault.png, noteSquareEndDefault.png]."); }
     }
 }

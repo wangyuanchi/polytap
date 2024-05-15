@@ -25,8 +25,23 @@ public class MarkersProcessingScript : MonoBehaviour
                 {
                     string line = reader.ReadLine();
                     string[] fields = line.Split('\t');
-                    string typeOfNote = fields[0];
+
+                    // Example: Processing "C-100" into typeOfNote == "C" and accuracyWindow == "100"
+                    string noteHyphenAccuracyWindow = fields[0];
+                    string[] parts = noteHyphenAccuracyWindow.Split('-'); // Split the string at the hyphen
+                    string typeOfNote = parts[0];
+                    string accuracyWindow = (float.Parse(parts[1]) / 1000f).ToString(); // Convert ms to s, then to string for storing
+
                     string timeStamp = timeToSeconds(fields[1]);
+
+                    // Check if formatting of note is correct
+                    List<string> acceptedNotes = new List<string> { "C", "S", "SE", "T" };
+                    List<float> acceptedAccuracyWindows = new List<float> { 0.01f, 0.025f, 0.05f, 0.075f, 0.1f };
+                    if ( !acceptedNotes.Contains(typeOfNote) || !acceptedAccuracyWindows.Contains(float.Parse(accuracyWindow)))
+                    {
+                        Debug.Log("Invalid note format!");
+                        return new List<Dictionary<string, string>>(); // Returns an empty beatmap
+                    }
 
                     // For noteSquareEnd
                     if (typeOfNote == "SE")
@@ -38,6 +53,7 @@ public class MarkersProcessingScript : MonoBehaviour
                     Dictionary<string, string> note = new Dictionary<string, string>()
                     {
                         { "typeOfNote", typeOfNote },
+                        { "accuracyWindow", accuracyWindow }, // In the case of noteSquareEnd, it will always adopt the accuracy window of noteSquareStart
                         { "timeStamp", timeStamp }
                     };
 
