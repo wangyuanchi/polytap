@@ -334,6 +334,7 @@ public class UIManagerScript : MonoBehaviour
 
     public void TransitionToScene(string levelName)
     {
+        StopCoroutine(UpdateProgressPercentageCoroutine); // Fix bug where the checkpoint percentage would blink out before scene restarts
         // Reset first attempt so that transition is loaded in the future
         firstAttempt = true;
         // [PRACTICE MODE] Reset so that practice and checkpoint is not loaded in the future

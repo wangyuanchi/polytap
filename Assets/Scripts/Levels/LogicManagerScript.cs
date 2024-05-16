@@ -99,7 +99,7 @@ public class LogicManagerScript : MonoBehaviour
     {
         float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         if (triangleTimingsQueue.Count > 0) 
-        { CheckInputTriangle(Time.time - currentTimeStamp); }
+        { CheckInputTriangle(currentTimeStamp); }
     }
 
     // For missed note, inputCorrect is false even though there was no input
