@@ -36,7 +36,7 @@ public class MarkersProcessingScript : MonoBehaviour
 
                     // Check if formatting of note is correct
                     List<string> acceptedNotes = new List<string> { "C", "S", "SE", "T" };
-                    List<float> acceptedAccuracyWindows = new List<float> { 0.01f, 0.025f, 0.05f, 0.075f, 0.1f };
+                    List<float> acceptedAccuracyWindows = new List<float> { 0.025f, 0.05f, 0.075f, 0.1f, 0.125f };
                     if ( !acceptedNotes.Contains(typeOfNote) || !acceptedAccuracyWindows.Contains(float.Parse(accuracyWindow)))
                     {
                         Debug.Log("Invalid note format!");

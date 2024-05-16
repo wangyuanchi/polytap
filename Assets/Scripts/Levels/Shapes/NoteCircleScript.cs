@@ -6,11 +6,11 @@ using UnityEngine;
 public class NoteCircleScript : MonoBehaviour
 {
     [Header("Sprites")]
-    [SerializeField] private Sprite noteCircle10;
     [SerializeField] private Sprite noteCircle25;
     [SerializeField] private Sprite noteCircle50;
     [SerializeField] private Sprite noteCircle75;
     [SerializeField] private Sprite noteCircle100;
+    [SerializeField] private Sprite noteCircle125;
 
     [Header("Timings")]
     public float timeSpawnToJudgement; // This is the time it takes for the note to move from its current position,
@@ -51,11 +51,11 @@ public class NoteCircleScript : MonoBehaviour
     public void SetSprite(float accuracyWindow)
     {
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        if (accuracyWindow == 0.01f) { spriteRenderer.sprite = noteCircle10; }
-        else if (accuracyWindow == 0.025f) { spriteRenderer.sprite = noteCircle25; }
+        if (accuracyWindow == 0.025f) { spriteRenderer.sprite = noteCircle25; }
         else if (accuracyWindow == 0.05f) { spriteRenderer.sprite = noteCircle50; }
         else if (accuracyWindow == 0.075f) { spriteRenderer.sprite = noteCircle75; }
         else if (accuracyWindow == 0.1f) { spriteRenderer.sprite = noteCircle100; }
+        else if (accuracyWindow == 0.125f) { spriteRenderer.sprite = noteCircle125; }
         else { Debug.Log("Invalid Accuracy Window! Sprite set as default [noteCircleDefault.png]."); }
     }
 }

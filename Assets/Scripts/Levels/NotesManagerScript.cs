@@ -63,7 +63,7 @@ public class NotesManagerScript : MonoBehaviour
         {
             foreach (var kvp in dict)
             {
-                beatMapString += $"{kvp.Key}: {kvp.Value}   ";
+                beatMapString += $"{kvp.Key}: {kvp.Value}, ";
             }
             beatMapString += "\n";
         }
@@ -92,8 +92,6 @@ public class NotesManagerScript : MonoBehaviour
     // but not logic calculation in logicManager or anywhere else
     private IEnumerator SpawnBeatMap(List<Dictionary<string, string>> beatMap, float timeSkipped)
     {
-        Debug.Log(BeatMapToString(beatMap));
-
         // Initial processing of notes that are not spawned and notes that are pre-spawned
         while (currentNote < beatMap.Count)
         {

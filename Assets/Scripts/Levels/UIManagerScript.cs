@@ -357,18 +357,20 @@ public class UIManagerScript : MonoBehaviour
         PracticeManagerScript.checkpointTimeStamp = 0f;
     }
 
-    public void UpdateAccuracyText(float accuracy, bool bypass)
+    public void UpdateAccuracyText(float accuracy, float expectedWindow, bool bypass)
     {
-        float baseExpectedWindow = 100 * 2.5f; // (in ms) Lowest tier accuracy window * expectedWindowMultiplier in LogicManagerScript 
-
         // Do not show accuracy for unexpected inputs, with exception to noteSquareEnd
         if (!bypass)
-        {   
-            if (Math.Abs(accuracy) > baseExpectedWindow)
+        {
+            // expectedWindow is smaller for a note that requires higher accuracy
+            if (Math.Abs(accuracy) > expectedWindow) 
             {
                 return;
             }
         }
+
+        // Convert from seconds to milliseconds
+        accuracy = (float)Math.Round(accuracy * 1000, 0);
 
         if (accuracy > 0)
         {

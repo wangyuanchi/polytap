@@ -30,8 +30,6 @@ public class LogicManagerScript : MonoBehaviour
     [Header("Particles")]
     [SerializeField] private GameObject inputParticles;
 
-    private float expectedWindowMultiplier = 2.5f;
-
     private void OnEnable()
     {
         circleActionReference.action.Enable();
@@ -123,12 +121,23 @@ public class LogicManagerScript : MonoBehaviour
     }
 
     // Updates the text displaying the accuracy of each input
-    private void UpdateAccuracyText(float accuracy, bool bypass)
+    private void UpdateAccuracyText(float accuracy, float expectedWindow, bool bypass)
     {
         if (PlayerPrefs.GetString("Accuracy") == "true")
         {
-            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText((float)Math.Round(accuracy * 1000, 0), bypass);
+            UIManager.GetComponent<UIManagerScript>().UpdateAccuracyText(accuracy, expectedWindow, bypass);
         }
+    }
+
+    // expectedWindow = 100logx, base 10
+    // Only outputs intended result using milliseconds! 
+    private float expectedWindowCalculation(float accuracyWindow)
+    {
+        // Convert from seconds to milliseconds
+        accuracyWindow = accuracyWindow * 1000;
+        float expectedWindow = 100 * (float)Math.Log10(accuracyWindow);
+        // Convert from milliseconds back to seconds
+        return expectedWindow / 1000f;
     }
 
     private void CheckInputCircle(float inputTimeStamp)
@@ -138,36 +147,43 @@ public class LogicManagerScript : MonoBehaviour
         float accuracyWindow = circleTimingsQueue.Peek()["accuracyWindow"];
         // The expected window is where the user is expected to provide an input before the note is missed,
         // needs to scale accordingly to accuracy window (which is a subset of the expected window)
-        float expectedWindow = accuracyWindow * expectedWindowMultiplier;
+        float expectedWindow = expectedWindowCalculation(accuracyWindow);
 
         float requiredTimeStamp = circleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, false);
         
         if (timeFromPerfect <= accuracyWindow)
         {
+            UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false); 
             ProcessInput(true, "Correct Input!");
             inputParticles.GetComponent<InputParticlesScript>().SpawnParticles(timeFromPerfect);
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
         }
         else if (timeFromPerfect <= expectedWindow)
         {
+            UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Circle]");
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
+        }
+        else
+        {
+            // Accuracy text will not reflect accuracy of missed notes
+            // If the input is unexpected (way too early), do nothing
+            return;
         }
     }
 
     private void CheckInputSquareInitial(float inputTimeStamp)
     {
         float accuracyWindow = squareTimingsQueue.Peek()["accuracyWindow"];
-        float expectedWindow = accuracyWindow * expectedWindowMultiplier;
+        float expectedWindow = expectedWindowCalculation(accuracyWindow);
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, false);
 
         // If the first input is correct, destroy noteSquareStart only and wait for second input
         if (timeFromPerfect <= accuracyWindow)
         {
+            UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareStart();
             initialSquareInput = true; // Give a bool flag for the second input such that
                                        // the second input is checked only if the first input is correct
@@ -175,19 +191,24 @@ public class LogicManagerScript : MonoBehaviour
         // If the first input is wrong, process the input and destroy the whole note 
         else if (timeFromPerfect <= expectedWindow)
         {
+            UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (Start)]");
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
         }
+        else { return; }
     }
 
     // This ignores accuracy of the first input
     private void CheckInputSquareFinal(float inputTimeStamp)
     {
         float accuracyWindow = squareTimingsQueue.Peek()["accuracyWindow"];
-        float expectedWindow = accuracyWindow * expectedWindowMultiplier;
+        float expectedWindow = expectedWindowCalculation(accuracyWindow);
         float requiredTimeStamp = squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, true); // Expected input regardless of how accurate it is, hence, bypass expected window check
+
+        // Expected input regardless of how accurate it is, hence, bypass expected window check
+        // However, if the note is missed, no accuracy text will be displayed
+        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, true); 
 
         if (timeFromPerfect <= accuracyWindow)
         {
@@ -200,26 +221,29 @@ public class LogicManagerScript : MonoBehaviour
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (End)]");
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
         }
+        else { return; }
     }
     private void CheckInputTriangle(float inputTimeStamp)
     {
         float accuracyWindow = triangleTimingsQueue.Peek()["accuracyWindow"];
-        float expectedWindow = accuracyWindow * expectedWindowMultiplier;
+        float expectedWindow = expectedWindowCalculation(accuracyWindow);
         float requiredTimeStamp = triangleTimingsQueue.Peek()["timeStamp"];
         float timeFromPerfect = Math.Abs(requiredTimeStamp - inputTimeStamp);
-        UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, false);
 
         if (timeFromPerfect <= accuracyWindow)
         {
+            UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(true, "Correct Input!");
             inputParticles.GetComponent<InputParticlesScript>().SpawnParticles(timeFromPerfect);
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
         }
         else if (timeFromPerfect <= expectedWindow)
         {
+            UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Triangle]");
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
         }
+        else { return; }
     }
 
     // Update is called once per frame
@@ -229,13 +253,13 @@ public class LogicManagerScript : MonoBehaviour
 
         // Missed note checks is based on the fact that a non-missed note would have already been dequeued,
         // and since it is not, it must be missed
-        if (circleTimingsQueue.Count > 0 && currentTimeStamp > circleTimingsQueue.Peek()["timeStamp"] + (circleTimingsQueue.Peek()["accuracyWindow"] * expectedWindowMultiplier))
+        if (circleTimingsQueue.Count > 0 && currentTimeStamp > circleTimingsQueue.Peek()["timeStamp"] + expectedWindowCalculation(circleTimingsQueue.Peek()["accuracyWindow"]))
         {
             DequeueNote(circleObjectsQueue, circleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Circle]");
         }
         // Only a missed note if the first input has not yet be detected, because the note is not dequeued upon first input check
-        if (squareTimingsQueue.Count > 0 && !initialSquareInput && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + (squareTimingsQueue.Peek()["accuracyWindow"] * expectedWindowMultiplier))
+        if (squareTimingsQueue.Count > 0 && !initialSquareInput && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]))
         {
             // Prevent 2 notes being shown and causing confusion
             // Only the first note will pass the judgement line and signify the loss of 1 health
@@ -243,14 +267,14 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Square (Start)]");
         }
-        if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + (squareTimingsQueue.Peek()["accuracyWindow"] * expectedWindowMultiplier))
+        if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]))
         {
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Square (End)]");
             // Invalidate onSquareRelease because note has already been missed 
             initialSquareInput = false;
         }
-        if (triangleTimingsQueue.Count > 0 && currentTimeStamp > triangleTimingsQueue.Peek()["timeStamp"] + (triangleTimingsQueue.Peek()["accuracyWindow"] * expectedWindowMultiplier))
+        if (triangleTimingsQueue.Count > 0 && currentTimeStamp > triangleTimingsQueue.Peek()["timeStamp"] + expectedWindowCalculation(triangleTimingsQueue.Peek()["accuracyWindow"]))
         {
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Triangle]");

@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c13f0d55a99aee542998fd041812cd7c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d51b42644ee250e469feacadc90d148b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.6666667}
   m_FlipX: 0
   m_FlipY: 0
@@ -157,7 +157,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 450d6be1215a84e438ce315472283c25, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 696ecba26cfe99045852b092ebe36e8d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.6666667}
   m_FlipX: 0
   m_FlipY: 0
@@ -214,16 +214,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d11b14b1cbeda3b42b957b07025500ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noteSquareStart10: {fileID: 21300000, guid: d51b42644ee250e469feacadc90d148b, type: 3}
   noteSquareStart25: {fileID: 21300000, guid: f2a04681ed0c10a48ab33c496870956b, type: 3}
   noteSquareStart50: {fileID: 21300000, guid: 0febdc7c1b321114ab261f0ef8966d09, type: 3}
   noteSquareStart75: {fileID: 21300000, guid: 548fbfd0ce410144ca0436a962b79083, type: 3}
   noteSquareStart100: {fileID: 21300000, guid: fde7deb42718d114084e51716534d565, type: 3}
-  noteSquareEnd10: {fileID: 21300000, guid: 696ecba26cfe99045852b092ebe36e8d, type: 3}
+  noteSquareStart125: {fileID: 21300000, guid: fcf57c94bc11faa4b84e620faa90d3e1, type: 3}
   noteSquareEnd25: {fileID: 21300000, guid: b241880149df293489c2cb6588c84f7d, type: 3}
   noteSquareEnd50: {fileID: 21300000, guid: 19e5d36b2ea96564aa46a017eeb7ee51, type: 3}
   noteSquareEnd75: {fileID: 21300000, guid: f37a863a4b6cb484eaa093b4d854c682, type: 3}
   noteSquareEnd100: {fileID: 21300000, guid: ed2ca0aa6ddc70b45a6eba5e8121c680, type: 3}
+  noteSquareEnd125: {fileID: 21300000, guid: f06288b76e82bd948ac4ddb8ed25f317, type: 3}
   timeSpawnToJudgement: 0
   defaultTimeSpawnToJudgement: 0
   holdDuration: 0
