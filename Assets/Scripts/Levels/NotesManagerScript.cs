@@ -45,7 +45,7 @@ public class NotesManagerScript : MonoBehaviour
         string levelName = SceneManager.GetActiveScene().name;
         string filepath = $"Assets\\Resources\\{levelName}.csv";
         beatMap = MarkersProcessingScript.ProcessMarkers(filepath);
-
+        
         noteSpeed = PlayerPrefs.GetInt("Note Speed");
 
         // Non-practice mode spawning, practice mode spawning is done in PracticeManagerScript
@@ -58,14 +58,14 @@ public class NotesManagerScript : MonoBehaviour
     // For checking the correctness of the beatmap
     private string BeatMapToString(List<Dictionary<string, string>> beatMap)
     {
-        string beatMapString = "";
+        string beatMapString = "[NEW BEATMAP LOADED]\n";
         foreach (var dict in beatMap)
         {
-            beatMapString += "[New Note] ";
             foreach (var kvp in dict)
             {
-                beatMapString += $"Key: {kvp.Key}, Value: {kvp.Value} ";
+                beatMapString += $"{kvp.Key}: {kvp.Value}, ";
             }
+            beatMapString += "\n";
         }
         return beatMapString; 
     }
@@ -131,18 +131,21 @@ public class NotesManagerScript : MonoBehaviour
     private void SpawnNote(Dictionary<string, string> note, bool preSpawn, float timeSkipped)
     {
         GameObject newNote;
+
         // Example: If the player is always 10ms late on every note,
         // global offset will be -10ms and every note needs to be detected 10ms later.
         // Hence, the global offset needs to be DEDUCTED from the normal timeStamp in the notesTimingsQueue
         float globalOffset = (float)PlayerPrefs.GetInt("Global Offset") / 1000; // Convert ms to s
+
         // [PRACTICE MODE] Need to include timeSkipped for prespawns if not it will base off old timestamps
         float noteTimeStamp = float.Parse(note["timeStamp"]) - timeSkipped;
 
         if (note["typeOfNote"] == "C")
         {
             newNote = Instantiate(noteCircle, transform.position, transform.rotation);
-            newNote.GetComponent<NoteCircleScript>().defaultTimeSpawnToJudgement = noteSpeedTimings[noteSpeed];
 
+            // Give data to note specific script for spawning of note
+            newNote.GetComponent<NoteCircleScript>().defaultTimeSpawnToJudgement = noteSpeedTimings[noteSpeed];
             if (preSpawn)
             {
                 newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = noteTimeStamp;
@@ -151,12 +154,15 @@ public class NotesManagerScript : MonoBehaviour
             {
                 newNote.GetComponent<NoteCircleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
             }
+            newNote.GetComponent<NoteCircleScript>().SetSprite(float.Parse(note["accuracyWindow"]));
 
+            // Give data to logic manager script for input processing
             logicManager.GetComponent<LogicManagerScript>().circleObjectsQueue.Enqueue(newNote);
             logicManager.GetComponent<LogicManagerScript>().circleTimingsQueue.Enqueue
                 (
                     new Dictionary<string, float>
                     {
+                        { "accuracyWindow", float.Parse(note["accuracyWindow"]) },
                         { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset }
                     }
                 );
@@ -165,9 +171,10 @@ public class NotesManagerScript : MonoBehaviour
         else if (note["typeOfNote"] == "S")
         {
             newNote = Instantiate(noteSquare, transform.position, transform.rotation);
+
+            // Give data to note specific script for spawning of note
             newNote.GetComponent<NoteSquareScript>().holdDuration = float.Parse(note["timeStampRelease"]) - float.Parse(note["timeStamp"]);
             newNote.GetComponent<NoteSquareScript>().defaultTimeSpawnToJudgement = noteSpeedTimings[noteSpeed];
-
             if (preSpawn)
             {
                 newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = noteTimeStamp;
@@ -176,12 +183,15 @@ public class NotesManagerScript : MonoBehaviour
             {
                 newNote.GetComponent<NoteSquareScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
             }
+            newNote.GetComponent<NoteSquareScript>().SetSprite(float.Parse(note["accuracyWindow"]));
 
+            // Give data to logic manager script for input processing
             logicManager.GetComponent<LogicManagerScript>().squareObjectsQueue.Enqueue(newNote);
             logicManager.GetComponent<LogicManagerScript>().squareTimingsQueue.Enqueue
                 (
                     new Dictionary<string, float>
                     {
+                        { "accuracyWindow", float.Parse(note["accuracyWindow"]) },
                         { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset },
                         { "duration", float.Parse(note["timeStampRelease"]) - float.Parse(note["timeStamp"]) }
                     }
@@ -191,8 +201,9 @@ public class NotesManagerScript : MonoBehaviour
         else if (note["typeOfNote"] == "T")
         {
             newNote = Instantiate(noteTriangle, transform.position, transform.rotation);
-            newNote.GetComponent<NoteTriangleScript>().defaultTimeSpawnToJudgement = noteSpeedTimings[noteSpeed];
 
+            // Give data to note specific script for spawning of note
+            newNote.GetComponent<NoteTriangleScript>().defaultTimeSpawnToJudgement = noteSpeedTimings[noteSpeed];
             if (preSpawn)
             {
                 newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteTimeStamp;
@@ -201,12 +212,15 @@ public class NotesManagerScript : MonoBehaviour
             {
                 newNote.GetComponent<NoteTriangleScript>().timeSpawnToJudgement = noteSpeedTimings[noteSpeed];
             }
+            newNote.GetComponent<NoteTriangleScript>().SetSprite(float.Parse(note["accuracyWindow"]));
 
+            // Give data to logic manager script for input processing
             logicManager.GetComponent<LogicManagerScript>().triangleObjectsQueue.Enqueue(newNote);
             logicManager.GetComponent<LogicManagerScript>().triangleTimingsQueue.Enqueue
                 (
                     new Dictionary<string, float>
                     {
+                        { "accuracyWindow", float.Parse(note["accuracyWindow"]) },
                         { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset },
                     }
                 );

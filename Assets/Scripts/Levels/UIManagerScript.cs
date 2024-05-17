@@ -334,6 +334,7 @@ public class UIManagerScript : MonoBehaviour
 
     public void TransitionToScene(string levelName)
     {
+        StopCoroutine(UpdateProgressPercentageCoroutine); // Fix bug where the checkpoint percentage would blink out before scene restarts
         // Reset first attempt so that transition is loaded in the future
         firstAttempt = true;
         // [PRACTICE MODE] Reset so that practice and checkpoint is not loaded in the future
@@ -357,17 +358,20 @@ public class UIManagerScript : MonoBehaviour
         PracticeManagerScript.checkpointTimeStamp = 0f;
     }
 
-    public void UpdateAccuracyText(float accuracy, bool bypass)
+    public void UpdateAccuracyText(float accuracy, float expectedWindow, bool bypass)
     {
         // Do not show accuracy for unexpected inputs, with exception to noteSquareEnd
         if (!bypass)
-        {   
-            // accuracy is in ms but expectedWindow is in seconds
-            if (Math.Abs(accuracy) > logicManager.GetComponent<LogicManagerScript>().expectedWindow * 1000)
+        {
+            // expectedWindow is smaller for a note that requires higher accuracy
+            if (Math.Abs(accuracy) > expectedWindow) 
             {
                 return;
             }
         }
+
+        // Convert from seconds to milliseconds
+        accuracy = (float)Math.Round(accuracy * 1000, 0);
 
         if (accuracy > 0)
         {

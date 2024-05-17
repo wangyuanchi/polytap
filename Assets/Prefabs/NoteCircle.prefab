@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 65594e188c6ea174e8fc3582452253fd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 438ee22c7ff6b8e41b9c5d492fb911e4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.6666667}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,5 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb1bde966fad5c945be21585cd4201b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  noteCircle25: {fileID: 21300000, guid: 53ff29a4a47da2a4fb1c437a0f77a5f2, type: 3}
+  noteCircle50: {fileID: 21300000, guid: 3b48513bd8dd12f4c83ec8472b1b5bf8, type: 3}
+  noteCircle75: {fileID: 21300000, guid: 2473390d23d08aa46ac162de1a63a8a9, type: 3}
+  noteCircle100: {fileID: 21300000, guid: dde245f53cf81504b9d688d714787000, type: 3}
+  noteCircle125: {fileID: 21300000, guid: 2b2bbd1efb909ab4ca6725ef3d09f7a2, type: 3}
   timeSpawnToJudgement: 0
-  noteSpeedTiming: 0
+  defaultTimeSpawnToJudgement: 0
