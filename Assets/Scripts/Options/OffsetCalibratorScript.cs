@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,10 @@ public class OffsetCalibratorScript : MonoBehaviour
 
     [Header("Input Actions")]
     [SerializeField] private InputActionReference circleActionReference;
+
+    [Header("Text")]
+    [SerializeField] TMP_Text accuracyText;
+    [SerializeField] TextMeshProUGUI numberText;
 
     private Queue<GameObject> noteQueue = new Queue<GameObject>();
     private Queue<float> timingQueue = new Queue<float>();
@@ -47,6 +52,7 @@ public class OffsetCalibratorScript : MonoBehaviour
                 new WaitForSeconds(4);
                 average = totalTime * 1000 / 10;
                 PlayerPrefs.SetInt("Global Offset", (int)average);
+                numberText.text = ((int)average).ToString();
                 calibrationMetronome.Stop();
                 lobbyMusic.Play();
                 circleActionReference.action.performed -= OnCircle;
@@ -60,7 +66,7 @@ public class OffsetCalibratorScript : MonoBehaviour
                 newNote.transform.SetParent(gameObject.transform, false);
                 noteQueue.Enqueue(newNote);
                 timingQueue.Dequeue();
-                optimalTiming = Time.time + 1;
+                optimalTiming = Time.time + (60f / 100f) * 2.5f;  //Note takes 2.5??? beats to reach middle line from spawning
                 timingQueue.Enqueue(timeToWait);
                 timer = 0;
                 counter++;
@@ -72,9 +78,10 @@ public class OffsetCalibratorScript : MonoBehaviour
     private void OnCircle(InputAction.CallbackContext context)
     {
         float timing = Time.time;
-        Debug.Log(optimalTiming - timing);
         totalTime += optimalTiming - timing;
-        Debug.Log(totalTime);
+        float accuracy = Mathf.Round((optimalTiming - timing) * 1000);
+        if (accuracy > 0) { accuracyText.text = "+" + accuracy.ToString() + "ms"; }
+        else { accuracyText.text = accuracy.ToString() + "ms"; }
         if (noteQueue.Count != 0)
         {
             Destroy(noteQueue.Dequeue());

@@ -16,18 +16,20 @@ public class CalibrationNoteScript : MonoBehaviour
         gameObject.SetActive(true);
         start = transform.position;
         end = new Vector3(start.x-1000,start.y,start.z);
-        float timeToMove = 2;
+        float timeToMove = (60f / 100f) * 5f;
         StartCoroutine(MoveToPosition(transform, end, timeToMove));
     }
 
+    private float fraction;
     private IEnumerator MoveToPosition(Transform transform, Vector3 position, float timeToMove)
     {
         var currentPos = transform.position;
         var t = 0f;
-        while (t <= 1f)
+        while (fraction <= 1f)
         {
-            t += Time.deltaTime / timeToMove;
-            transform.position = Vector3.Lerp(currentPos, position, t);
+            t += Time.deltaTime;
+            fraction = t / timeToMove;
+            transform.position = Vector3.Lerp(currentPos, position, fraction);
             yield return null;
         }
         transform.position = position;
