@@ -1,90 +1,147 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class OffsetCalibratorScript : MonoBehaviour
 {
-    [Header("Notes")]
-    [SerializeField] GameObject calibrationNote;
+    [Header("Calibration")]
+    [SerializeField] private GameObject calibrationNote;
+    [SerializeField] private TMP_Text accuracyText;
+    private GameObject newCalibrationNote;
 
-    [Header("Audio")]
-    [SerializeField] AudioSource calibrationMetronome;
-    [SerializeField] AudioSource lobbyMusic;
+    [Header("Hidden UI")]
+    [SerializeField] private GameObject backButton;
+    [SerializeField] private GameObject nextButton;
+
+    [Header("Audio Source")]
+    [SerializeField] private AudioSource calibrationMetronome;
 
     [Header("Input Actions")]
-    [SerializeField] private InputActionReference circleActionReference;
+    [SerializeField] private InputActionReference calibrationActionReference;
 
-    [Header("Text")]
-    [SerializeField] TMP_Text accuracyText;
-    [SerializeField] TextMeshProUGUI numberText;
+    [Header("Sliders")]
+    [SerializeField] private GameObject globalOffsetSlider;
 
-    private Queue<GameObject> noteQueue = new Queue<GameObject>();
-    private Queue<float> timingQueue = new Queue<float>();
+    // The time in seconds between 4 notes of 100bpm
+    private float interval = (60f / 100f) * 4f;
 
-    private float timer = 0;
-    private float timeToWait;
-    private float totalTime;
-    private float average;
-    private float counter = 0;
-    Coroutine calibration;
+    // The "perfect" timing where an input would result in +0ms offset
+    // Can be constantly updated and referred directly because only 1 note is present at a time
+    private float optimalTiming;
+
+    // A list of user inputs that is within the accepted range of offsets
+    private List<float> inputTimings = new List<float>(); 
+
     private void OnEnable()
     {
-        gameObject.SetActive(true);
-        float startTime = Time.time;
-        timeToWait = (60f / 100f) * 4f;      //amount of seconds between 4 notes of 100bpm
-        timingQueue.Enqueue(timeToWait);
-        calibrationMetronome.Play();
-        lobbyMusic.Stop();
-        calibration = StartCoroutine(startCalibration());
-        circleActionReference.action.Enable();
-        circleActionReference.action.performed += OnCircle;
+        calibrationActionReference.action.Enable();
+        calibrationActionReference.action.performed += OnInput;
+
+        StartCoroutine(StartCalibration());
     }
 
-    private IEnumerator startCalibration()
+    private void OnDisable()
     {
-        while (true)
+        calibrationActionReference.action.performed -= OnInput;
+        calibrationActionReference.action.Disable();
+    }
+
+    private IEnumerator StartCalibration()
+    {
+        calibrationMetronome.Play();
+
+        // Reset accuracy text (required if 2 or more calibrations)
+        accuracyText.text = "+0ms";
+
+        float timer = 0;
+        int totalNotesSpawned = 0;
+
+        while (totalNotesSpawned < 10)
         {
             timer += Time.deltaTime;
-            if (counter >= 10)
+                
+            if (timer >= interval)
             {
-                new WaitForSeconds(4);
-                average = totalTime * 1000 / 10;
-                PlayerPrefs.SetInt("Global Offset", (int)average);
-                numberText.text = ((int)average).ToString();
-                calibrationMetronome.Stop();
-                lobbyMusic.Play();
-                circleActionReference.action.performed -= OnCircle;
-                circleActionReference.action.Disable();
-                gameObject.SetActive(false);
-                yield break;
-            }
-            if (timer > timingQueue.Peek())
-            {
-                GameObject newNote = Instantiate(calibrationNote, new Vector3(500, 0, 0), new Quaternion(0,0,0,0)) ;
-                newNote.transform.SetParent(gameObject.transform, false);
-                noteQueue.Enqueue(newNote);
-                timingQueue.Dequeue();
-                optimalTiming = Time.time + (60f / 100f) * 2.5f;  //Note takes 2.5??? beats to reach middle line from spawning
-                timingQueue.Enqueue(timeToWait);
+                // Spawn the note at x = 500, and it will move 1000 units to x = -500 (opposite)
+                newCalibrationNote = Instantiate(calibrationNote, new Vector3(500, 0, 0), Quaternion.identity);
+
+                // Sets the parent of the note to be this game object, but maintain its current position
+                newCalibrationNote.transform.SetParent(gameObject.transform, false);
+
+                // Only after setting positions then start moving the object
+                newCalibrationNote.GetComponent<CalibrationNoteScript>().StartMove();
+
+                optimalTiming = Time.time + (60f / 100f) * 2f;
+
+                // Enable input because it has been disabled previously in OnInput
+                calibrationActionReference.action.Enable();
+
                 timer = 0;
-                counter++;
+                totalNotesSpawned++;
             }
             yield return null;
         }
+
+        // For last bar of 4 beats to complete, then stop metronome
+        yield return new WaitForSeconds(interval);
+        calibrationMetronome.Stop();
+
+        // globalOffset default to 0 if no inputs have been made, prevent out of bounds error
+        int globalOffset = 0;
+        if (inputTimings.Any())
+        { globalOffset = (int)inputTimings.Average(); }
+
+        // For player to know that global offset has been updated
+        if (globalOffset >= 0) { accuracyText.text = $"Your global offset has been set to +{globalOffset}ms."; }
+        else { accuracyText.text = $"Your global offset has been set to {globalOffset}ms."; }
+
+        // Update preferences and slider
+        PlayerPrefs.SetInt("Global Offset", globalOffset);
+        globalOffsetSlider.GetComponent<GlobalOffsetScript>().LoadGlobalOffset();
+
+        yield return new WaitForSeconds(3);
+
+        ShowCalibrationUI(false);
     }
-    float optimalTiming;
-    private void OnCircle(InputAction.CallbackContext context)
+
+    private void OnInput(InputAction.CallbackContext context)
     {
-        float timing = Time.time;
-        totalTime += optimalTiming - timing;
-        float accuracy = Mathf.Round((optimalTiming - timing) * 1000);
-        if (accuracy > 0) { accuracyText.text = "+" + accuracy.ToString() + "ms"; }
-        else { accuracyText.text = accuracy.ToString() + "ms"; }
-        if (noteQueue.Count != 0)
+        float inputTiming = Time.time;
+        float accuracy = Mathf.Round((optimalTiming - inputTiming) * 1000); // in milliseconds
+
+        // Do not process inputs above the accepted offset range
+        if (Mathf.Abs(accuracy) > 200f) return;
+
+        // Prevent double inputs if an input has already been accepted
+        calibrationActionReference.action.Disable();
+
+        // Add all accepted inputs into a list
+        inputTimings.Add(accuracy);
+
+        // Display accuracy text
+        if (accuracy > 0) { accuracyText.text = $"+{accuracy}ms"; }
+        else { accuracyText.text = $"{accuracy}ms"; }
+    }
+
+    public void ShowCalibrationUI(bool show) 
+    {
+        if (show)
         {
-            Destroy(noteQueue.Dequeue());
+            LobbyMusicScript.instance.StopLobbyMusic();
         }
+        else
+        {
+            LobbyMusicScript.instance.PlayLobbyMusic();
+        }
+
+        // Destroy the note if the user leaves the calibration prematurely to prevent the note being there on during a new calibration session
+        if (newCalibrationNote != null) { Destroy(newCalibrationNote); }
+
+        gameObject.SetActive(show);
+        nextButton.SetActive(!show);
+        backButton.SetActive(!show);
     }
 }
