@@ -52,14 +52,11 @@ public class OffsetCalibratorScript : MonoBehaviour
     private IEnumerator StartCalibration()
     {
         calibrationMetronome.Play();
-
+        
         // Without this buffer, the metronome is expected to be synced with the note, but it is always late
         // Adding this buffer delays the spawning of the note (does not affect optimalTiming has it would also be shifted)
-        // Could be due to unity engine lag
-        yield return new WaitForSeconds(0.26f); 
-
-        // Reset accuracy text (required if 2 or more calibrations)
-        accuracyText.text = "+0ms";
+        // Sound is shown to be played in AudioMixer but only heard after a few frames
+        yield return new WaitForSeconds(0.265f); 
 
         float timer = 0;
         int totalNotesSpawned = 0;
@@ -111,6 +108,9 @@ public class OffsetCalibratorScript : MonoBehaviour
         yield return new WaitForSeconds(3);
 
         ShowCalibrationUI(false);
+
+        // Reset accuracy text (required if 2 or more calibrations)
+        accuracyText.text = "+0ms";
     }
 
     private void OnInput(InputAction.CallbackContext context)
