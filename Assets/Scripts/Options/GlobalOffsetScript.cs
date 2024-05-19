@@ -16,15 +16,15 @@ public class GlobalOffsetScript : MonoBehaviour
         LoadGlobalOffset();
     }
 
-    private void LoadGlobalOffset()
+    public void LoadGlobalOffset()
     {
         numberText.text = PlayerPrefs.GetInt("Global Offset").ToString();
-        globalOffsetSlider.value = PlayerPrefs.GetInt("Global Offset") / 5; // Need to convert back to normal slider divisions
+        globalOffsetSlider.value = PlayerPrefs.GetInt("Global Offset"); 
     }
 
     public void SetGlobalOffset()
     {
-        PlayerPrefs.SetInt("Global Offset", (int)globalOffsetSlider.value * 5); // Shifts by divisions of 5ms
-        numberText.text = ((int)globalOffsetSlider.value * 5).ToString();
+        PlayerPrefs.SetInt("Global Offset", (int)globalOffsetSlider.value);
+        numberText.text = ((int)globalOffsetSlider.value).ToString();
     }
 }
