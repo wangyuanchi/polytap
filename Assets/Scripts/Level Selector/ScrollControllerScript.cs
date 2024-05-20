@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
 {
     [Header("General")]
-    [SerializeField] private int maxPage;
-    private int currentPage;
-    private Vector3 targetPos;
     [SerializeField] private Vector3 pageStep;
-    [SerializeField] private RectTransform levelPagesRect;
+    [SerializeField] private RectTransform levelsRectTransform;
+    private int currentPage;
+    private int maxPage;
+    private Vector3 targetPos;
+
+    [Header("Navigation")]
+    [SerializeField] private Button nextButton;
+    [SerializeField] private Button prevButton;
 
     [Header("Animation")]
     [SerializeField] private float tweenTime;
@@ -21,14 +26,16 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
     void Start()
     {
         currentPage = 1;
-        targetPos = levelPagesRect.localPosition;
+        maxPage = levelsRectTransform.childCount;
+        targetPos = levelsRectTransform.localPosition;
+        prevButton.interactable = false;
         dragThreshold = Screen.width / 15;
     }
 
     public void Next()
     {
         if (currentPage < maxPage)
-        { 
+        {
             currentPage++;
             targetPos += pageStep;
             MovePage();
@@ -47,7 +54,11 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
     
     private void MovePage()
     {
-        levelPagesRect.LeanMoveLocal(targetPos, tweenTime).setEase(tweenType);
+        levelsRectTransform.LeanMoveLocal(targetPos, tweenTime).setEase(tweenType);
+        nextButton.interactable = true;
+        prevButton.interactable = true;
+        if (currentPage == maxPage) nextButton.interactable = false;
+        if (currentPage == 1) prevButton.interactable = false;
     }
 
     public void OnEndDrag(PointerEventData eventData)

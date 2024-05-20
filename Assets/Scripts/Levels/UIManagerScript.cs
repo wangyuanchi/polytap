@@ -43,6 +43,10 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private GameObject normalModeProgressBar;
     [SerializeField] private GameObject hardModeProgressBar;
 
+    [Header("Attempts UI")]
+    [SerializeField] private GameObject attemptsUI;
+    [SerializeField] private TMP_Text attemptsText;
+
     [Header("Game Over")]
     [SerializeField] private GameObject levelCompleteOverlay;
     [SerializeField] private GameObject newBestOverlay;
@@ -136,13 +140,29 @@ public class UIManagerScript : MonoBehaviour
     // Increasing total number of attempts every time the scene is loaded
     private void SetTotalAttempts()
     {
-        // [PRACTICE MODE] Do not increase attempts count if in practice mode
-        if (PracticeManagerScript.practiceMode == true) return;
+        // [PRACTICE MODE] Do not increase attempts count or show attempts text if in practice mode
+        if (PracticeManagerScript.practiceMode == true)
+        {
+            attemptsUI.SetActive(false);
+            return;
+        }
 
         string key;
 
         key = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-TA";
-        PlayerPrefs.SetInt(key, PlayerPrefs.GetInt(key) + 1);
+        int totalAttempts = PlayerPrefs.GetInt(key) + 1; // Includes the current attempt
+        PlayerPrefs.SetInt(key, totalAttempts);
+
+        // Set attemps text
+        if (PlayerPrefs.GetString("Attempts") == "true")
+        {
+            attemptsUI.SetActive(true);
+            attemptsText.text = $"Attempt {totalAttempts}";
+        }
+        else
+        {
+            attemptsUI.SetActive(false);
+        }
     }
 
     // Load and set progress bars
@@ -151,14 +171,16 @@ public class UIManagerScript : MonoBehaviour
         string levelName = SceneManager.GetActiveScene().name;
         float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
         float hardModeHighScore = PlayerPrefs.GetFloat($"{levelName}-H-HS");
+        int normalModeAttempts = PlayerPrefs.GetInt($"{levelName}-N-TA");
+        int hardModeAttempts = PlayerPrefs.GetInt($"{levelName}-H-TA");
 
         // Set progress bar fill
         normalModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = normalModeHighScore / 100;
         hardModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = hardModeHighScore / 100;
 
         // Set progress text
-        normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = normalModeHighScore.ToString() + "%";
-        hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = hardModeHighScore.ToString() + "%";
+        normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{normalModeHighScore}% ({normalModeAttempts})";
+        hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{hardModeHighScore}% ({hardModeAttempts})";
     }
 
     private IEnumerator UpdateProgressPercentage()

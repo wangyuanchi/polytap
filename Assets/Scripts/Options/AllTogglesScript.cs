@@ -9,6 +9,7 @@ public class AllTogglesScript : MonoBehaviour
     [SerializeField] private Toggle vignetteToggle;
     [SerializeField] private Toggle particlesToggle;
     [SerializeField] private Toggle accuracyToggle;
+    [SerializeField] private Toggle attemptsToggle;
 
     private Dictionary<string, Toggle> prefToggleDict = new Dictionary<string, Toggle>();
 
@@ -19,6 +20,7 @@ public class AllTogglesScript : MonoBehaviour
         prefToggleDict.Add("Vignette", vignetteToggle);
         prefToggleDict.Add("Particles", particlesToggle);
         prefToggleDict.Add("Accuracy", accuracyToggle);
+        prefToggleDict.Add("Attempts", attemptsToggle);
         LoadAllToggles();
     }
 

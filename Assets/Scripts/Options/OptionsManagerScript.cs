@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Audio;
 
 public class OptionsManagerScript : MonoBehaviour
@@ -10,9 +11,10 @@ public class OptionsManagerScript : MonoBehaviour
     [SerializeField] private AudioMixer audioMixer;
 
     [Header("Navigation")]
-    [SerializeField] private GameObject NextButton;
-    [SerializeField] private GameObject PrevButton;
+    [SerializeField] private Button NextButton;
+    [SerializeField] private Button PrevButton;
     [SerializeField] private GameObject GameplayInterface;
+    [SerializeField] private GameObject EffectsAndStatsInterface;
     [SerializeField] private GameObject KeybindsInterface;
     [SerializeField] private GameObject AudioInterface;
     [SerializeField] private int totalPage;
@@ -25,7 +27,6 @@ public class OptionsManagerScript : MonoBehaviour
         LoadAudioVolume();
 
         // Make sure correct page at scene start
-        PrevButton.SetActive(false);
         ShowPage(1);
     }
 
@@ -44,51 +45,43 @@ public class OptionsManagerScript : MonoBehaviour
     {
         currentPage++;
         ShowPage(currentPage);
-
-        if (currentPage != 1)
-        {
-            PrevButton.SetActive(true);
-        }
-
-        if (currentPage == totalPage)
-        {
-            NextButton.SetActive(false);
-        }
     }
 
     public void Prev()
     {
         currentPage--;
         ShowPage(currentPage);
-
-        if (currentPage == 1)
-        {
-            PrevButton.SetActive(false);
-        }
-
-        if (currentPage != totalPage)
-        {
-            NextButton.SetActive(true);
-        }
     }
 
     private void ShowPage(int currentPage)
     {
+        // Prev and Next Buttons
+        NextButton.interactable = true;
+        PrevButton.interactable = true;
+
+        // Interfaces
         GameplayInterface.SetActive(false);
+        EffectsAndStatsInterface.SetActive(false);
         KeybindsInterface.SetActive(false);
         AudioInterface.SetActive(false);
 
         if (currentPage == 1)
         {
             GameplayInterface.SetActive(true);
+            PrevButton.interactable = false;
         }
         else if (currentPage == 2)
         {
-            KeybindsInterface.SetActive(true);
+            EffectsAndStatsInterface.SetActive(true);
         }
         else if (currentPage == 3)
         {
+            KeybindsInterface.SetActive(true);
+        }
+        else if (currentPage == 4)
+        {
             AudioInterface.SetActive(true);
+            NextButton.interactable= false;
         }
     }
 }
