@@ -35,6 +35,7 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetString("Particles", PlayerPrefs.GetString("Particles", "true"));
         PlayerPrefs.SetString("Accuracy", PlayerPrefs.GetString("Accuracy", "false"));
         PlayerPrefs.SetString("Attempts", PlayerPrefs.GetString("Attempts", "true"));
+        PlayerPrefs.SetString("DebugLog", PlayerPrefs.GetString("DebugLog", "false"));
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Lobby Music", PlayerPrefs.GetString("Lobby Music", "true"));

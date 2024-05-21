@@ -30,6 +30,10 @@ public class LogicManagerScript : MonoBehaviour
     [Header("Particles")]
     [SerializeField] private GameObject inputParticles;
 
+    [Header("Options")]
+    [SerializeField] private GameObject debugLog;
+    private string debugLogToggle;
+
     private void OnEnable()
     {
         circleActionReference.action.Enable();
@@ -163,6 +167,7 @@ public class LogicManagerScript : MonoBehaviour
         {
             UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Circle]");
+            DebugLog("Circle", (float)Math.Round((requiredTimeStamp - inputTimeStamp) * 1000));
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
         }
         else
@@ -193,6 +198,7 @@ public class LogicManagerScript : MonoBehaviour
         {
             UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (Start)]");
+            DebugLog("SquareInitial", (float)Math.Round((requiredTimeStamp - inputTimeStamp) * 1000));
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
         }
         else { return; }
@@ -219,6 +225,7 @@ public class LogicManagerScript : MonoBehaviour
         else if (timeFromPerfect <= expectedWindow)
         {
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (End)]");
+            DebugLog("SquareFinal", (float)Math.Round((requiredTimeStamp - inputTimeStamp) * 1000));
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
         }
         else { return; }
@@ -241,6 +248,7 @@ public class LogicManagerScript : MonoBehaviour
         {
             UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Triangle]");
+            DebugLog("Triangle", (float)Math.Round((requiredTimeStamp - inputTimeStamp)*1000));
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
         }
         else { return; }
@@ -255,6 +263,7 @@ public class LogicManagerScript : MonoBehaviour
         // and since it is not, it must be missed
         if (circleTimingsQueue.Count > 0 && currentTimeStamp > circleTimingsQueue.Peek()["timeStamp"] + expectedWindowCalculation(circleTimingsQueue.Peek()["accuracyWindow"]))
         {
+            DebugLog("Circle", (float)Math.Round(expectedWindowCalculation(circleTimingsQueue.Peek()["accuracyWindow"]) * 1000));
             DequeueNote(circleObjectsQueue, circleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Circle]");
         }
@@ -263,12 +272,14 @@ public class LogicManagerScript : MonoBehaviour
         {
             // Prevent 2 notes being shown and causing confusion
             // Only the first note will pass the judgement line and signify the loss of 1 health
-            squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd(); 
+            squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd();
+            DebugLog("SquareInitial", (float)Math.Round(expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]) * 1000));
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Square (Start)]");
         }
         if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]))
         {
+            DebugLog("SquareFinal", (float)Math.Round(expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]) * 1000));
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Square (End)]");
             // Invalidate onSquareRelease because note has already been missed 
@@ -276,6 +287,7 @@ public class LogicManagerScript : MonoBehaviour
         }
         if (triangleTimingsQueue.Count > 0 && currentTimeStamp > triangleTimingsQueue.Peek()["timeStamp"] + expectedWindowCalculation(triangleTimingsQueue.Peek()["accuracyWindow"]))
         {
+            DebugLog("Triangle", (float)Math.Round(expectedWindowCalculation(triangleTimingsQueue.Peek()["accuracyWindow"]) * 1000));
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Triangle]");
         }
@@ -317,5 +329,17 @@ public class LogicManagerScript : MonoBehaviour
         triangleTimingsQueue.Clear();
 
         EnableShapeInputs(); 
+    }
+
+    //Takes in the type of note and timing that was missed, then sends it to the debugLog object to be processed
+    public void DebugLog(string type, float timing)
+    {
+        debugLogToggle = PlayerPrefs.GetString("DebugLog");
+        if (debugLogToggle == "true")
+        {
+            float progressPercentage = UIManager.GetComponent<UIManagerScript>().progressPercentage;
+            string text_report = $"Missed {type} by {timing}ms at {progressPercentage}%";
+            debugLog.GetComponent<DebugLogScript>().AddText(text_report);
+        }
     }
 }
