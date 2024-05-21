@@ -537,7 +537,8 @@ MonoBehaviour:
   squareActionReference: {fileID: -2785143678684464852, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
   triangleActionReference: {fileID: -3585319890446463770, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
   inputParticles: {fileID: 2047466605}
-  debugLog: {fileID: 2048017136}
+  logsUI: {fileID: 2048017136}
+  currentProgressText: {fileID: 2046315652}
 --- !u!4 &123170252
 Transform:
   m_ObjectHideFlags: 0
@@ -3275,10 +3276,10 @@ RectTransform:
   m_Children:
   - {fileID: 1463915203}
   - {fileID: 349886117}
-  - {fileID: 669905978}
-  - {fileID: 1727056111}
   - {fileID: 1846505603}
+  - {fileID: 1727056111}
   - {fileID: 2048017137}
+  - {fileID: 669905978}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3806,7 +3807,7 @@ GameObject:
   - component: {fileID: 1270439350}
   - component: {fileID: 1270439349}
   m_Layer: 5
-  m_Name: DebugText
+  m_Name: LogsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3828,8 +3829,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -700, y: 180}
-  m_SizeDelta: {x: 500, y: 300}
+  m_AnchoredPosition: {x: -687.5, y: 270}
+  m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1270439349
 MonoBehaviour:
@@ -3853,15 +3854,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 91a663738151da14bab606918de74ca0, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 47e2548f60b42404583b9ee8970cb6dc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4283504163
+  m_fontColor: {r: 0.13725491, g: 0.08627451, b: 0.31764707, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3878,8 +3879,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -10759,12 +10760,12 @@ GameObject:
   - component: {fileID: 2048017137}
   - component: {fileID: 2048017138}
   m_Layer: 5
-  m_Name: DebugUI
+  m_Name: LogsUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2048017137
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10797,8 +10798,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b0d02758325954caf47676d46819cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugLog: {fileID: 2048017136}
-  debugLogText: {fileID: 1270439349}
+  logsUI: {fileID: 2048017136}
+  logsText: {fileID: 1270439349}
 --- !u!1 &2103010089
 GameObject:
   m_ObjectHideFlags: 0
