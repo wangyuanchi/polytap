@@ -171,11 +171,11 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
             if (requiredTimeStamp > inputTimeStamp)
             {
-                Log("Circle", "Too Early", currentProgressText.text);
+                Log("Circle", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }   
             else
             {
-                Log("Circle", "Too Late", currentProgressText.text);
+                Log("Circle", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
         else
@@ -209,11 +209,11 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
             if (requiredTimeStamp > inputTimeStamp)
             {
-                Log("SquareStart", "Too Early", currentProgressText.text);
+                Log("SquareStart", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
             else
             {
-                Log("SquareStart", "Too Late", currentProgressText.text);
+                Log("SquareStart", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
         else { return; }
@@ -243,11 +243,11 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
             if (requiredTimeStamp > inputTimeStamp)
             {
-                Log("SquareEnd", "Too Early", currentProgressText.text);
+                Log("SquareEnd", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
             else
             {
-                Log("SquareEnd", "Too Late", currentProgressText.text);
+                Log("SquareEnd", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
         else { return; }
@@ -273,11 +273,11 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
             if (requiredTimeStamp > inputTimeStamp)
             {
-                Log("Triangle", "Too Early", currentProgressText.text);
+                Log("Triangle", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
             else
             {
-                Log("Triangle", "Too Late", currentProgressText.text);
+                Log("Triangle", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
         else { return; }
@@ -361,11 +361,12 @@ public class LogicManagerScript : MonoBehaviour
     }
 
     // Takes in the type of note, reason for lost health and percentage it happened
-    public void Log(string typeOfNote, string reason, string percentage)
+    public void Log(string typeOfNote, string reason, string percentage, string addOnText = "")
     {
         if (PlayerPrefs.GetString("Logs") == "true")
         {
-            logsUI.GetComponent<LogsScript>().AddLog($"{percentage} - {reason}\n({typeOfNote})");
+            if (addOnText == "") addOnText = "+0ms";
+            logsUI.GetComponent<LogsScript>().AddLog($"{reason}! ({addOnText})\n{typeOfNote} at {percentage}");
         }
     }
 }

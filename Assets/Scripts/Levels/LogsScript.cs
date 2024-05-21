@@ -19,7 +19,7 @@ public class LogsScript : MonoBehaviour
         // On first log, changes text to received text
         // Otherwise, append it as a new line
         if (tempText == "") { tempText = text; }
-        else { tempText += "<br>" + text; }
+        else { tempText += "\n" + text; }
         logsText.text = tempText;
     }
 }
