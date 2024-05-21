@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -29,6 +30,10 @@ public class LogicManagerScript : MonoBehaviour
 
     [Header("Particles")]
     [SerializeField] private GameObject inputParticles;
+
+    [Header("Logs")]
+    [SerializeField] private GameObject logsUI;
+    [SerializeField] private TMP_Text currentProgressText;
 
     private void OnEnable()
     {
@@ -164,6 +169,14 @@ public class LogicManagerScript : MonoBehaviour
             UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Circle]");
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
+            if (requiredTimeStamp > inputTimeStamp)
+            {
+                Log("Circle", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }   
+            else
+            {
+                Log("Circle", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }
         }
         else
         {
@@ -194,6 +207,14 @@ public class LogicManagerScript : MonoBehaviour
             UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (Start)]");
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
+            if (requiredTimeStamp > inputTimeStamp)
+            {
+                Log("SquareStart", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }
+            else
+            {
+                Log("SquareStart", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }
         }
         else { return; }
     }
@@ -220,6 +241,14 @@ public class LogicManagerScript : MonoBehaviour
         {
             ProcessInput(false, "Wrong Input: Too Early/Late [Square (End)]");
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
+            if (requiredTimeStamp > inputTimeStamp)
+            {
+                Log("SquareEnd", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }
+            else
+            {
+                Log("SquareEnd", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }
         }
         else { return; }
     }
@@ -242,6 +271,14 @@ public class LogicManagerScript : MonoBehaviour
             UpdateAccuracyText(requiredTimeStamp - inputTimeStamp, expectedWindow, false);
             ProcessInput(false, "Wrong Input: Too Early/Late [Triangle]");
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
+            if (requiredTimeStamp > inputTimeStamp)
+            {
+                Log("Triangle", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }
+            else
+            {
+                Log("Triangle", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }
         }
         else { return; }
     }
@@ -257,20 +294,23 @@ public class LogicManagerScript : MonoBehaviour
         {
             DequeueNote(circleObjectsQueue, circleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Circle]");
+            Log("Circle", "Missed", currentProgressText.text);
         }
         // Only a missed note if the first input has not yet be detected, because the note is not dequeued upon first input check
         if (squareTimingsQueue.Count > 0 && !initialSquareInput && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]))
         {
             // Prevent 2 notes being shown and causing confusion
             // Only the first note will pass the judgement line and signify the loss of 1 health
-            squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd(); 
+            squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd();
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Square (Start)]");
+            Log("SquareStart", "Missed", currentProgressText.text);
         }
         if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]))
         {
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Square (End)]");
+            Log("SquareEnd", "Missed", currentProgressText.text);
             // Invalidate onSquareRelease because note has already been missed 
             initialSquareInput = false;
         }
@@ -278,6 +318,7 @@ public class LogicManagerScript : MonoBehaviour
         {
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Triangle]");
+            Log("Triangle", "Missed", currentProgressText.text);
         }
     }
 
@@ -317,5 +358,15 @@ public class LogicManagerScript : MonoBehaviour
         triangleTimingsQueue.Clear();
 
         EnableShapeInputs(); 
+    }
+
+    // Takes in the type of note, reason for lost health and percentage it happened
+    public void Log(string typeOfNote, string reason, string percentage, string addOnText = "")
+    {
+        if (PlayerPrefs.GetString("Logs") == "true")
+        {
+            if (addOnText == "") addOnText = "+0ms";
+            logsUI.GetComponent<LogsScript>().AddLog($"{reason}! ({addOnText})\n{typeOfNote} at {percentage}");
+        }
     }
 }

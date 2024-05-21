@@ -25,7 +25,7 @@ public class UIManagerScript : MonoBehaviour
 
     [Header("Progress")]
     [SerializeField] private TMP_Text currentProgressText;
-    private float progressPercentage;
+    public float progressPercentage;
     private Coroutine UpdateProgressPercentageCoroutine;
 
     [Header("Health")]
