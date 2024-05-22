@@ -59,6 +59,11 @@ public class UIManagerScript : MonoBehaviour
     [Header("Particles")]
     [SerializeField] private ParticleSystem ambientParticles;
 
+    [Header("Background")]
+    [SerializeField] private SpriteRenderer background;
+    [SerializeField] private Sprite[] backgroundSprites;
+    private string[] levelArray = { "L1", "L2" };
+
     [Header("Accuracy")]
     [SerializeField] private GameObject accuracyUI;
     [SerializeField] private TMP_Text accuracyText;
@@ -359,6 +364,8 @@ public class UIManagerScript : MonoBehaviour
         StopCoroutine(UpdateProgressPercentageCoroutine); // Fix bug where the checkpoint percentage would blink out before scene restarts
         // Reset first attempt so that transition is loaded in the future
         firstAttempt = true;
+        string level = PlayerPrefs.GetString("Level");
+        background.sprite = backgroundSprites[Array.FindIndex(levelArray, level => level.Contains(level))];
         // [PRACTICE MODE] Reset so that practice and checkpoint is not loaded in the future
         PracticeManagerScript.practiceMode = false;
         PracticeManagerScript.checkpointTimeStamp = 0f;

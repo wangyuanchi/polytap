@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class LevelMusicScript : MonoBehaviour
@@ -10,6 +12,9 @@ public class LevelMusicScript : MonoBehaviour
 
     [Header("Music")]
     [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioClip[] musicClip;
+    //levelArray is used to find the position of the corresponding music clip for that level
+    private string[] levelArray = {"L1","L2"};
 
     [Header("Managers")]
     [SerializeField] private GameObject PracticeManager;
@@ -17,12 +22,15 @@ public class LevelMusicScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Gets the current level, then changes the clip to the one for that level
+        string level = PlayerPrefs.GetString("Level");
+        musicSource.clip = musicClip[Array.FindIndex(levelArray,level => level.Contains(level))];
         // Check for incorrect input
         if (beatMapEndTime < 0 || beatMapEndTime > musicSource.clip.length)
         { Debug.Log("Invalid Beat Map End Time!"); }
 
         // Non-practice mode playing, practice mode playing is done in PracticeManagerScript
-        if (!PracticeManagerScript.practiceMode)
+        if (!PracticeManagerScript.practiceMode)    
         {
             PlayMusic();
         }
