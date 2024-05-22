@@ -14,6 +14,7 @@ public class OffsetCalibratorScript : MonoBehaviour
 
     [Header("Hidden UI")]
     [SerializeField] private GameObject backButton;
+    [SerializeField] private GameObject prevButton;
     [SerializeField] private GameObject nextButton;
 
     [Header("Audio Source")]
@@ -147,6 +148,7 @@ public class OffsetCalibratorScript : MonoBehaviour
         if (newCalibrationNote != null) { Destroy(newCalibrationNote); }
 
         gameObject.SetActive(show);
+        prevButton.SetActive(!show);
         nextButton.SetActive(!show);
         backButton.SetActive(!show);
     }

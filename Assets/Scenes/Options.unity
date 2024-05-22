@@ -5780,6 +5780,7 @@ MonoBehaviour:
   calibrationNote: {fileID: 6996436097488363818, guid: 60883239482db3d41ae2b951cc210353, type: 3}
   accuracyText: {fileID: 465062017}
   backButton: {fileID: 1026759561}
+  prevButton: {fileID: 797785277}
   nextButton: {fileID: 65461040}
   calibrationMetronome: {fileID: 1023721254}
   calibrationActionReference: {fileID: -6020199453101433352, guid: 0537fdc277f2cac4991db1967082c12b, type: 3}
