@@ -63,7 +63,8 @@ public class LevelSelectorManagerScript : MonoBehaviour
     public void TransitionToScene(string levelName)
     {
         sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
-        PlayerPrefs.SetString("Level",levelName.ToString());
+        // Sets the level in a static script so that the managers can reference it for the scriptable objects
+        StaticInformation.level = levelName;
 
         // If not going back to main menu, fade music out and destroy music object
         if (levelName != "Main Menu")

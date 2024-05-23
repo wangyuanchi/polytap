@@ -98,6 +98,10 @@ public class UIManagerScript : MonoBehaviour
             sceneTransition.GetComponent<SceneTransitionScript>().SceneFadeIn(); 
             firstAttempt = false;
         }
+        // Grabs the current level, then references the scriptable object for the background
+        string level = StaticInformation.level;
+        LevelDataScriptableObject scriptableObjectInstance = (LevelDataScriptableObject)Resources.Load<ScriptableObject>($"LevelData\\{level}");
+        background.sprite = scriptableObjectInstance.background;
         LoadAudioVolume();
         LoadDifficulty();
         LoadParticles();
@@ -364,8 +368,6 @@ public class UIManagerScript : MonoBehaviour
         StopCoroutine(UpdateProgressPercentageCoroutine); // Fix bug where the checkpoint percentage would blink out before scene restarts
         // Reset first attempt so that transition is loaded in the future
         firstAttempt = true;
-        string level = PlayerPrefs.GetString("Level");
-        background.sprite = backgroundSprites[Array.FindIndex(levelArray, level => level.Contains(level))];
         // [PRACTICE MODE] Reset so that practice and checkpoint is not loaded in the future
         PracticeManagerScript.practiceMode = false;
         PracticeManagerScript.checkpointTimeStamp = 0f;

@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: ff6f4771348f2594a83ea20e122307c5
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - levelAudio: {instanceID: 0}
+  - musicSource: {instanceID: 0}
+  - background: {instanceID: 0}
+  - backgroundRenderer: {instanceID: 0}
+  - inputParticleRenderer: {instanceID: 0}
+  - ambientParticleRenderer: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
