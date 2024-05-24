@@ -13,6 +13,7 @@ public class LevelMusicScript : MonoBehaviour
 
     [Header("Music")]
     [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioClip emptyMusic;
 
     [Header("Managers")]
     [SerializeField] private GameObject PracticeManager;
@@ -37,8 +38,17 @@ public class LevelMusicScript : MonoBehaviour
     {
         // Gets the current level, then references the scriptable object for the audio
         string level = StaticInformation.level;
-        LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
-        musicSource.clip = scriptableObjectInstance.levelMusic;
+        if (level == null)
+        {
+            Debug.Log("No level music loaded.");
+            musicSource.clip = emptyMusic; // Don't play sounds if starting directly from Level.unity scene,
+                                           // but still fill the audio source with a clip to prevent nullexceptionerror
+        }
+        else
+        {
+            LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+            musicSource.clip = scriptableObjectInstance.levelMusic;
+        }
     }
 
     // [PRACTICE MODE] MAIN METHOD

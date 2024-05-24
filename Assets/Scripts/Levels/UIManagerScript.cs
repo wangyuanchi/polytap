@@ -109,8 +109,16 @@ public class UIManagerScript : MonoBehaviour
     {
         // Grabs the current level, then references the scriptable object for the background
         string level = StaticInformation.level;
-        LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
-        background.sprite = scriptableObjectInstance.background;
+        if (level == null)
+        {
+            Debug.Log("No background loaded.");
+            return; // Don't show a background if starting directly from Level.unity scene
+        }
+        else
+        {
+            LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+            background.sprite = scriptableObjectInstance.background;
+        }
     }
 
     private void LoadAudioVolume()
@@ -163,7 +171,8 @@ public class UIManagerScript : MonoBehaviour
 
         key = StaticInformation.level + "-" + PlayerPrefs.GetString("Mode") + "-TA";
         int totalAttempts = PlayerPrefs.GetInt(key) + 1; // Includes the current attempt
-        PlayerPrefs.SetInt(key, totalAttempts);
+
+        if (PlayerPrefs.HasKey(key)) { PlayerPrefs.SetInt(key, totalAttempts); }
 
         // Set attemps text
         if (PlayerPrefs.GetString("Attempts") == "true")
@@ -331,7 +340,7 @@ public class UIManagerScript : MonoBehaviour
         float highScore = PlayerPrefs.GetFloat(key);
         if (highScore < progressPercentage)
         {
-            PlayerPrefs.SetFloat(key, progressPercentage);
+            if (PlayerPrefs.HasKey(key)) { PlayerPrefs.SetFloat(key, progressPercentage); }
             return true;
         }
 

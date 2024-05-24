@@ -69,7 +69,7 @@ public class MarkersProcessingScript : MonoBehaviour
         }
         else
         {
-            Debug.Log("File not found!");
+            Debug.Log("File not found! No beatmap will be loaded.");
         }
 
         return beatMap;
