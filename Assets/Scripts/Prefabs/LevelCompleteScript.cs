@@ -66,7 +66,7 @@ public class LevelCompleteScript : MonoBehaviour
         if (!PracticeManagerScript.practiceMode)
         {
             string mode = PlayerPrefs.GetString("Mode") == "N" ? "Normal" : "Hard";
-            string attemptsKey = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-TA";
+            string attemptsKey = StaticInformation.level + "-" + PlayerPrefs.GetString("Mode") + "-TA";
             string attempts = PlayerPrefs.GetInt(attemptsKey).ToString();
             levelInfoText.fontSize = 65;
             levelInfoText.text = $"Mode: {mode} \t Attempts: {attempts}";

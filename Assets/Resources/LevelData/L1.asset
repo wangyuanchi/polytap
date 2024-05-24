@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: L1
   m_EditorClassIdentifier: 
   levelMusic: {fileID: 8300000, guid: 3c5bae8726c38434da6c463b5863deb7, type: 3}
-  beatMapEndTime: 97.72
   background: {fileID: 21300000, guid: dcecb4bed081cb248b711be68ea780a4, type: 3}
+  beatMapEndTime: 97.72

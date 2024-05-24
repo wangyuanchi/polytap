@@ -28,7 +28,7 @@ public class NewBestScript : MonoBehaviour
 
     private void SetNewBestText()
     {
-        string key = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-HS";
+        string key = StaticInformation.level + "-" + PlayerPrefs.GetString("Mode") + "-HS";
         float newBestPercentage = PlayerPrefs.GetFloat(key);
         newBestText.text = $"NEW BEST!\n{newBestPercentage}%";
     }
