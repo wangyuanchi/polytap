@@ -42,7 +42,7 @@ public class NotesManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string levelName = SceneManager.GetActiveScene().name;
+        string levelName = StaticInformation.level;
         string filepath = $"Assets\\Resources\\{levelName}.csv";
         beatMap = MarkersProcessingScript.ProcessMarkers(filepath);
         

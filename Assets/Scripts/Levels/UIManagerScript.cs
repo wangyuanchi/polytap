@@ -61,8 +61,6 @@ public class UIManagerScript : MonoBehaviour
 
     [Header("Background")]
     [SerializeField] private SpriteRenderer background;
-    [SerializeField] private Sprite[] backgroundSprites;
-    private string[] levelArray = { "L1", "L2" };
 
     [Header("Accuracy")]
     [SerializeField] private GameObject accuracyUI;
@@ -98,16 +96,21 @@ public class UIManagerScript : MonoBehaviour
             sceneTransition.GetComponent<SceneTransitionScript>().SceneFadeIn(); 
             firstAttempt = false;
         }
-        // Grabs the current level, then references the scriptable object for the background
-        string level = StaticInformation.level;
-        LevelDataScriptableObject scriptableObjectInstance = (LevelDataScriptableObject)Resources.Load<ScriptableObject>($"LevelData\\{level}");
-        background.sprite = scriptableObjectInstance.background;
+        LoadBackground();
         LoadAudioVolume();
         LoadDifficulty();
         LoadParticles();
         SetTotalAttempts();
         SetProgressBar();
         UpdateProgressPercentageCoroutine = StartCoroutine(UpdateProgressPercentage());
+    }
+
+    private void LoadBackground()
+    {
+        // Grabs the current level, then references the scriptable object for the background
+        string level = StaticInformation.level;
+        LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+        background.sprite = scriptableObjectInstance.background;
     }
 
     private void LoadAudioVolume()
@@ -158,7 +161,7 @@ public class UIManagerScript : MonoBehaviour
 
         string key;
 
-        key = SceneManager.GetActiveScene().name + "-" + PlayerPrefs.GetString("Mode") + "-TA";
+        key = StaticInformation.level + "-" + PlayerPrefs.GetString("Mode") + "-TA";
         int totalAttempts = PlayerPrefs.GetInt(key) + 1; // Includes the current attempt
         PlayerPrefs.SetInt(key, totalAttempts);
 
@@ -177,7 +180,7 @@ public class UIManagerScript : MonoBehaviour
     // Load and set progress bars
     private void SetProgressBar()
     {
-        string levelName = SceneManager.GetActiveScene().name;
+        string levelName = StaticInformation.level;
         float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
         float hardModeHighScore = PlayerPrefs.GetFloat($"{levelName}-H-HS");
         int normalModeAttempts = PlayerPrefs.GetInt($"{levelName}-N-TA");
@@ -318,11 +321,11 @@ public class UIManagerScript : MonoBehaviour
         
         if (PlayerPrefs.GetString("Mode") == "N")
         {
-            key = SceneManager.GetActiveScene().name + "-N-HS";
+            key = StaticInformation.level + "-N-HS";
         }
         else
         {
-            key = SceneManager.GetActiveScene().name + "-H-HS";
+            key = StaticInformation.level + "-H-HS";
         }
 
         float highScore = PlayerPrefs.GetFloat(key);

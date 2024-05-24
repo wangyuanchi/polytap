@@ -31,6 +31,9 @@ public class LevelSelectorManagerScript : MonoBehaviour
             }
             LoadProgressBars(level);
         }
+
+        // Refresh level to be loaded 
+        StaticInformation.level = null;
     }
 
     private void LoadAudioVolume()
@@ -60,18 +63,21 @@ public class LevelSelectorManagerScript : MonoBehaviour
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{hardModeHighScore}% ({hardModeAttempts})";
     }
 
-    public void TransitionToScene(string levelName)
+    public void TransitionToMainMenu()
     {
-        sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene(levelName);
+        sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene("Main Menu");
+    }
+
+    public void TransitionToLevel(string levelName)
+    {
+        sceneTransition.GetComponent<SceneTransitionScript>().TransitionToScene("Level");
+
         // Sets the level in a static script so that the managers can reference it for the scriptable objects
         StaticInformation.level = levelName;
 
-        // If not going back to main menu, fade music out and destroy music object
-        if (levelName != "Main Menu")
-        {
-            LobbyMusicScript.instance.MusicFadeOutAndDestroy();
-            PlaySFX(levelStartSFX);
-        }   
+        // Fade music out and destroy music object
+        LobbyMusicScript.instance.MusicFadeOutAndDestroy();
+        PlaySFX(levelStartSFX);
     }    
 
     private void PlaySFX(AudioClip SFX)

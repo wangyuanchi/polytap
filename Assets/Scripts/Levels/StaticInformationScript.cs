@@ -4,6 +4,5 @@ using UnityEngine;
 
 public class StaticInformation
 {
-    public static string level{ get; set; }
-
+    public static string level { get; set; }
 }

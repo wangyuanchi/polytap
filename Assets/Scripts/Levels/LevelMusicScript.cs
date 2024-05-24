@@ -20,11 +20,8 @@ public class LevelMusicScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Gets the current level, then references the scriptable object for the audio
-        string level = StaticInformation.level;
-        LevelDataScriptableObject scriptableObjectInstance = (LevelDataScriptableObject)Resources.Load<ScriptableObject>($"LevelData\\{level}");
-        musicSource.clip = scriptableObjectInstance.levelAudio;
-        
+        LoadMusic();
+
         // Check for incorrect input
         if (beatMapEndTime < 0 || beatMapEndTime > musicSource.clip.length)
         { Debug.Log("Invalid Beat Map End Time!"); }
@@ -36,10 +33,21 @@ public class LevelMusicScript : MonoBehaviour
         }
     }
 
+    private void LoadMusic()
+    {
+        // Gets the current level, then references the scriptable object for the audio
+        string level = StaticInformation.level;
+        LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+        musicSource.clip = scriptableObjectInstance.levelMusic;
+    }
+
     // [PRACTICE MODE] MAIN METHOD
     // Set the new time position and play
     public void SkipToTime(float timeSkipped)
     {
+        LoadMusic(); // This method is called in PracticeManagerScript in Start(),
+                     // hence, need to load the music before it is called later in this method,
+                     // as it is not loaded in time in Start() in this script
         StopMusic();
         musicSource.time = Mathf.Clamp(timeSkipped, 0f, musicSource.clip.length);
         PlayMusic();
