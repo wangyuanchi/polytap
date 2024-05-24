@@ -206,7 +206,7 @@ public class UIManagerScript : MonoBehaviour
 
     private IEnumerator UpdateProgressPercentage()
     {
-        float beatMapEndTime = levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime;
+        float beatMapEndTime = levelMusic.GetComponent<LevelMusicScript>().GetBeatMapEndTime();
 
         while (progressPercentage < 100f)
         {

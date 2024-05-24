@@ -3067,7 +3067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 660bd94d6cee1fe4d9e5ab0d12932e6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beatMapEndTime: 10
+  beatMapEndTime: 0
   musicSource: {fileID: 1138441066}
   emptyMusic: {fileID: 8300000, guid: c900879b10551774c95b249d845002f2, type: 3}
   PracticeManager: {fileID: 1036583455}

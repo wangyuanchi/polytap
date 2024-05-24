@@ -43,7 +43,7 @@ public class NotesManagerScript : MonoBehaviour
     void Start()
     {
         string levelName = StaticInformation.level;
-        string filepath = $"Assets\\Resources\\{levelName}.csv";
+        string filepath = $"Assets\\Resources\\BeatMaps\\{levelName}.csv";
         beatMap = MarkersProcessingScript.ProcessMarkers(filepath);
         
         noteSpeed = PlayerPrefs.GetInt("Note Speed");

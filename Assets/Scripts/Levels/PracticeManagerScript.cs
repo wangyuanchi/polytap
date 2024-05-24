@@ -127,13 +127,13 @@ public class PracticeManagerScript : MonoBehaviour
         while (true)
         {
             // Break if the level is complete
-            if (levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp() >= levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime)
+            if (levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp() >= levelMusic.GetComponent<LevelMusicScript>().GetBeatMapEndTime())
             {
                 break;
             }
 
             // Check for forwards overflow
-            if (checkpointTimeStamp + skipDuration > levelMusic.GetComponent<LevelMusicScript>().beatMapEndTime)
+            if (checkpointTimeStamp + skipDuration > levelMusic.GetComponent<LevelMusicScript>().GetBeatMapEndTime())
             {
                 forwardsActionReference.action.Disable();
                 forwardsButton.interactable = false;

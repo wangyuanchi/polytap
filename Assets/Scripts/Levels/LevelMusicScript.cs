@@ -8,8 +8,7 @@ using UnityEngine;
 public class LevelMusicScript : MonoBehaviour
 {
     [Header("Beat Map")]
-    public float beatMapEndTime; // Make sure the end timing set is at least 0.5s after the last correct input to prevent clashes
-                                 // where wrong user input on last note is performed after level complete
+    public float beatMapEndTime; 
 
     [Header("Music")]
     [SerializeField] private AudioSource musicSource;
@@ -22,10 +21,7 @@ public class LevelMusicScript : MonoBehaviour
     void Start()
     {
         LoadMusic();
-
-        // Check for incorrect input
-        if (beatMapEndTime < 0 || beatMapEndTime > musicSource.clip.length)
-        { Debug.Log("Invalid Beat Map End Time!"); }
+        LoadBeatMapEndTime();
 
         // Non-practice mode playing, practice mode playing is done in PracticeManagerScript
         if (!PracticeManagerScript.practiceMode)    
@@ -36,8 +32,9 @@ public class LevelMusicScript : MonoBehaviour
 
     private void LoadMusic()
     {
-        // Gets the current level, then references the scriptable object for the audio
+        // Gets the current level, then references the scriptable object for the music
         string level = StaticInformation.level;
+
         if (level == null)
         {
             Debug.Log("No level music loaded.");
@@ -49,6 +46,41 @@ public class LevelMusicScript : MonoBehaviour
             LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
             musicSource.clip = scriptableObjectInstance.levelMusic;
         }
+    }
+
+    private void LoadBeatMapEndTime()
+    {
+        beatMapEndTime = GetBeatMapEndTime();
+
+        // If starting directly in the level scene
+        if (StaticInformation.level == null)
+        {
+            Debug.Log("beatMapEndTime is set to its default of 10 seconds.");
+        }
+
+        // Check for incorrect input
+        if (beatMapEndTime < 0 || beatMapEndTime > musicSource.clip.length)
+        {
+            Debug.Log("Invalid beatMapEndTime!");
+        }
+    }
+
+    // This function is used when the beatMapEndTime is required at Start()
+    public float GetBeatMapEndTime()
+    {
+        // Gets the current level, then references the scriptable object for beatMapEndTime
+        string level = StaticInformation.level;
+
+        if (level == null)
+        {
+            return 10f; // Default value
+        }
+        else
+        {
+            LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+            beatMapEndTime = scriptableObjectInstance.beatMapEndTime;
+        }
+        return beatMapEndTime;
     }
 
     // [PRACTICE MODE] MAIN METHOD
