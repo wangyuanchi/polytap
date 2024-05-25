@@ -156,13 +156,17 @@ public class UIManagerScript : MonoBehaviour
     {
         if (PlayerPrefs.GetString("Particles") == "true")
         {
-            //Instantiates the ambientParticles from the SciptedObject based on the level
+            // Instantiates the ambient particles from the scriptable object based on the level
             string level = StaticInformation.level;
-            if (level == null) { ambientParticles = emptyParticles; }
+            if (level == null) 
+            {
+                Debug.Log("No ambient particles loaded.");
+                ambientParticles = emptyParticles; 
+            }
             else 
             {
-            LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
-            ambientParticles = Instantiate(scriptableObjectInstance.ambientParticles);
+                LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+                ambientParticles = Instantiate(scriptableObjectInstance.ambientParticles);
             }
             ambientParticles.Play(); 
         }

@@ -46,16 +46,6 @@ public class LogicManagerScript : MonoBehaviour
         squareActionReference.action.started += OnSquareHold;
         squareActionReference.action.canceled += OnSquareRelease;
         triangleActionReference.action.performed += OnTriangle;
-
-
-        //Instantiates the input particles from the SciptedObject based on level
-        string level = StaticInformation.level;
-        if (level == null){ inputParticles = emptyParticles; }
-        else
-        {
-            LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
-            inputParticles = Instantiate(scriptableObjectInstance.inputParticles);
-        }
     }
 
     private void OnDisable()
@@ -116,6 +106,22 @@ public class LogicManagerScript : MonoBehaviour
         float currentTimeStamp = levelMusic.GetComponent<LevelMusicScript>().getCurrentTimeStamp();
         if (triangleTimingsQueue.Count > 0) 
         { CheckInputTriangle(currentTimeStamp); }
+    }
+
+    void Start()
+    {
+        // Instantiates the input particles from the scriptable object based on level
+        string level = StaticInformation.level;
+        if (level == null) 
+        {
+            Debug.Log("No input particles loaded.");
+            inputParticles = emptyParticles; 
+        }
+        else
+        {
+            LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+            inputParticles = Instantiate(scriptableObjectInstance.inputParticles);
+        }
     }
 
     // For missed note, inputCorrect is false even though there was no input
