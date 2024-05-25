@@ -57,7 +57,8 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private GameObject logicManager;
 
     [Header("Particles")]
-    [SerializeField] private ParticleSystem ambientParticles;
+    [SerializeField] private ParticleSystem emptyParticles;
+    private ParticleSystem ambientParticles;
 
     [Header("Background")]
     [SerializeField] private SpriteRenderer background;
@@ -154,7 +155,17 @@ public class UIManagerScript : MonoBehaviour
     private void LoadParticles()
     {
         if (PlayerPrefs.GetString("Particles") == "true")
-        { ambientParticles.Play(); }
+        {
+            //Instantiates the ambientParticles from the SciptedObject based on the level
+            string level = StaticInformation.level;
+            if (level == null) { ambientParticles = emptyParticles; }
+            else 
+            {
+            LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+            ambientParticles = Instantiate(scriptableObjectInstance.ambientParticles);
+            }
+            ambientParticles.Play(); 
+        }
     }
 
     // Increasing total number of attempts every time the scene is loaded

@@ -29,7 +29,8 @@ public class LogicManagerScript : MonoBehaviour
     private bool initialSquareInput = false;
 
     [Header("Particles")]
-    [SerializeField] private GameObject inputParticles;
+    [SerializeField] private GameObject emptyParticles;
+    private GameObject inputParticles;
 
     [Header("Logs")]
     [SerializeField] private GameObject logsUI;
@@ -45,6 +46,16 @@ public class LogicManagerScript : MonoBehaviour
         squareActionReference.action.started += OnSquareHold;
         squareActionReference.action.canceled += OnSquareRelease;
         triangleActionReference.action.performed += OnTriangle;
+
+
+        //Instantiates the input particles from the SciptedObject based on level
+        string level = StaticInformation.level;
+        if (level == null){ inputParticles = emptyParticles; }
+        else
+        {
+            LevelDataScriptableObject scriptableObjectInstance = Resources.Load<LevelDataScriptableObject>($"LevelData\\{level}");
+            inputParticles = Instantiate(scriptableObjectInstance.inputParticles);
+        }
     }
 
     private void OnDisable()

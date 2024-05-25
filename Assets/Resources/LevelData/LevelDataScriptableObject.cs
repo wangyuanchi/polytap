@@ -9,6 +9,10 @@ public class LevelDataScriptableObject : ScriptableObject
     [SerializeField] public AudioClip levelMusic;
     [SerializeField] public Sprite background;
 
+    [Header("Particles")]
+    [SerializeField] public GameObject inputParticles;
+    [SerializeField] public ParticleSystem ambientParticles;
+
     [Header("Beat Map End Time: It must be at least 0.5s after the last note")]
     [SerializeField] public float beatMapEndTime;   
 }

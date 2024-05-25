@@ -6,6 +6,7 @@ using UnityEngine.Android;
 
 public class InputParticlesScript : MonoBehaviour
 {
+    [SerializeField] public ParticleSystem inputParticles;
     private ParticleSystem ps;
 
     void Start()
