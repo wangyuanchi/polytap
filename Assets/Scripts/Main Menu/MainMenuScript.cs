@@ -39,13 +39,19 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("Music Volume", PlayerPrefs.GetFloat("Music Volume", 0.5f));
         PlayerPrefs.SetFloat("SFX Volume", PlayerPrefs.GetFloat("SFX Volume", 0.5f));
         PlayerPrefs.SetString("Lobby Music", PlayerPrefs.GetString("Lobby Music", "true"));
-
-        // Levels
         PlayerPrefs.SetString("Mode", PlayerPrefs.GetString("Mode", "N"));
+
+        // L1
         PlayerPrefs.SetFloat("L1-N-HS", PlayerPrefs.GetFloat("L1-N-HS", 0f));
         PlayerPrefs.SetFloat("L1-H-HS", PlayerPrefs.GetFloat("L1-H-HS", 0f));
         PlayerPrefs.SetInt("L1-N-TA", PlayerPrefs.GetInt("L1-N-TA", 0));
         PlayerPrefs.SetInt("L1-H-TA", PlayerPrefs.GetInt("L1-H-TA", 0));
+
+        // L2
+        PlayerPrefs.SetFloat("L2-N-HS", PlayerPrefs.GetFloat("L2-N-HS", 0f));
+        PlayerPrefs.SetFloat("L2-H-HS", PlayerPrefs.GetFloat("L2-H-HS", 0f));
+        PlayerPrefs.SetInt("L2-N-TA", PlayerPrefs.GetInt("L2-N-TA", 0));
+        PlayerPrefs.SetInt("L2-H-TA", PlayerPrefs.GetInt("L2-H-TA", 0));
     }
 
     public void ResetAllPreferences()

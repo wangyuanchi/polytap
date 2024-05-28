@@ -24,11 +24,6 @@ public class LevelSelectorManagerScript : MonoBehaviour
 
         foreach (Transform level in allLevelsGameObject.transform)
         {
-            // Remove this after all levels have been made
-            if (level.name != "L1")
-            {
-                continue;
-            }
             LoadProgressBars(level);
         }
 
