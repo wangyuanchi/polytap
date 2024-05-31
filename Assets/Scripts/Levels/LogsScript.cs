@@ -22,4 +22,10 @@ public class LogsScript : MonoBehaviour
         else { tempText += "\n" + text; }
         logsText.text = tempText;
     }
+
+    // To prevent more than 3 logs being accumulated in practice mode
+    public void ClearLogs()
+    {
+        tempText = "";
+    }
 }

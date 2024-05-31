@@ -18,6 +18,7 @@ public class PracticeManagerScript : MonoBehaviour
     [SerializeField] private GameObject UIManager;
     [SerializeField] private GameObject levelMusic;
     [SerializeField] private GameObject notesManager;
+    [SerializeField] private GameObject logsUI;
 
     [Header("Pause UI")]
     [SerializeField] private Sprite practiceEnabled;
@@ -119,6 +120,9 @@ public class PracticeManagerScript : MonoBehaviour
     {
         levelMusic.GetComponent<LevelMusicScript>().SkipToTime(checkpointTimeStamp);
         notesManager.GetComponent<NotesManagerScript>().SkipToTime(checkpointTimeStamp);
+
+        // Clear out the logs from previous attempt
+        logsUI.GetComponent<LogsScript>().ClearLogs();
     }
 
     private IEnumerator TimeOutOfRangeCheck()
@@ -133,7 +137,7 @@ public class PracticeManagerScript : MonoBehaviour
             }
 
             // Check for forwards overflow
-            if (checkpointTimeStamp + skipDuration > levelMusic.GetComponent<LevelMusicScript>().GetBeatMapEndTime())
+            if (checkpointTimeStamp + skipDuration >= levelMusic.GetComponent<LevelMusicScript>().GetBeatMapEndTime())
             {
                 forwardsActionReference.action.Disable();
                 forwardsButton.interactable = false;

@@ -2769,6 +2769,7 @@ MonoBehaviour:
   UIManager: {fileID: 783021154}
   levelMusic: {fileID: 1138441062}
   notesManager: {fileID: 346430842}
+  logsUI: {fileID: 2048017136}
   practiceEnabled: {fileID: 21300000, guid: 32f475fa47cad7446a15d53aa237e263, type: 3}
   practiceDisabled: {fileID: 21300000, guid: a85b6451cfa0a2940a311c701bbe609e, type: 3}
   practiceButton: {fileID: 1685396170}
