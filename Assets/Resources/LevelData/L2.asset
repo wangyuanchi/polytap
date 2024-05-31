@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff6f4771348f2594a83ea20e122307c5, type: 3}
   m_Name: L2
   m_EditorClassIdentifier: 
-  levelMusic: {fileID: 0}
+  levelMusic: {fileID: 8300000, guid: 750308e0d082b5c449b9eb8dd3a1def1, type: 3}
   background: {fileID: 21300000, guid: 44c27745c0635ba4ead6a52926eda729, type: 3}
   inputParticles: {fileID: 6093069315959623814, guid: 8220fcedf7fd2ad40a022492702c9c77, type: 3}
   ambientParticles: {fileID: 193913021430770230, guid: 8c8c053957494254aba012d9d974273e, type: 3}
-  beatMapEndTime: 0
+  beatMapEndTime: 125
