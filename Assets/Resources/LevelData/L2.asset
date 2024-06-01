@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelMusic: {fileID: 8300000, guid: ca115df8432ba6c4980a965d0e0a58cf, type: 3}
   background: {fileID: 21300000, guid: 44c27745c0635ba4ead6a52926eda729, type: 3}
-  inputParticles: {fileID: 6093069315959623814, guid: 8220fcedf7fd2ad40a022492702c9c77, type: 3}
-  ambientParticles: {fileID: 193913021430770230, guid: 8c8c053957494254aba012d9d974273e, type: 3}
+  inputParticles: {fileID: 0}
+  ambientParticles: {fileID: 0}
   beatMapEndTime: 120.72
