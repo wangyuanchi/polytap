@@ -10,7 +10,7 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
     [Header("General")]
     [SerializeField] private Vector3 pageStep;
     [SerializeField] private RectTransform levelsRectTransform;
-    private int currentPage;
+    private static int currentPage = 1;
     private int maxPage;
     private Vector3 targetPos;
 
@@ -25,11 +25,15 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
 
     void Start()
     {
-        currentPage = 1;
+        // Shift to the previously accessed level
+        levelsRectTransform.localPosition += (currentPage - 1) * pageStep;
+
         maxPage = levelsRectTransform.childCount;
         targetPos = levelsRectTransform.localPosition;
-        prevButton.interactable = false;
         dragThreshold = Screen.width / 15;
+
+        // Move to current page, for setting of interactability of the nav buttons 
+        MovePage();
     }
 
     public void Next()
