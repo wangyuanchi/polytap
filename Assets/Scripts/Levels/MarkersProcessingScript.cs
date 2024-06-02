@@ -87,6 +87,9 @@ public class MarkersProcessingScript : MonoBehaviour
         // Convert to seconds and add
         float totalTime = minutes * 60 + seconds;
 
-        return totalTime.ToString();
+        // Buffer for better syncing
+        float totalTimeWithBuffer = totalTime + 0.265f;
+
+        return totalTimeWithBuffer.ToString();
     }
 }
