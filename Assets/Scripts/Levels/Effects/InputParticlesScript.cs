@@ -29,12 +29,19 @@ public class InputParticlesScript : MonoBehaviour
         {
             ModifyBurstCount(10);
         }
+
         ps.Play();
     }
 
     // Only one burst is currently set
     private void ModifyBurstCount(int newBurstCount)
     {
+        if (ps.emission.burstCount == 0)
+        {
+            Debug.Log("Set at least 1 burst in emissions to see InputParticles!");
+            return;
+        }    
+
         ParticleSystem.Burst burst = ps.emission.GetBurst(0);
         burst.count = newBurstCount;
         ps.emission.SetBurst(0, burst);
