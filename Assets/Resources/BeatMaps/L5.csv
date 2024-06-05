@@ -92,7 +92,7 @@ C-100	0:32.850	0:00.000	decimal	Cue
 S-75	0:33.214	0:00.000	decimal	Cue	
 C-100	0:33.557	0:00.000	decimal	Cue	
 C-100	0:33.923	0:00.000	decimal	Cue	
-T	0:34.451	0:00.000	decimal	Cue	
+T-100	0:34.451	0:00.000	decimal	Cue	
 SE-75	0:34.625	0:00.000	decimal	Cue	
 C-75	0:35.678	0:00.000	decimal	Cue	
 C-75	0:36.037	0:00.000	decimal	Cue	
@@ -107,7 +107,7 @@ S-125	0:38.855	0:00.000	decimal	Cue
 T-100	0:39.387	0:00.000	decimal	Cue	
 C-125	0:39.559	0:00.000	decimal	Cue	
 T-100	0:40.094	0:00.000	decimal	Cue	
-S-125	0:40.271	0:00.000	decimal	Cue	
+SE-125	0:40.271	0:00.000	decimal	Cue	
 C-125	0:40.271	0:00.000	decimal	Cue	
 C-100	0:40.628	0:00.000	decimal	Cue	
 C-100	0:40.976	0:00.000	decimal	Cue	
@@ -156,7 +156,7 @@ C-100	0:57.922	0:00.000	decimal	Cue
 C-100	0:58.269	0:00.000	decimal	Cue	
 C-50	0:58.624	0:00.000	decimal	Cue	
 C-50	0:58.970	0:00.000	decimal	Cue	
-T	0:59.507	0:00.000	decimal	Cue	
+T-75	0:59.507	0:00.000	decimal	Cue	
 C-50	0:59.680	0:00.000	decimal	Cue	
 S-75	1:00.043	0:00.000	decimal	Cue	
 C-75	1:00.381	0:00.000	decimal	Cue	
