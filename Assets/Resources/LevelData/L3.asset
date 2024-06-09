@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: L3
   m_EditorClassIdentifier: 
   levelMusic: {fileID: 8300000, guid: c4b8b89d2d8a1874391725f5ac3682bb, type: 3}
-  background: {fileID: 21300000, guid: dcecb4bed081cb248b711be68ea780a4, type: 3}
-  inputParticles: {fileID: 6093069315959623814, guid: 9d333335d371cfd4782514c653e844ae, type: 3}
-  ambientParticles: {fileID: 8002038764096566130, guid: 4a90cf0317433bb4db120b59bd8487be, type: 3}
-  beatMapEndTime: 113
+  background: {fileID: 21300000, guid: 1f8ab598462de5041aab560f9ea960ec, type: 3}
+  inputParticles: {fileID: 1976651968250676649, guid: 39e2f3fdbd5f73a488e0ea4d3e175bcb, type: 3}
+  ambientParticles: {fileID: 864769376049909061, guid: 02658d91d27e8da42bbceb9c4c0c3ddf, type: 3}
+  beatMapEndTime: 113.059

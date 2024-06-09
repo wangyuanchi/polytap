@@ -57,7 +57,7 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("L3-N-HS", PlayerPrefs.GetFloat("L3-N-HS", 0f));
         PlayerPrefs.SetFloat("L3-H-HS", PlayerPrefs.GetFloat("L3-H-HS", 0f));
         PlayerPrefs.SetInt("L3-N-TA", PlayerPrefs.GetInt("L3-N-TA", 0));
-        PlayerPrefs.SetInt("L2]3-H-TA", PlayerPrefs.GetInt("L3-H-TA", 0));
+        PlayerPrefs.SetInt("L3-H-TA", PlayerPrefs.GetInt("L3-H-TA", 0));
 
         // L4
         PlayerPrefs.SetFloat("L4-N-HS", PlayerPrefs.GetFloat("L4-N-HS", 0f));
