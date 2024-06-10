@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff6f4771348f2594a83ea20e122307c5, type: 3}
+  m_Name: L6
+  m_EditorClassIdentifier: 
+  levelMusic: {fileID: 8300000, guid: 00af93c2a63123b4e9ab21e9fdfc6c50, type: 3}
+  background: {fileID: 21300000, guid: e888aabec0a93504fbbf5ff967547088, type: 3}
+  inputParticles: {fileID: 1830688534800398, guid: 8a302f26936f00949a669a360bfb0484, type: 3}
+  ambientParticles: {fileID: 198999705567538108, guid: 9dca676f2ff988a45a505d56f3bd0bb6, type: 3}
+  beatMapEndTime: 107.24

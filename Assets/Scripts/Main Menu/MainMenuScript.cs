@@ -70,6 +70,12 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetFloat("L5-H-HS", PlayerPrefs.GetFloat("L5-H-HS", 0f));
         PlayerPrefs.SetInt("L5-N-TA", PlayerPrefs.GetInt("L5-N-TA", 0));
         PlayerPrefs.SetInt("L5-H-TA", PlayerPrefs.GetInt("L5-H-TA", 0));
+
+        // L6
+        PlayerPrefs.SetFloat("L6-N-HS", PlayerPrefs.GetFloat("L6-N-HS", 0f));
+        PlayerPrefs.SetFloat("L6-H-HS", PlayerPrefs.GetFloat("L6-H-HS", 0f));
+        PlayerPrefs.SetInt("L6-N-TA", PlayerPrefs.GetInt("L6-N-TA", 0));
+        PlayerPrefs.SetInt("L6-H-TA", PlayerPrefs.GetInt("L6-H-TA", 0));
     }
 
     public void ResetAllPreferences()
