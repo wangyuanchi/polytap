@@ -38,6 +38,16 @@ public class LogicManagerScript : MonoBehaviour
 
     private void OnEnable()
     {
+        EnableShapeInputs();
+    }
+
+    private void OnDisable()
+    {
+        DisableShapeInputs();
+    }
+
+    public void EnableShapeInputs()
+    {
         circleActionReference.action.Enable();
         squareActionReference.action.Enable();
         triangleActionReference.action.Enable();
@@ -48,27 +58,13 @@ public class LogicManagerScript : MonoBehaviour
         triangleActionReference.action.performed += OnTriangle;
     }
 
-    private void OnDisable()
+    public void DisableShapeInputs()
     {
         circleActionReference.action.performed -= OnCircle;
         squareActionReference.action.started -= OnSquareHold;
         squareActionReference.action.canceled -= OnSquareRelease;
-        triangleActionReference.action.performed -= OnTriangle;
+        triangleActionReference.action.performed -= OnTriangle; 
 
-        circleActionReference.action.Disable();
-        squareActionReference.action.Disable();
-        triangleActionReference.action.Disable();
-    }
-
-    public void EnableShapeInputs()
-    {
-        circleActionReference.action.Enable();
-        squareActionReference.action.Enable();
-        triangleActionReference.action.Enable();
-    }
-
-    public void DisableShapeInputs()
-    {
         circleActionReference.action.Disable();
         squareActionReference.action.Disable();
         triangleActionReference.action.Disable();
@@ -188,11 +184,11 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(circleObjectsQueue, circleTimingsQueue, true);
             if (requiredTimeStamp > inputTimeStamp)
             {
-                Log("Circle", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+                Log("Circle", "Too Early", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }   
             else
             {
-                Log("Circle", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+                Log("Circle", "Too Late", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
         else
@@ -226,11 +222,11 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
             if (requiredTimeStamp > inputTimeStamp)
             {
-                Log("SquareStart", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+                Log("SquareStart", "Too Early", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
             else
             {
-                Log("SquareStart", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+                Log("SquareStart", "Too Late", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
         else { return; }
@@ -260,11 +256,11 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
             if (requiredTimeStamp > inputTimeStamp)
             {
-                Log("SquareEnd", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+                Log("SquareEnd", "Too Early", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
             else
             {
-                Log("SquareEnd", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+                Log("SquareEnd", "Too Late", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
         else { return; }
@@ -290,11 +286,11 @@ public class LogicManagerScript : MonoBehaviour
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, true);
             if (requiredTimeStamp > inputTimeStamp)
             {
-                Log("Triangle", "Too Early", currentProgressText.text, $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+                Log("Triangle", "Too Early", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
             else
             {
-                Log("Triangle", "Too Late", currentProgressText.text, $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+                Log("Triangle", "Too Late", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
         else { return; }
@@ -311,7 +307,7 @@ public class LogicManagerScript : MonoBehaviour
         {
             DequeueNote(circleObjectsQueue, circleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Circle]");
-            Log("Circle", "Missed", currentProgressText.text);
+            Log("Circle", "Missed", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString());
         }
         // Only a missed note if the first input has not yet be detected, because the note is not dequeued upon first input check
         if (squareTimingsQueue.Count > 0 && !initialSquareInput && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]))
@@ -321,13 +317,13 @@ public class LogicManagerScript : MonoBehaviour
             squareObjectsQueue.Peek().GetComponent<NoteSquareScript>().DestroyNoteSquareEnd();
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Square (Start)]");
-            Log("SquareStart", "Missed", currentProgressText.text);
+            Log("SquareStart", "Missed", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString());
         }
         if (squareTimingsQueue.Count > 0 && currentTimeStamp > squareTimingsQueue.Peek()["timeStamp"] + squareTimingsQueue.Peek()["duration"] + expectedWindowCalculation(squareTimingsQueue.Peek()["accuracyWindow"]))
         {
             DequeueNote(squareObjectsQueue, squareTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Square (End)]");
-            Log("SquareEnd", "Missed", currentProgressText.text);
+            Log("SquareEnd", "Missed", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString());
             // Invalidate onSquareRelease because note has already been missed 
             initialSquareInput = false;
         }
@@ -335,7 +331,7 @@ public class LogicManagerScript : MonoBehaviour
         {
             DequeueNote(triangleObjectsQueue, triangleTimingsQueue, false);
             ProcessInput(false, "Missed Note! [Triangle]");
-            Log("Triangle", "Missed", currentProgressText.text);
+            Log("Triangle", "Missed", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString());
         }
     }
 
@@ -383,7 +379,7 @@ public class LogicManagerScript : MonoBehaviour
         if (PlayerPrefs.GetString("Logs") == "true")
         {
             if (addOnText == "") addOnText = "+0ms";
-            logsUI.GetComponent<LogsScript>().AddLog($"{reason}! ({addOnText})\n{typeOfNote} at {percentage}");
+            logsUI.GetComponent<LogsScript>().AddLog($"{reason}! ({addOnText})\n{typeOfNote} at {percentage}%");
         }
     }
 }
