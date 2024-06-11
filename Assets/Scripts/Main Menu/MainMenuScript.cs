@@ -65,17 +65,17 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetInt("L4-N-TA", PlayerPrefs.GetInt("L4-N-TA", 0));
         PlayerPrefs.SetInt("L4-H-TA", PlayerPrefs.GetInt("L4-H-TA", 0));
 
-        // L5
-        PlayerPrefs.SetFloat("L5-N-HS", PlayerPrefs.GetFloat("L5-N-HS", 0f));
-        PlayerPrefs.SetFloat("L5-H-HS", PlayerPrefs.GetFloat("L5-H-HS", 0f));
-        PlayerPrefs.SetInt("L5-N-TA", PlayerPrefs.GetInt("L5-N-TA", 0));
-        PlayerPrefs.SetInt("L5-H-TA", PlayerPrefs.GetInt("L5-H-TA", 0));
-
         // L6
         PlayerPrefs.SetFloat("L6-N-HS", PlayerPrefs.GetFloat("L6-N-HS", 0f));
         PlayerPrefs.SetFloat("L6-H-HS", PlayerPrefs.GetFloat("L6-H-HS", 0f));
         PlayerPrefs.SetInt("L6-N-TA", PlayerPrefs.GetInt("L6-N-TA", 0));
         PlayerPrefs.SetInt("L6-H-TA", PlayerPrefs.GetInt("L6-H-TA", 0));
+
+        // L8
+        PlayerPrefs.SetFloat("L8-N-HS", PlayerPrefs.GetFloat("L8-N-HS", 0f));
+        PlayerPrefs.SetFloat("L8-H-HS", PlayerPrefs.GetFloat("L8-H-HS", 0f));
+        PlayerPrefs.SetInt("L8-N-TA", PlayerPrefs.GetInt("L8-N-TA", 0));
+        PlayerPrefs.SetInt("L8-H-TA", PlayerPrefs.GetInt("L8-H-TA", 0));
     }
 
     public void ResetAllPreferences()

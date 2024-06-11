@@ -263,7 +263,17 @@ public class LogicManagerScript : MonoBehaviour
                 Log("SquareEnd", "Too Late", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
             }
         }
-        else { return; }
+        else
+        {
+            // Consider the case that the note was "missed" because the release was way too early
+            if (requiredTimeStamp > inputTimeStamp)
+            {
+                ProcessInput(false, "Wrong Input: Too Early [Square (End)]");
+                DequeueNote(squareObjectsQueue, squareTimingsQueue, true);
+                Log("SquareEnd", "Too Early", UIManager.GetComponent<UIManagerScript>().progressPercentage.ToString(), $"+{Mathf.Round((requiredTimeStamp - inputTimeStamp) * 1000)}ms");
+            }
+            else return; 
+        }
     }
     private void CheckInputTriangle(float inputTimeStamp)
     {

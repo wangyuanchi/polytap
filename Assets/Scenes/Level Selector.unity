@@ -2190,7 +2190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2393011329770122938, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: L5
+      value: L6
       objectReference: {fileID: 0}
     - target: {fileID: 3046904578615311317, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_text
@@ -2202,7 +2202,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 26f5089f5bb0dae439c13b8d55fbac1c, type: 3}
     - target: {fileID: 7778165831145472272, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_Name
-      value: L5
+      value: L6
       objectReference: {fileID: 0}
     - target: {fileID: 8145929313701982450, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_Pivot.x
@@ -2678,7 +2678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2393011329770122938, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: L6
+      value: L8
       objectReference: {fileID: 0}
     - target: {fileID: 3046904578615311317, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_text
@@ -2690,7 +2690,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: e888aabec0a93504fbbf5ff967547088, type: 3}
     - target: {fileID: 7778165831145472272, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_Name
-      value: L6
+      value: L8
       objectReference: {fileID: 0}
     - target: {fileID: 8145929313701982450, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_Pivot.x
