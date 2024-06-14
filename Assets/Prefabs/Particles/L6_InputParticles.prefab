@@ -227,8 +227,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 0.7714715, b: 0, a: 0.19607843}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.8703648, b: 0, a: 0.19607843}
-        key1: {r: 1, g: 0.5825622, b: 0, a: 0.19607843}
+        key0: {r: 1, g: 0.8703648, b: 0, a: 0.05882353}
+        key1: {r: 1, g: 0.5825622, b: 0, a: 0.05882353}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -257,8 +257,8 @@ ParticleSystem:
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.24664946, b: 0, a: 0.19607843}
-        key1: {r: 1, g: 0.9247515, b: 0, a: 0.19607843}
+        key0: {r: 1, g: 0.24664946, b: 0, a: 0.05882353}
+        key1: {r: 1, g: 0.9247515, b: 0, a: 0.05882353}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -288,8 +288,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.05
-      minScalar: 0.025
+      scalar: 0.2
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -666,7 +666,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 35
+    angle: 45
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -4836,7 +4836,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b0cf8371eb5ae904db7835c42188d026, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
