@@ -71,6 +71,12 @@ public class MainMenuScript : MonoBehaviour
         PlayerPrefs.SetInt("L6-N-TA", PlayerPrefs.GetInt("L6-N-TA", 0));
         PlayerPrefs.SetInt("L6-H-TA", PlayerPrefs.GetInt("L6-H-TA", 0));
 
+        //L7
+        PlayerPrefs.SetFloat("L7-N-HS", PlayerPrefs.GetFloat("L7-N-HS", 0f));
+        PlayerPrefs.SetFloat("L7-H-HS", PlayerPrefs.GetFloat("L7-H-HS", 0f));
+        PlayerPrefs.SetInt("L7-N-TA", PlayerPrefs.GetInt("L7-N-TA", 0));
+        PlayerPrefs.SetInt("L7-H-TA", PlayerPrefs.GetInt("L7-H-TA", 0));
+
         // L8
         PlayerPrefs.SetFloat("L8-N-HS", PlayerPrefs.GetFloat("L8-N-HS", 0f));
         PlayerPrefs.SetFloat("L8-H-HS", PlayerPrefs.GetFloat("L8-H-HS", 0f));
