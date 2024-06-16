@@ -42,20 +42,25 @@ public class LevelSelectorManagerScript : MonoBehaviour
         string levelName = level.name;
         float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
         float hardModeHighScore = PlayerPrefs.GetFloat($"{levelName}-H-HS");
+        float accuracyModeHighScore = PlayerPrefs.GetFloat($"{levelName}-A-HS");
         int normalModeAttempts = PlayerPrefs.GetInt($"{levelName}-N-TA");
         int hardModeAttempts = PlayerPrefs.GetInt($"{levelName}-H-TA");
+        int accuracyModeAttempts = PlayerPrefs.GetInt($"{levelName}-A-TA");
 
         GameObject levelGameObject = level.gameObject;
         GameObject normalModeProgressBar = levelGameObject.transform.Find("NormalModeProgressBar").gameObject;
         GameObject hardModeProgressBar = levelGameObject.transform.Find("HardModeProgressBar").gameObject;
+        GameObject accuracyModeProgressBar = levelGameObject.transform.Find("AccuracyModeProgressBar").gameObject;
 
         // Set progress bar fill
         normalModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = normalModeHighScore / 100;
         hardModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = hardModeHighScore / 100;
+        accuracyModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = accuracyModeHighScore / 100;
 
         // Set progress text and total attempts
         normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{normalModeHighScore}% ({normalModeAttempts})";
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{hardModeHighScore}% ({hardModeAttempts})";
+        accuracyModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{accuracyModeHighScore}% ({accuracyModeAttempts})";
     }
 
     public void TransitionToMainMenu()

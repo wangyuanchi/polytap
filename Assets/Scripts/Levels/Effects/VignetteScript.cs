@@ -23,8 +23,8 @@ public class VignetteScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enableVignette = PlayerPrefs.GetString("Vignette") == "true" ? true : false; 
-       
+        enableVignette = PlayerPrefs.GetString("Vignette") == "true" ? true : false;
+
         volume = GetComponent<PostProcessVolume>();
         volume.profile.TryGetSettings<Vignette>(out vignette);
 
@@ -38,7 +38,7 @@ public class VignetteScript : MonoBehaviour
         {
             Debug.Log("Error: Empty Vignette");
         }
-        else if (PlayerPrefs.GetString("Mode") == "N")
+        else if (PlayerPrefs.GetString("Mode") == "N" || PlayerPrefs.GetString("Mode") == "A")
         {
             vignette.enabled.Override(false);
         }
@@ -108,6 +108,19 @@ public class VignetteScript : MonoBehaviour
         {
             ChangeVignetteIntensityCoroutine = StartCoroutine(ChangeVignetteIntensity(peakIntensity0, targetIntensity0));
         }
+    }
+
+    public void VignettePulse()
+    {
+        if (!enableVignette) return;
+
+        if (ChangeVignetteIntensityCoroutine != null)
+        {
+            StopCoroutine(ChangeVignetteIntensityCoroutine);
+        }
+
+        // Vignette fades out completely if no damage taken after a while
+        ChangeVignetteIntensityCoroutine = StartCoroutine(ChangeVignetteIntensity(peakIntensity2, 0));
     }
 
     public IEnumerator ChangeVignetteColor(Color targetColor)

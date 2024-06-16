@@ -14,11 +14,14 @@ public class LevelCompleteScript : MonoBehaviour
     [Header("SFX")]
     [SerializeField] private AudioClip levelCompleteNSFX;
     [SerializeField] private AudioClip levelCompleteHSFX;
+    [SerializeField] private AudioClip levelCompleteASFX;
 
     private GameObject UIManager;
 
     void Awake()
     {
+        UIManager = GameObject.Find("UIManager");
+
         SetLevelCompleteText();
         SetLevelInfoText();
         if (PlayerPrefs.GetString("Mode") == "N")
@@ -33,7 +36,7 @@ public class LevelCompleteScript : MonoBehaviour
                 animator.SetTrigger("PracticeCompleteN");
             }
         }
-        else
+        else if (PlayerPrefs.GetString("Mode") == "H")
         {
             PlaySFX(levelCompleteHSFX);
             if (!PracticeManagerScript.practiceMode)
@@ -45,8 +48,18 @@ public class LevelCompleteScript : MonoBehaviour
                 animator.SetTrigger("PracticeCompleteH");
             }
         }
-
-        UIManager = GameObject.Find("UIManager");
+        else
+        {
+            PlaySFX(levelCompleteASFX);
+            if (!PracticeManagerScript.practiceMode)
+            {
+                animator.SetTrigger("LevelCompleteA");
+            }
+            else
+            {
+                animator.SetTrigger("PracticeCompleteA");
+            }
+        }
     }
 
     private void SetLevelCompleteText()
@@ -65,11 +78,22 @@ public class LevelCompleteScript : MonoBehaviour
     {
         if (!PracticeManagerScript.practiceMode)
         {
-            string mode = PlayerPrefs.GetString("Mode") == "N" ? "Normal" : "Hard";
-            string attemptsKey = StaticInformation.level + "-" + PlayerPrefs.GetString("Mode") + "-TA";
-            string attempts = PlayerPrefs.GetInt(attemptsKey).ToString();
-            levelInfoText.fontSize = 65;
-            levelInfoText.text = $"Mode: {mode} \t Attempts: {attempts}";
+            if (PlayerPrefs.GetString("Mode") == "A")
+            {
+                float currentAccuracy = UIManager.GetComponent<UIManagerScript>().currentAccuracy;
+                string bestAccuracyKey = StaticInformation.level + "-" + PlayerPrefs.GetString("Mode") + "-HS";
+                float bestAccuracy = PlayerPrefs.GetFloat(bestAccuracyKey);
+                levelInfoText.fontSize = 60;
+                levelInfoText.text = $"Accuracy: {currentAccuracy}% \t Best: {bestAccuracy}%";
+            }
+            else
+            { 
+                string mode = PlayerPrefs.GetString("Mode") == "N" ? "Normal" : "Hard";
+                string attemptsKey = StaticInformation.level + "-" + PlayerPrefs.GetString("Mode") + "-TA";
+                string attempts = PlayerPrefs.GetInt(attemptsKey).ToString();
+                levelInfoText.fontSize = 60;
+                levelInfoText.text = $"Mode: {mode} \t Attempts: {attempts}";
+            }
         }
         else
         {

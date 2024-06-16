@@ -124,7 +124,11 @@ public class LogicManagerScript : MonoBehaviour
     private void ProcessInput(bool inputCorrect, string inputDetails)
     {
         if (!inputCorrect)
-        { UIManager.GetComponent<UIManagerScript>().TakeDamage(); }
+        { 
+            UIManager.GetComponent<UIManagerScript>().TakeDamage();
+        }
+
+        UIManager.GetComponent<UIManagerScript>().UpdateCurrentAccuracy(inputCorrect);
         Debug.Log(inputDetails);
     }
 

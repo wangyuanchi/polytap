@@ -1014,6 +1014,7 @@ MonoBehaviour:
   animator: {fileID: 331893920660584466}
   levelCompleteNSFX: {fileID: 8300000, guid: fb37f362e3307ac44ab255b7e7b7a767, type: 3}
   levelCompleteHSFX: {fileID: 8300000, guid: 3db2ae3a95bdc8d4eb0038213bed87df, type: 3}
+  levelCompleteASFX: {fileID: 8300000, guid: e4bba5888080b4b4ead147b9a0addd93, type: 3}
 --- !u!82 &1982929649427211971
 AudioSource:
   m_ObjectHideFlags: 0

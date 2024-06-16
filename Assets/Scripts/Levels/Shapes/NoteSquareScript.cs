@@ -75,6 +75,12 @@ public class NoteSquareScript : MonoBehaviour
 
         // Destroy game object after it moves off the screen
         Destroy(noteSquareChild);
+
+        // Need to wait for the next frame if not the deleted child will still be part of childCount
+        yield return null; 
+
+        // Delete parent square object
+        if (gameObject.transform.childCount == 0) Destroy(gameObject);
     }
 
     public void DestroyNoteSquareStart()

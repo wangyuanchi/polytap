@@ -85,7 +85,7 @@ public class NotesManagerScript : MonoBehaviour
         // Start a new beatmap 
         currentNote = 0;
         beatMapCoroutine = StartCoroutine(SpawnBeatMap(beatMap, timeSkipped));
-        UIManager.GetComponent<UIManagerScript>().LoadDifficulty();
+        UIManager.GetComponent<UIManagerScript>().LoadMode();
     }
 
     // [PRACTICE MODE] Using timeSkipped to change values only take place in the spawning of beat map (and prespawning),

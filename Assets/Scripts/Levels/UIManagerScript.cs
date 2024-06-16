@@ -29,9 +29,17 @@ public class UIManagerScript : MonoBehaviour
     private Coroutine UpdateProgressPercentageCoroutine;
 
     [Header("Health")]
+    [SerializeField] private GameObject healthUI;
     [SerializeField] private int health;
     [SerializeField] private RectTransform heartMask;
     private Coroutine animateHeartMaskCoroutine;
+
+    [Header("Accuracy Mode UI")]
+    [SerializeField] private GameObject accuracyModeUI;
+    [SerializeField] private TMP_Text currentAccuracyText;
+    private int correctNotes = 0;
+    private int totalNotesPassed = 0;
+    public float currentAccuracy = 100f;
 
     [Header("Practice UI")]
     [SerializeField] private GameObject practiceManager;
@@ -42,6 +50,7 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField] private GameObject pauseUI;
     [SerializeField] private GameObject normalModeProgressBar;
     [SerializeField] private GameObject hardModeProgressBar;
+    [SerializeField] private GameObject accuracyModeProgressBar;
 
     [Header("Attempts UI")]
     [SerializeField] private GameObject attemptsUI;
@@ -99,7 +108,7 @@ public class UIManagerScript : MonoBehaviour
         }
         LoadBackground();
         LoadAudioVolume();
-        LoadDifficulty();
+        LoadMode();
         LoadParticles();
         SetTotalAttempts();
         SetProgressBar();
@@ -128,27 +137,65 @@ public class UIManagerScript : MonoBehaviour
         audioMixer.SetFloat("SFX Volume", Mathf.Log10(PlayerPrefs.GetFloat("SFX Volume")) * 25);
     }
 
-    public void LoadDifficulty()
+    // Should be called everytime a new note is passed, whether with a correct/wrong or missed input
+    public void UpdateCurrentAccuracy(bool inputCorrect)
     {
-        // If a new checkpoint is set using forward/backward buttons right after a note passes judgement line,
-        // loses health and animation is still playing, health may not be full afterwards
-        // Hence, stop the animation first.
-        if (animateHeartMaskCoroutine != null)
+        if (PlayerPrefs.GetString("Mode") != "A") return; // Only applicable for accuracy mode
+        
+        if (inputCorrect)
         {
-            StopCoroutine(animateHeartMaskCoroutine);
-        }
-
-        if (PlayerPrefs.GetString("Mode") == "N")
-        {
-            health = 3;
-            heartMask.sizeDelta = new Vector2(350f, 100f);
-            PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
+            correctNotes++;
+            totalNotesPassed++;
         }
         else
         {
-            health = 1;
-            heartMask.sizeDelta = new Vector2(110f, 100f);
-            PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
+            totalNotesPassed++;
+        }
+
+        if (totalNotesPassed == 0) return; // Prevent divide by 0
+
+        currentAccuracy = (float)Math.Round(correctNotes * 100f / totalNotesPassed, 2);
+        currentAccuracyText.text = $"{currentAccuracy}%";
+    }
+
+    public void LoadMode()
+    {
+        if (PlayerPrefs.GetString("Mode") == "A")
+        {
+            accuracyModeUI.gameObject.SetActive(true);
+            PostProcessing.GetComponent<VignetteScript>().SetVignette(3); // No vignette, like in normal mode
+
+            // Reset variables
+            correctNotes = 0;
+            totalNotesPassed = 0;
+            currentAccuracy = 100f;
+            currentAccuracyText.text = "100%";
+        }
+        else
+        {
+            // HealthUI is used for normal and hard mode
+            healthUI.gameObject.SetActive(true);
+
+            // If a new checkpoint is set using forward/backward buttons right after a note passes judgement line,
+            // loses health and animation is still playing, health may not be full afterwards
+            // Hence, stop the animation first.
+            if (animateHeartMaskCoroutine != null)
+            {
+                StopCoroutine(animateHeartMaskCoroutine);
+            }
+
+            if (PlayerPrefs.GetString("Mode") == "N")
+            {
+                health = 3;
+                heartMask.sizeDelta = new Vector2(350f, 100f);
+                PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
+            }
+            else
+            {
+                health = 1;
+                heartMask.sizeDelta = new Vector2(110f, 100f);
+                PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
+            }
         }
     }
 
@@ -207,16 +254,20 @@ public class UIManagerScript : MonoBehaviour
         string levelName = StaticInformation.level;
         float normalModeHighScore = PlayerPrefs.GetFloat($"{levelName}-N-HS");
         float hardModeHighScore = PlayerPrefs.GetFloat($"{levelName}-H-HS");
+        float accuracyModeHighScore = PlayerPrefs.GetFloat($"{levelName}-A-HS");
         int normalModeAttempts = PlayerPrefs.GetInt($"{levelName}-N-TA");
         int hardModeAttempts = PlayerPrefs.GetInt($"{levelName}-H-TA");
+        int accuracyModeAttempts = PlayerPrefs.GetInt($"{levelName}-A-TA");
 
         // Set progress bar fill
         normalModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = normalModeHighScore / 100;
         hardModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = hardModeHighScore / 100;
+        accuracyModeProgressBar.transform.Find("ProgressBarFilled").GetComponent<Image>().fillAmount = accuracyModeHighScore / 100;
 
         // Set progress text
         normalModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{normalModeHighScore}% ({normalModeAttempts})";
         hardModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{hardModeHighScore}% ({hardModeAttempts})";
+        accuracyModeProgressBar.transform.Find("ProgressText").GetComponent<TextMeshProUGUI>().text = $"{accuracyModeHighScore}% ({accuracyModeAttempts})";
     }
 
     private IEnumerator UpdateProgressPercentage()
@@ -254,6 +305,13 @@ public class UIManagerScript : MonoBehaviour
 
     public void TakeDamage()
     {
+        if (PlayerPrefs.GetString("Mode") == "A")
+        {
+            PostProcessing.GetComponent<VignetteScript>().VignettePulse();
+            return;
+        }
+
+        // Health mechanism is only for normal and hard mode 
         health--;
         PostProcessing.GetComponent<VignetteScript>().SetVignette(health);
 
@@ -303,7 +361,7 @@ public class UIManagerScript : MonoBehaviour
         if (newHighScore)
         {
             SetProgressBar();
-            if (!levelComplete)
+            if (!levelComplete) // This means that no newBestOverlay will be shown for accuracy mode, as level will always be complete
             { 
                 Instantiate(newBestOverlay, transform.position, transform.rotation); 
             }
@@ -341,22 +399,25 @@ public class UIManagerScript : MonoBehaviour
         // [PRACTICE MODE] Do not set any high scores if in practice mode
         if (PracticeManagerScript.practiceMode == true) return false;
 
-        string key;
-        
-        if (PlayerPrefs.GetString("Mode") == "N")
+        string key = StaticInformation.level + "-" + PlayerPrefs.GetString("Mode") + "-HS";
+        float highScore = PlayerPrefs.GetFloat(key);
+
+        // Accuracy mode has different high score calculation as compared to normal and hard mode
+        if (PlayerPrefs.GetString("Mode") == "A")
         {
-            key = StaticInformation.level + "-N-HS";
+            if (highScore < currentAccuracy)
+            {
+                PlayerPrefs.SetFloat(key, currentAccuracy);
+                return true;
+            }
         }
         else
         {
-            key = StaticInformation.level + "-H-HS";
-        }
-
-        float highScore = PlayerPrefs.GetFloat(key);
-        if (highScore < progressPercentage)
-        {
-            if (PlayerPrefs.HasKey(key)) { PlayerPrefs.SetFloat(key, progressPercentage); }
-            return true;
+            if (highScore < progressPercentage)
+            {
+                PlayerPrefs.SetFloat(key, progressPercentage);
+                return true;
+            }
         }
 
         return false;
