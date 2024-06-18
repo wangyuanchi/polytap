@@ -2025,6 +2025,7 @@ MonoBehaviour:
   heartMask: {fileID: 1232000856}
   accuracyModeUI: {fileID: 205825913}
   currentAccuracyText: {fileID: 1252638393}
+  currentAccuracy: 100
   practiceManager: {fileID: 1036583455}
   forwardsButton: {fileID: 1857009332}
   backwardsButton: {fileID: 189335688}
