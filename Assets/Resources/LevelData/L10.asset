@@ -16,4 +16,4 @@ MonoBehaviour:
   background: {fileID: 21300000, guid: 1f7e1ebedac65a144bb94df9b5bc6ce1, type: 3}
   inputParticles: {fileID: 6093069315959623814, guid: ee4864b4522b09c44b514ab0ce806d86, type: 3}
   ambientParticles: {fileID: 1691201191890459280, guid: 0fbd58cdf743f4044a17aa8923a4c2f6, type: 3}
-  beatMapEndTime: 120.577
+  beatMapEndTime: 121.576
