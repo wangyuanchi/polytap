@@ -68,6 +68,15 @@ public class NoteSquareScript : MonoBehaviour
         // Check for null because notes can be deleted based on user input or if user misses the note
         while (defaultElapsedTime < defaultTimeSpawnToDestroy && noteSquareChild != null)
         {
+            // Plays the fading out animation to prevent cluttering if the note is past the judgement line
+            if (noteSquareChild.transform.localScale.x > 1.25 && noteSquareChild.GetComponent<SpriteRenderer>().color.a != 0)
+            {
+                if (!noteSquareChild.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("FadeOut"))
+                {
+                    noteSquareChild.GetComponent<Animator>().SetTrigger("FadeOut");
+                }
+            }
+
             defaultElapsedTime += Time.deltaTime;
             noteSquareChild.transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), defaultElapsedTime / defaultTimeSpawnToDestroy);
             yield return null;

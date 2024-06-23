@@ -1,4 +1,4 @@
-    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -19,13 +19,14 @@ public class LogsScript : MonoBehaviour
         // On first log, changes text to received text
         // Otherwise, append it as a new line
         if (tempText == "") { tempText = text; }
-        else { tempText += "\n" + text; }
+        else { tempText = text + "\n" + tempText; }
         logsText.text = tempText;
     }
 
-    // To prevent more than 3 logs being accumulated in practice mode
+    // To prevent accumulation of logs in practice mode
     public void ClearLogs()
     {
         tempText = "";
+        logsText.text = tempText;
     }
 }

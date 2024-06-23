@@ -17,6 +17,9 @@ public class NoteTriangleScript : MonoBehaviour
                                        // not necessarily at (0, 0, 0) due to prespawns, to the judgement line at (1, 1, 1)
     public float defaultTimeSpawnToJudgement; // This is the time it takes for a note to move from (0, 0, 0) to the judgement line at (1, 1, 1)
 
+    [Header("Animation")]
+    [SerializeField] private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,13 +42,16 @@ public class NoteTriangleScript : MonoBehaviour
         // Scaling up with time from starting position
         while (defaultElapsedTime < defaultTimeSpawnToDestroy)
         {
+            // Plays the fading out animation to prevent cluttering if the note is past the judgement line
+            if (transform.localScale.x > 1.125 && !animator.GetCurrentAnimatorStateInfo(0).IsName("FadeOut"))
+            {
+                animator.SetTrigger("FadeOut");
+            }
+
             defaultElapsedTime += Time.deltaTime;
             transform.localScale = Vector3.Lerp(Vector3.zero, new Vector3(finalScale, finalScale, finalScale), defaultElapsedTime / defaultTimeSpawnToDestroy);
             yield return null;
         }
-
-        // Destroy game object after it moves off the screen
-        Destroy(gameObject);
     }
 
     public void SetSprite(float accuracyWindow)
@@ -57,5 +63,10 @@ public class NoteTriangleScript : MonoBehaviour
         else if (accuracyWindow == 0.1f) { spriteRenderer.sprite = noteTriangle100; }
         else if (accuracyWindow == 0.125f) { spriteRenderer.sprite = noteTriangle125; }
         else { Debug.Log("Invalid Accuracy Window! Sprite set as default [noteTriangleDefault.png]."); }
+    }
+
+    public void DestroyNote()
+    {
+        Destroy(gameObject);
     }
 }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8585782628635255066}
   - component: {fileID: 2230985340077003222}
   - component: {fileID: 3419017282176291017}
+  - component: {fileID: 2848833429349069755}
   m_Layer: 0
   m_Name: NoteCircle
   m_TagString: Untagged
@@ -104,3 +105,25 @@ MonoBehaviour:
   noteCircle125: {fileID: 21300000, guid: 2b2bbd1efb909ab4ca6725ef3d09f7a2, type: 3}
   timeSpawnToJudgement: 0
   defaultTimeSpawnToJudgement: 0
+  animator: {fileID: 2848833429349069755}
+--- !u!95 &2848833429349069755
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8569020730096176565}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c76d868ccc1bed84788554b33e5ad52d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

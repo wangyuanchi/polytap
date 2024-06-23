@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2581017695242136731}
   - component: {fileID: 1952322629055500264}
   - component: {fileID: 8709607907276310219}
+  - component: {fileID: 5658908807697296389}
   m_Layer: 0
   m_Name: NoteTriangle
   m_TagString: Untagged
@@ -104,3 +105,25 @@ MonoBehaviour:
   noteTriangle125: {fileID: 21300000, guid: 8319d60e29d88624f8e228206a88f16c, type: 3}
   timeSpawnToJudgement: 0
   defaultTimeSpawnToJudgement: 0
+  animator: {fileID: 5658908807697296389}
+--- !u!95 &5658908807697296389
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6818662013703148609}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 543bcede9b9106444815711f4d408015, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

@@ -433,6 +433,7 @@ public class UIManagerScript : MonoBehaviour
     {
         pauseUI.SetActive(true);
         Time.timeScale = 0;
+        logicManager.GetComponent<LogicManagerScript>().DisableShapeInputs(); // Prevents notes being pressed if paused on the judgement line
         levelMusic.GetComponent<LevelMusicScript>().PauseMusic();
     }
 
@@ -440,6 +441,7 @@ public class UIManagerScript : MonoBehaviour
     {
         pauseUI.SetActive(false);
         Time.timeScale = 1;
+        logicManager.GetComponent<LogicManagerScript>().EnableShapeInputs();
         levelMusic.GetComponent<LevelMusicScript>().ResumeMusic();
     }
 
