@@ -17,10 +17,11 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
     [Header("Navigation")]
     [SerializeField] private Button nextButton;
     [SerializeField] private Button prevButton;
+    private Coroutine scrollCoroutine;
 
     [Header("Animation")]
-    [SerializeField] private float tweenTime;
-    [SerializeField] private LeanTweenType tweenType;
+    [SerializeField] private float scrollDuration;
+    [SerializeField] private AnimationCurve slideEase;
     private float dragThreshold;
 
     void Start()
@@ -58,11 +59,35 @@ public class ScrollControllerScript : MonoBehaviour, IEndDragHandler
     
     private void MovePage()
     {
-        levelsRectTransform.LeanMoveLocal(targetPos, tweenTime).setEase(tweenType);
+        // Accomodates for multiple calls if previous animation has not completed
+        if (scrollCoroutine != null)
+        {
+            StopCoroutine(scrollCoroutine);
+        }
+        scrollCoroutine = StartCoroutine(ScrollToPosition(targetPos.x));
+
         nextButton.interactable = true;
         prevButton.interactable = true;
         if (currentPage == maxPage) nextButton.interactable = false;
         if (currentPage == 1) prevButton.interactable = false;
+    }
+
+    private IEnumerator ScrollToPosition(float targetX)
+    {
+        float currentX = levelsRectTransform.localPosition.x;
+        float timeElapsed = 0f;
+
+        while (timeElapsed < scrollDuration)
+        {
+            timeElapsed += Time.deltaTime;
+            float lerpFactor = slideEase.Evaluate(timeElapsed / scrollDuration);
+            levelsRectTransform.localPosition = new Vector3(Mathf.Lerp(currentX, targetX, lerpFactor),
+                levelsRectTransform.localPosition.y, levelsRectTransform.localPosition.z);
+            yield return null;
+        }
+
+        // Makes sure the final position is exact
+        levelsRectTransform.localPosition = new Vector3(targetX, levelsRectTransform.localPosition.y, levelsRectTransform.localPosition.z);
     }
 
     public void OnEndDrag(PointerEventData eventData)
