@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 71409648}
   - component: {fileID: 71409650}
   - component: {fileID: 71409649}
+  - component: {fileID: 71409651}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -219,8 +220,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 625, y: -653.375}
-  m_SizeDelta: {x: 1250, y: 1270}
+  m_AnchoredPosition: {x: 625, y: -710}
+  m_SizeDelta: {x: 1200, y: 3800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71409649
 MonoBehaviour:
@@ -255,10 +256,33 @@ MonoBehaviour:
     \xB175ms (Correct), \xB175ms to \xB1187ms (Too Early/Late)\nOrange: \xB150ms
     (Correct), \xB150ms to \xB1169ms (Too Early/Late)\nRed: \xB125ms (Correct), \xB125ms
     to \xB1139ms (Too Early/Late)\nAny other timings, if earlier, will not be penalized,
-    and if later, will be a miss."
+    and if later, will be a miss.\n\n<u><b><size=50><align=center>Credits</align></size></b></u>\r\nClick
+    on the links to visit the resources used!\n\nLobby Music: <u><link=\"https://www.newgrounds.com/audio/listen/806079\">Waterflame
+    - Floating</link></u>\n\r\nLevel 1\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1220995\">Waterflame
+    - Starcrater</link>\r</u>\nBackground: <u><link=\"https://digitalmoons.itch.io/pixel-skies-demo\">Digital
+    Moons - Pixel Skies</link>\r</u>\n\r\nLevel 2\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/110798\">Waterflame
+    - Race around the world</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/nature-landscapes-free-pixel-art\">Craftpix
+    - Nature Landscapes Pixel Art</link>\r</u>\n\r\nLevel 3\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/516761\">Waterflame
+    - Dreamscape</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/free-summer-pixel-art-backgrounds\">Craftpix
+    - Summer Pixel Backgrounds</link>\r</u>\n\r\nLevel 4\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1168412\">Waterflame
+    - Time Machine 2</link>\r</u>\nBackground: <u><link=\"https://misoshiru-studio.itch.io/overgrown-passageways\">Misoshiru
+    Studio - Overgrown Passageways</link>\r</u>\n\r\nLevel 5\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/678497\">KabukiTunes
+    - Promises</link>\r</u>\nBackground: <u><link=\"https://shiroze.itch.io/stormy-mountains\">Shiroze
+    - Stormy Mountains</link>\r</u>\n\r\nLevel 6\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/711933\">Waterflame
+    - Striker</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/free-city-backgrounds-pixel-art\">Craftpix
+    - Modern City Backgrounds Pixel Art</link>\r</u>\n\r\nLevel 7\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/786346\">cYsmix
+    - Babaroque</link>\r</u>\nBackground: <u><link=\"https://shiroze.itch.io/starry-night-parallax-background\">Shiroze
+    - Starry Night</link>\r</u>\n\r\nLevel 8\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/85046\">ParagonX9
+    - Chaoz Fantasy</link>\r</u>\nBackground: <u><link=\"https://www.deviantart.com/dacxell/art/The-Sun-Sets-on-the-Cherry-Blossom-Pixel-City-974765330\">Dacxell
+    - The Sun Sets on the Cherry Blossom Pixel City</link>\r</u>\n\r\nLevel 9\nMusic:
+    <u><link=\"https://www.newgrounds.com/audio/listen/1272565\">LunitaCL - Euphoria</link>\r</u>\nBackground:
+    <u><link=\"https://dusan-pavkovic-warlord.itch.io/skadovsk\">Dusan Pavkovic WARlord
+    - Skadovsk the rusty barque</link>\r</u>\n\r\nLevel 10\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/467339\">Dimrain47
+    - At the speed of light</link>\r</u>\nBackground: <u><link=\"https://aamatniekss.artstation.com/projects/VwKZR\">Nauris
+    Amatnieks - Blood Moon</link></u>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: a5291e80f5bef7a4985eae8b98993a14, type: 2}
+  m_sharedMaterial: {fileID: 1510713269788925125, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -332,6 +356,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 71409647}
   m_CullTransparentMesh: 1
+--- !u!114 &71409651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71409647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83366a6a87546d14f92e8b620006afec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &138417167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -342,7 +378,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1659755535763017245, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_text
-      value: Time Machine
+      value: Time Machine 2
       objectReference: {fileID: 0}
     - target: {fileID: 2393011329770122938, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -716,8 +752,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 579450964}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.19772336, y: 0}
-  m_AnchorMax: {x: 0.8022766, y: 1}
+  m_AnchorMin: {x: 0.221831, y: 0}
+  m_AnchorMax: {x: 0.77816904, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -842,7 +878,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 377149299}
   m_Direction: 0
   m_Value: 0.5
-  m_Size: 0.6045533
+  m_Size: 0.556338
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1729,7 +1765,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0.000015258789}
-  m_SizeDelta: {x: 1250, y: 1306.75}
+  m_SizeDelta: {x: 1250, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &751188425
 MonoBehaviour:
@@ -2735,7 +2771,7 @@ PrefabInstance:
     - target: {fileID: 4835887895440872157, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 1f7e1ebedac65a144bb94df9b5bc6ce1, type: 3}
+      objectReference: {fileID: 21300000, guid: 190bf5a670ed1ca4f975db92ae84368e, type: 3}
     - target: {fileID: 7778165831145472272, guid: 635a46e0505a113499b38208cf869bb8, type: 3}
       propertyPath: m_Name
       value: L10
