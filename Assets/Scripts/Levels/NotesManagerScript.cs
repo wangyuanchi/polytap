@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using Unity.IO;
+using System.IO;
 
 public class NotesManagerScript : MonoBehaviour
 {
@@ -43,7 +45,7 @@ public class NotesManagerScript : MonoBehaviour
     void Start()
     {
         string levelName = StaticInformation.level;
-        string filepath = $"Assets\\Resources\\BeatMaps\\{levelName}.csv";
+        string filepath = Path.Combine(Application.streamingAssetsPath, $"BeatMaps\\{levelName}.csv");
         beatMap = MarkersProcessingScript.ProcessMarkers(filepath);
         
         noteSpeed = PlayerPrefs.GetInt("Note Speed");
