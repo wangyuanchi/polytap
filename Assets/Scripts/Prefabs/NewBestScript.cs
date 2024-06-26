@@ -16,8 +16,12 @@ public class NewBestScript : MonoBehaviour
     [Header("SFX")]
     [SerializeField] private AudioClip newBestSFX;
 
+    [Header("Canvas")]
+    [SerializeField] private Canvas canvas;
+
     void Awake()
     {
+        canvas.worldCamera = Camera.main;
         SetNewBestText();
         animator.SetTrigger("NewBest");
         LoadParticles();

@@ -16,10 +16,14 @@ public class LevelCompleteScript : MonoBehaviour
     [SerializeField] private AudioClip levelCompleteHSFX;
     [SerializeField] private AudioClip levelCompleteASFX;
 
+    [Header("Canvas")]
+    [SerializeField] private Canvas canvas;
+
     private GameObject UIManager;
 
     void Awake()
     {
+        canvas.worldCamera = Camera.main;
         UIManager = GameObject.Find("UIManager");
 
         SetLevelCompleteText();
