@@ -1,7 +1,10 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
+using Unity.Plastic.Newtonsoft.Json.Linq;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 ////TODO: localization support
 
@@ -205,6 +208,11 @@ namespace UnityEngine.InputSystem.Samples.RebindUI
                 var bindingIndex = action.bindings.IndexOf(x => x.id.ToString() == m_BindingId);
                 if (bindingIndex != -1)
                     displayString = action.GetBindingDisplayString(bindingIndex, out deviceLayoutName, out controlPath, displayStringOptions);
+                string[] words = displayString.Split(" ");
+                if (words[0] == "Tap" || words[0] == "MultiTap")
+                {
+                    displayString = string.Join(" ", words.Skip(1));
+                }
             }
 
             // Set on label (if any).
