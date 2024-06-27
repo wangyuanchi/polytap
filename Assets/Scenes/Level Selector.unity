@@ -277,7 +277,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 625, y: -710}
-  m_SizeDelta: {x: 1200, y: 3800}
+  m_SizeDelta: {x: 1200, y: 3880}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71409649
 MonoBehaviour:
@@ -306,7 +306,8 @@ MonoBehaviour:
     different parts of the level using the \"Practice\" mode available through the
     pause UI.\n\r\n<u><b><size=50><align=center>Type of Notes</align></size></b></u>\nCircle
     - Single Tap [Space]\nSquare - Hold and Release on its sub-shapes [Right Shift]\r\nTriangle
-    - Double Tap [Enter]\n<size=25>*Keybinds can be set in options</size>\n\r\n<u><b><size=50><align=center>Note
+    - Double Tap (The second tap must be at most 0.75s after the first, and then
+    the input will be registered) [Enter]\n<size=25>*Keybinds can be set in options</size>\n\r\n<u><b><size=50><align=center>Note
     Timings</align></size></b></u>\nBlue: \xB1125ms (Correct), \xB1125ms to \xB1209ms
     (Too Early/Late)\nGreen: \xB1100ms (Correct), \xB1100ms to \xB1200ms (Too Early/Late)\nYellow:
     \xB175ms (Correct), \xB175ms to \xB1187ms (Too Early/Late)\nOrange: \xB150ms
