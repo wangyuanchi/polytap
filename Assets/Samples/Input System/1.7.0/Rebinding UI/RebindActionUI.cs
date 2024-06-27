@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Unity.Plastic.Newtonsoft.Json.Linq;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 
 ////TODO: localization support
 
