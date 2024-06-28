@@ -3557,8 +3557,8 @@ MonoBehaviour:
   m_FillRect: {fileID: 2127269223}
   m_HandleRect: {fileID: 1205851122}
   m_Direction: 0
-  m_MinValue: -200
-  m_MaxValue: 200
+  m_MinValue: -500
+  m_MaxValue: 500
   m_WholeNumbers: 1
   m_Value: 0
   m_OnValueChanged:
@@ -3838,7 +3838,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 625, y: -710}
-  m_SizeDelta: {x: 1200, y: 1345}
+  m_SizeDelta: {x: 1200, y: 1560}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &549555980
 MonoBehaviour:
@@ -3873,22 +3873,23 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: '<b>Note Speed:</b> A faster note speed will cause notes to move faster,
-    and lesser notes on the screen at one time.
+    and less notes on the screen at any one time.
 
 
     <b>Practice Skip Duration:</b>
-    This is the interval between each forwards/backwards skip in practice mode.
+    This is the interval between each forwards/backwards skip in "Practice" mode.
 
 
     <b>Music
-    Offset:</b> If the music/metronome is always late with respect to the notes,
-    your music offset must be positive so that music can play earlier. If the music/metronome
-    is early, your music offset must be negative.
+    Offset:</b> If the music/metronome is late with respect to the notes, your music
+    offset must increase (shift slider rightwards) so that the music can play earlier.
+    If the music/metronome is early, your music offset must be decrease (shift slider
+    leftwards).
 
 
-    <b>Input Offset:</b> If your
-    input is always late, your input offset must be positive so that it will be processed
-    earlier. If your input is always early, your input offset must be negative.
+    <b>Input Offset:</b> If your input is late, your input offset
+    must increase (shift slider rightwards) so that it will be processed earlier.
+    If your input is early, your input offset must decrease (shift slider leftwards).
 
 
     <b>Attempts:</b>
@@ -3898,11 +3899,13 @@ MonoBehaviour:
 
     <b>Accuracy:</b> This is
     the accuracy of your input with respect to each note. An early input would be
-    positive in green, and a late input would be negative in red.
+    positive in green, and a late input would be negative in red. This can be displayed
+    everytime an input is detected.
 
 
-    <b>Logs:</b>
-    This is the live updating of every note that was too early, too late or missed.'
+    <b>Logs:</b> This is the live updating
+    of every note that was too early, too late or missed. This can be displayed during
+    the playthrough of a level.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
   m_sharedMaterial: {fileID: 1510713269788925125, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
@@ -12314,7 +12317,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: '<b>Music Calibration:</b> Adjust the music offset slider previously such
-    that the note reaches the line on the 3rd beat.
+    that the note reaches the line on the <u>3rd</u> beat.
 
     <b>Input Calibration:</b>
     Tap "W [Keyboard]" when the note reaches the line (ignore metronome).

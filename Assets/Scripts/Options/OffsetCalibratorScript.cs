@@ -92,7 +92,7 @@ public class OffsetCalibratorScript : MonoBehaviour
         }
 
         // For last bar of 4 beats to complete, then stop metronome
-        yield return new WaitForSeconds(interval);
+        yield return new WaitForSeconds(interval - 0.25f - musicOffset);
         calibrationMetronome.Stop();
 
         // inputOffset default to 0 if no inputs have been made, prevent out of bounds error
