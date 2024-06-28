@@ -87,8 +87,11 @@ public class MarkersProcessingScript : MonoBehaviour
         // Convert to seconds and add
         float totalTime = minutes * 60 + seconds;
 
-        // Buffer for better syncing
-        float totalTimeWithBuffer = totalTime + 0.265f;
+        // Example: If the music is always 10ms late,
+        // music offset will be +10ms and all notes will also spawn 10ms late
+        // Hence, the music offset needs to be ADDED to the total time
+        float musicOffset = PlayerPrefs.GetInt("Music Offset") / 1000f;
+        float totalTimeWithBuffer = totalTime + 0.25f + musicOffset;
 
         return totalTimeWithBuffer.ToString();
     }

@@ -135,9 +135,9 @@ public class NotesManagerScript : MonoBehaviour
         GameObject newNote;
 
         // Example: If the player is always 10ms late on every note,
-        // global offset will be -10ms and every note needs to be detected 10ms later.
-        // Hence, the global offset needs to be DEDUCTED from the normal timeStamp in the notesTimingsQueue
-        float globalOffset = (float)PlayerPrefs.GetInt("Global Offset") / 1000; // Convert ms to s
+        // input offset will be +10ms and every note needs to be detected 10ms later.
+        // Hence, the input offset needs to be ADDED from the normal timeStamp in the notesTimingsQueue
+        float inputOffset = (float)PlayerPrefs.GetInt("Input Offset") / 1000; // Convert ms to s
 
         // [PRACTICE MODE] Need to include timeSkipped for prespawns if not it will base off old timestamps
         float noteTimeStamp = float.Parse(note["timeStamp"]) - timeSkipped;
@@ -165,7 +165,7 @@ public class NotesManagerScript : MonoBehaviour
                     new Dictionary<string, float>
                     {
                         { "accuracyWindow", float.Parse(note["accuracyWindow"]) },
-                        { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset }
+                        { "timeStamp", float.Parse(note["timeStamp"]) + inputOffset }
                     }
                 );
         }
@@ -194,7 +194,7 @@ public class NotesManagerScript : MonoBehaviour
                     new Dictionary<string, float>
                     {
                         { "accuracyWindow", float.Parse(note["accuracyWindow"]) },
-                        { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset },
+                        { "timeStamp", float.Parse(note["timeStamp"]) + inputOffset },
                         { "duration", float.Parse(note["timeStampRelease"]) - float.Parse(note["timeStamp"]) }
                     }
                 );
@@ -223,7 +223,7 @@ public class NotesManagerScript : MonoBehaviour
                     new Dictionary<string, float>
                     {
                         { "accuracyWindow", float.Parse(note["accuracyWindow"]) },
-                        { "timeStamp", float.Parse(note["timeStamp"]) - globalOffset },
+                        { "timeStamp", float.Parse(note["timeStamp"]) + inputOffset },
                     }
                 );
         }

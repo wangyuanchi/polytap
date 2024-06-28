@@ -277,7 +277,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 625, y: -710}
-  m_SizeDelta: {x: 1200, y: 3880}
+  m_SizeDelta: {x: 1200, y: 3975}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71409649
 MonoBehaviour:
@@ -304,37 +304,40 @@ MonoBehaviour:
     1 in \"Hard\" mode, try to reach the end!\nYou do not lose lives in \"Accuracy\"
     mode, and you can play through the whole level to see your progress from perfection.\nPractice
     different parts of the level using the \"Practice\" mode available through the
-    pause UI.\n\r\n<u><b><size=50><align=center>Type of Notes</align></size></b></u>\nCircle
-    - Single Tap [Space]\nSquare - Hold and Release on its sub-shapes [Right Shift]\r\nTriangle
-    - Double Tap (The second tap must be at most 0.75s after the first, and then
-    the input will be registered) [Enter]\n<size=25>*Keybinds can be set in options</size>\n\r\n<u><b><size=50><align=center>Note
-    Timings</align></size></b></u>\nBlue: \xB1125ms (Correct), \xB1125ms to \xB1209ms
-    (Too Early/Late)\nGreen: \xB1100ms (Correct), \xB1100ms to \xB1200ms (Too Early/Late)\nYellow:
-    \xB175ms (Correct), \xB175ms to \xB1187ms (Too Early/Late)\nOrange: \xB150ms
-    (Correct), \xB150ms to \xB1169ms (Too Early/Late)\nRed: \xB125ms (Correct), \xB125ms
-    to \xB1139ms (Too Early/Late)\nAny other timings, if earlier, will not be penalized,
-    and if later, will be a miss.\n\n<u><b><size=50><align=center>Credits</align></size></b></u>\r\nClick
-    on the links to visit the resources used!\n\nLobby Music: <u><link=\"https://www.newgrounds.com/audio/listen/806079\">Waterflame
-    - Floating</link></u>\n\r\nLevel 1\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1220995\">Waterflame
+    pause UI.\n<b>It is highly recommended to calibrate your music and input offsets
+    in \"Options\" for the best experience.</b>\n\r\n<u><b><size=50><align=center>Type
+    of Notes</align></size></b></u>\n<b>Circle</b> - Single Tap [Space]\n<b>Square</b>
+    - Hold and Release on its sub-shapes [Right Shift]\r\n<b>Triangle</b> - Double
+    Tap (The second tap must be at most 0.75s after the first, and then the input
+    will be registered) [Enter]\n<size=25>*Keybinds can be set in options</size>\n\r\n<u><b><size=50><align=center>Note
+    Timings</align></size></b></u>\n<b>Blue:</b> \xB1125ms (Correct), \xB1125ms to
+    \xB1209ms (Too Early/Late)\n<b>Green:</b> \xB1100ms (Correct), \xB1100ms to \xB1200ms
+    (Too Early/Late)\n<b>Yellow:</b> \xB175ms (Correct), \xB175ms to \xB1187ms (Too
+    Early/Late)\n<b>Orange:</b> \xB150ms (Correct), \xB150ms to \xB1169ms (Too Early/Late)\n<b>Red:</b>
+    \xB125ms (Correct), \xB125ms to \xB1139ms (Too Early/Late)\nAny other timings,
+    if earlier, will not be penalized, and if later, will be a miss.\n\n<u><b><size=50><align=center>Credits</align></size></b></u>\r\nClick
+    on the links to visit the resources used!\n\n<b>Lobby Music</b>: <u><link=\"https://www.newgrounds.com/audio/listen/806079\">Waterflame
+    - Floating</link></u>\n\r\n<b>Level 1</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1220995\">Waterflame
     - Starcrater</link>\r</u>\nBackground: <u><link=\"https://digitalmoons.itch.io/pixel-skies-demo\">Digital
-    Moons - Pixel Skies</link>\r</u>\n\r\nLevel 2\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/110798\">Waterflame
+    Moons - Pixel Skies</link>\r</u>\n\r\n<b>Level 2</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/110798\">Waterflame
     - Race around the world</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/nature-landscapes-free-pixel-art\">Craftpix
-    - Nature Landscapes Pixel Art</link>\r</u>\n\r\nLevel 3\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/516761\">Waterflame
+    - Nature Landscapes Pixel Art</link>\r</u>\n\r\n<b>Level 3</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/516761\">Waterflame
     - Dreamscape</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/free-summer-pixel-art-backgrounds\">Craftpix
-    - Summer Pixel Backgrounds</link>\r</u>\n\r\nLevel 4\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1168412\">Waterflame
+    - Summer Pixel Backgrounds</link>\r</u>\n\r\n<b>Level 4</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1168412\">Waterflame
     - Time Machine 2</link>\r</u>\nBackground: <u><link=\"https://misoshiru-studio.itch.io/overgrown-passageways\">Misoshiru
-    Studio - Overgrown Passageways</link>\r</u>\n\r\nLevel 5\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/678497\">KabukiTunes
+    Studio - Overgrown Passageways</link>\r</u>\n\r\n<b>Level 5</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/678497\">KabukiTunes
     - Promises</link>\r</u>\nBackground: <u><link=\"https://shiroze.itch.io/stormy-mountains\">Shiroze
-    - Stormy Mountains</link>\r</u>\n\r\nLevel 6\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/711933\">Waterflame
+    - Stormy Mountains</link>\r</u>\n\r\n<b>Level 6</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/711933\">Waterflame
     - Striker</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/free-city-backgrounds-pixel-art\">Craftpix
-    - Modern City Backgrounds Pixel Art</link>\r</u>\n\r\nLevel 7\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/786346\">cYsmix
-    - Babaroque</link>\r</u>\nBackground: <u><link=\"https://shiroze.itch.io/starry-night-parallax-background\">Shiroze
-    - Starry Night</link>\r</u>\n\r\nLevel 8\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/85046\">ParagonX9
+    - Modern City Backgrounds Pixel Art</link>\r</u>\n\r\n<b>Level 7</b>\nMusic:
+    <u><link=\"https://www.newgrounds.com/audio/listen/786346\">cYsmix - Babaroque</link>\r</u>\nBackground:
+    <u><link=\"https://shiroze.itch.io/starry-night-parallax-background\">Shiroze
+    - Starry Night</link>\r</u>\n\r\n<b>Level 8</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/85046\">ParagonX9
     - Chaoz Fantasy</link>\r</u>\nBackground: <u><link=\"https://www.deviantart.com/dacxell/art/The-Sun-Sets-on-the-Cherry-Blossom-Pixel-City-974765330\">Dacxell
-    - The Sun Sets on the Cherry Blossom Pixel City</link>\r</u>\n\r\nLevel 9\nMusic:
+    - The Sun Sets on the Cherry Blossom Pixel City</link>\r</u>\n\r\n<b>Level 9</b>\nMusic:
     <u><link=\"https://www.newgrounds.com/audio/listen/1272565\">LunitaCL - Euphoria</link>\r</u>\nBackground:
     <u><link=\"https://dusan-pavkovic-warlord.itch.io/skadovsk\">Dusan Pavkovic WARlord
-    - Skadovsk the rusty barque</link>\r</u>\n\r\nLevel 10\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/467339\">Dimrain47
+    - Skadovsk the rusty barque</link>\r</u>\n\r\n<b>Level 10</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/467339\">Dimrain47
     - At the speed of light</link>\r</u>\nBackground: <u><link=\"https://aamatniekss.artstation.com/projects/VwKZR\">Nauris
     Amatnieks - Blood Moon</link></u>"
   m_isRightToLeft: 0
@@ -1821,7 +1824,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.000015258789}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1250, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &751188425
@@ -3527,7 +3530,7 @@ MonoBehaviour:
   m_Content: {fileID: 751188424}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135

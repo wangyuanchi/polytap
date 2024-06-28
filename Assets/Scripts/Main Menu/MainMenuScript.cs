@@ -30,7 +30,8 @@ public class MainMenuScript : MonoBehaviour
         // General
         PlayerPrefs.SetInt("Note Speed", PlayerPrefs.GetInt("Note Speed", 5)); // // Units: arbitrary
         PlayerPrefs.SetFloat("Practice Skip Duration", PlayerPrefs.GetFloat("Practice Skip Duration", 5f)); // Units: seconds
-        PlayerPrefs.SetInt("Global Offset", PlayerPrefs.GetInt("Global Offset", 0)); // Units: milliseconds
+        PlayerPrefs.SetInt("Music Offset", PlayerPrefs.GetInt("Music Offset", 0)); // Units: milliseconds
+        PlayerPrefs.SetInt("Input Offset", PlayerPrefs.GetInt("Input Offset", 0)); // Units: milliseconds
         PlayerPrefs.SetString("Vignette", PlayerPrefs.GetString("Vignette", "true"));
         PlayerPrefs.SetString("Particles", PlayerPrefs.GetString("Particles", "true"));
         PlayerPrefs.SetString("Accuracy", PlayerPrefs.GetString("Accuracy", "false"));

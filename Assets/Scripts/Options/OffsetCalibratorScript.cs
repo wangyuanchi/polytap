@@ -16,6 +16,7 @@ public class OffsetCalibratorScript : MonoBehaviour
     [SerializeField] private GameObject backButton;
     [SerializeField] private GameObject prevButton;
     [SerializeField] private GameObject nextButton;
+    [SerializeField] private GameObject explanationButton;
 
     [Header("Audio Source")]
     [SerializeField] private AudioSource calibrationMetronome;
@@ -24,7 +25,7 @@ public class OffsetCalibratorScript : MonoBehaviour
     [SerializeField] private InputActionReference calibrationActionReference;
 
     [Header("Sliders")]
-    [SerializeField] private GameObject globalOffsetSlider;
+    [SerializeField] private GameObject inputOffsetSlider;
 
     // The time in seconds between 4 notes of 100bpm
     private float interval = (60f / 100f) * 4f;
@@ -53,11 +54,12 @@ public class OffsetCalibratorScript : MonoBehaviour
     private IEnumerator StartCalibration()
     {
         calibrationMetronome.Play();
-        
+
         // Without this buffer, the metronome is expected to be synced with the note, but it is always late
         // Adding this buffer delays the spawning of the note (does not affect optimalTiming has it would also be shifted)
-        // Sound is shown to be played in AudioMixer but only heard after a few frames
-        yield return new WaitForSeconds(0.265f); 
+        // Now, +0.25 is the baseline for music offset, furthur customizable by the slider
+        float musicOffset = PlayerPrefs.GetInt("Music Offset") / 1000f;
+        yield return new WaitForSeconds(0.25f + musicOffset); 
 
         float timer = 0;
         int totalNotesSpawned = 0;
@@ -93,25 +95,22 @@ public class OffsetCalibratorScript : MonoBehaviour
         yield return new WaitForSeconds(interval);
         calibrationMetronome.Stop();
 
-        // globalOffset default to 0 if no inputs have been made, prevent out of bounds error
-        int globalOffset = 0;
+        // inputOffset default to 0 if no inputs have been made, prevent out of bounds error
+        int inputOffset = 0;
         if (inputTimings.Any())
-        { globalOffset = (int)inputTimings.Average(); }
+        { inputOffset = -(int)inputTimings.Average(); }
 
-        // For player to know that global offset has been updated
-        if (globalOffset >= 0) { accuracyText.text = $"Your global offset has been set to +{globalOffset}ms."; }
-        else { accuracyText.text = $"Your global offset has been set to {globalOffset}ms."; }
+        // For player to know that input offset has been updated
+        if (inputOffset >= 0) { accuracyText.text = $"Your input offset has been set to +{inputOffset}ms."; }
+        else { accuracyText.text = $"Your input offset has been set to {inputOffset}ms."; }
 
         // Update preferences and slider
-        PlayerPrefs.SetInt("Global Offset", globalOffset);
-        globalOffsetSlider.GetComponent<GlobalOffsetScript>().LoadGlobalOffset();
+        PlayerPrefs.SetInt("Input Offset", inputOffset);
+        inputOffsetSlider.GetComponent<InputOffsetScript>().LoadInputOffset();
 
         yield return new WaitForSeconds(3);
 
         ShowCalibrationUI(false);
-
-        // Reset accuracy text (required if 2 or more calibrations)
-        accuracyText.text = "+0ms";
     }
 
     private void OnInput(InputAction.CallbackContext context)
@@ -135,6 +134,9 @@ public class OffsetCalibratorScript : MonoBehaviour
 
     public void ShowCalibrationUI(bool show) 
     {
+        // Reset accuracy text
+        accuracyText.text = "+0ms";
+
         if (show)
         {
             LobbyMusicScript.instance.StopLobbyMusic();
@@ -151,5 +153,6 @@ public class OffsetCalibratorScript : MonoBehaviour
         prevButton.SetActive(!show);
         nextButton.SetActive(!show);
         backButton.SetActive(!show);
+        explanationButton.SetActive(!show);
     }
 }
