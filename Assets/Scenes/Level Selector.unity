@@ -318,28 +318,25 @@ MonoBehaviour:
     if earlier, will not be penalized, and if later, will be a miss.\n\n<u><b><size=50><align=center>Credits</align></size></b></u>\r\nClick
     on the links to visit the resources used!\n\n<b>Lobby Music</b>: <u><link=\"https://www.newgrounds.com/audio/listen/806079\">Waterflame
     - Floating</link></u>\n\r\n<b>Level 1</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1220995\">Waterflame
-    - Starcrater</link>\r</u>\nBackground: <u><link=\"https://digitalmoons.itch.io/pixel-skies-demo\">Digital
-    Moons - Pixel Skies</link>\r</u>\n\r\n<b>Level 2</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/110798\">Waterflame
-    - Race around the world</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/nature-landscapes-free-pixel-art\">Craftpix
-    - Nature Landscapes Pixel Art</link>\r</u>\n\r\n<b>Level 3</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/516761\">Waterflame
-    - Dreamscape</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/free-summer-pixel-art-backgrounds\">Craftpix
-    - Summer Pixel Backgrounds</link>\r</u>\n\r\n<b>Level 4</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1168412\">Waterflame
-    - Time Machine 2</link>\r</u>\nBackground: <u><link=\"https://misoshiru-studio.itch.io/overgrown-passageways\">Misoshiru
-    Studio - Overgrown Passageways</link>\r</u>\n\r\n<b>Level 5</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/678497\">KabukiTunes
-    - Promises</link>\r</u>\nBackground: <u><link=\"https://shiroze.itch.io/stormy-mountains\">Shiroze
-    - Stormy Mountains</link>\r</u>\n\r\n<b>Level 6</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/711933\">Waterflame
-    - Striker</link>\r</u>\nBackground: <u><link=\"https://free-game-assets.itch.io/free-city-backgrounds-pixel-art\">Craftpix
-    - Modern City Backgrounds Pixel Art</link>\r</u>\n\r\n<b>Level 7</b>\nMusic:
-    <u><link=\"https://www.newgrounds.com/audio/listen/786346\">cYsmix - Babaroque</link>\r</u>\nBackground:
-    <u><link=\"https://shiroze.itch.io/starry-night-parallax-background\">Shiroze
-    - Starry Night</link>\r</u>\n\r\n<b>Level 8</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/85046\">ParagonX9
-    - Chaoz Fantasy</link>\r</u>\nBackground: <u><link=\"https://www.deviantart.com/dacxell/art/The-Sun-Sets-on-the-Cherry-Blossom-Pixel-City-974765330\">Dacxell
-    - The Sun Sets on the Cherry Blossom Pixel City</link>\r</u>\n\r\n<b>Level 9</b>\nMusic:
+    - Starcrater</link>\r</u>\nBackground: Digital Moons - Pixel Skies\n\r\n<b>Level
+    2</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/110798\">Waterflame
+    - Race around the world</link>\r</u>\nBackground: Craftpix - Nature Landscapes
+    Pixel Art\n\r\n<b>Level 3</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/516761\">Waterflame
+    - Dreamscape</link>\r</u>\nBackground: Craftpix - Summer Pixel Backgrounds\n\r\n<b>Level
+    4</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1168412\">Waterflame
+    - Time Machine 2</link>\r</u>\nBackground: Misoshiru Studio - Overgrown Passageways\n\r\n<b>Level
+    5</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/678497\">KabukiTunes
+    - Promises</link>\r</u>\nBackground: Shiroze - Stormy Mountains\n\r\n<b>Level
+    6</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/711933\">Waterflame
+    - Striker</link>\r</u>\nBackground: Craftpix - Modern City Backgrounds Pixel
+    Art\n\r\n<b>Level 7</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/786346\">cYsmix
+    - Babaroque</link>\r</u>\nBackground: Shiroze - Starry Night\n\r\n<b>Level 8</b>\nMusic:
+    <u><link=\"https://www.newgrounds.com/audio/listen/85046\">ParagonX9 - Chaoz
+    Fantasy</link>\r</u>\nBackground: AnasAbdin - Side Quest\n\r\n<b>Level 9</b>\nMusic:
     <u><link=\"https://www.newgrounds.com/audio/listen/1272565\">LunitaCL - Euphoria</link>\r</u>\nBackground:
-    <u><link=\"https://dusan-pavkovic-warlord.itch.io/skadovsk\">Dusan Pavkovic WARlord
-    - Skadovsk the rusty barque</link>\r</u>\n\r\n<b>Level 10</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/467339\">Dimrain47
-    - At the speed of light</link>\r</u>\nBackground: <u><link=\"https://aamatniekss.artstation.com/projects/VwKZR\">Nauris
-    Amatnieks - Blood Moon</link></u>"
+    Dusan Pavkovic WARlord - Skadovsk the rusty barque\n\r\n<b>Level 10</b>\nMusic:
+    <u><link=\"https://www.newgrounds.com/audio/listen/467339\">Dimrain47 - At the
+    speed of light</link>\r</u>\nBackground: Nauris Amatnieks - Blood Moon"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
   m_sharedMaterial: {fileID: 1510713269788925125, guid: b756bd3f461bfd74db6a73db1c3ae958, type: 2}
