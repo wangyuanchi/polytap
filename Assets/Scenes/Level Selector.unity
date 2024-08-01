@@ -277,7 +277,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 625, y: -710}
-  m_SizeDelta: {x: 1200, y: 4100}
+  m_SizeDelta: {x: 1200, y: 4700}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71409649
 MonoBehaviour:
@@ -306,16 +306,19 @@ MonoBehaviour:
     perfection.\nPractice different parts of the level using \"Practice\" mode which
     is available through the pause UI.\n<b>It is highly recommended to calibrate
     your music and input offsets in \"Options\" before playing for the best experience.</b>\n\r\n<u><b><size=50><align=center>Type
-    of Notes</align></size></b></u>\n<b>Circle</b> - Single Tap [Space]\n<b>Square</b>
-    - Hold and Release on its sub-shapes [Right Shift]\r\n<b>Triangle</b> - Double
-    Tap (The second tap must be at most 0.75s after the first, and then the input
-    will be registered) [Enter]\n<size=30>*Keybinds can be set in options</size>\n\r\n<u><b><size=50><align=center>Note
-    Timings</align></size></b></u>\n<b>Blue:</b> \xB1125ms (Correct), \xB1125ms to
-    \xB1209ms (Too Early/Late)\n<b>Green:</b> \xB1100ms (Correct), \xB1100ms to \xB1200ms
-    (Too Early/Late)\n<b>Yellow:</b> \xB175ms (Correct), \xB175ms to \xB1187ms (Too
-    Early/Late)\n<b>Orange:</b> \xB150ms (Correct), \xB150ms to \xB1169ms (Too Early/Late)\n<b>Red:</b>
-    \xB125ms (Correct), \xB125ms to \xB1139ms (Too Early/Late)\nAny other timings,
-    if earlier, will not be penalized, and if later, will be a miss.\n\n<u><b><size=50><align=center>Credits</align></size></b></u>\r\nClick
+    of Notes</align></size></b></u>\n<b>Circle</b> - Single tap for each circle note.
+    [Space]\n<b>Square</b> - Each main square note has 2 square sub-shapes. Begin
+    holding the key on the first square, and release it on the second square. [Right
+    Shift]\r\n<b>Triangle</b> - Double tap for each triangle note. For the double
+    tap, make sure the second tap takes place when the triangle note is at the judgement.
+    The first tap can be at most 0.75 seconds before that. [Enter]\n<size=30>*Keybinds
+    can be set in options</size>\n\r\n<u><b><size=50><align=center>Note Timings</align></size></b></u>\n<b>Blue:</b>
+    \xB1125ms (Correct), \xB1125ms to \xB1209ms (Too Early/Late)\n<b>Green:</b> \xB1100ms
+    (Correct), \xB1100ms to \xB1200ms (Too Early/Late)\n<b>Yellow:</b> \xB175ms (Correct),
+    \xB175ms to \xB1187ms (Too Early/Late)\n<b>Orange:</b> \xB150ms (Correct), \xB150ms
+    to \xB1169ms (Too Early/Late)\n<b>Red:</b> \xB125ms (Correct), \xB125ms to \xB1139ms
+    (Too Early/Late)\nAny other timings, if earlier, will not be penalized, and if
+    later, will be a miss.\n\n<u><b><size=50><align=center>Credits</align></size></b></u>\r\nClick
     on the links to visit the resources used!\n\n<b>Lobby Music</b>: <u><link=\"https://www.newgrounds.com/audio/listen/806079\">Waterflame
     - Floating</link></u>\n\r\n<b>Level 1</b>\nMusic: <u><link=\"https://www.newgrounds.com/audio/listen/1220995\">Waterflame
     - Starcrater</link>\r</u>\nBackground: Digital Moons - Pixel Skies\n\r\n<b>Level
@@ -375,7 +378,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 20
+  m_lineSpacing: 35
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0

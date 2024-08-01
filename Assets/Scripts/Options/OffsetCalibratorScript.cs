@@ -143,7 +143,10 @@ public class OffsetCalibratorScript : MonoBehaviour
         }
         else
         {
-            LobbyMusicScript.instance.PlayLobbyMusic();
+            if (PlayerPrefs.GetString("Lobby Music") == "true")
+            {
+                LobbyMusicScript.instance.PlayLobbyMusic();
+            }
         }
 
         // Destroy the note if the user leaves the calibration prematurely to prevent the note being there on during a new calibration session
