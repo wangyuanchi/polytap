@@ -1,6 +1,8 @@
 # PolyTap
 
-This game will be released and available to play for free on Steam on 1 Aug 2024
+![library_header.png](library_header.png)
+
+This game is released and available to play for free on Steam
 
 [Click here to play now!](https://store.steampowered.com/app/3104050/PolyTap/)
 
