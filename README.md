@@ -12,6 +12,8 @@ Each note requires a different tapping pattern to pass:
 
 The goal is to reach the end without missing a single note.
 
+[Click here to play now!](https://store.steampowered.com/app/3104050/PolyTap/)
+
 ## Features
 - 10 custom levels synced with different music
 - Increasing difficulty of notes and timings with level progression
