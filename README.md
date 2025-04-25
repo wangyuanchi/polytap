@@ -1,27 +1,20 @@
-# PolyTap
+![polytap_banner.png](polytap_banner.png)
 
-![library_header.png](library_header.png)
+## About 
+PolyTap is a shape-based rhythm game.
 
-This game is released and available to play for free on Steam
+It features the Circle, Square and Triangle notes.
 
-[Click here to play now!](https://store.steampowered.com/app/3104050/PolyTap/)
+Each note requires a different tapping pattern to pass:
+- Single tap for Circle
+- Hold and release for Square
+- Double tap for Triangle
 
-## About this game
-This is a simple rhythm game that was made in Unity
-
-It features 3 main notes: Circle, Square and Triangle
-
-The notes require different tapping patterns: Single tap, hold-release and double tap respectively
-
-The player can try to reach the end without missing a note, or simply play through the level and test their accuracy
+The goal is to reach the end without missing a single note.
 
 ## Features
-- 10 levels with different music
-  
+- 10 custom levels synced with different music
 - Increasing difficulty of notes and timings with level progression
-  
 - 3 main modes (Normal, Hard and Accuracy)
-  
 - Practice mode for all main modes
-  
-- Settings customization for smoother gameplay
+- 15+ configurable settings for smoother gameplay
